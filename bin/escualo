@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require "bundler/setup"
+require 'commander/import'
+
+def parse_args_variables(args)
+  Hash[args.map { |it| it.split('=') }]
+end
+
+program :name, 'escualo'
+program :version, '0.0.1'
+program :description, 'escualo provisioning tool implementation for ruby'
+
+global_option '-h', '--hostname HOSTNAME', String, 'the host to connect' do |hostname|
+  $hostname = hostanme || 'localhost'
+end
+
+
+command 'bootstrap' do |c|
+    c.syntax = 'escualo bootstrap'
+    c.description = 'Prepare environment to be an escualo host'
+    c.option '--swap', FalseClass, 'setup swap?'
+
+    c.action do |args, options|
+      ask("Monit Password: ") { |q| q.echo = "*" }
+      say "...."
+    end
+end
+
+$plugins = %w(node haskell docker postgre nginx rabbit mongo)
+command 'install' do |c|
+    c.syntax = 'escualo install <plugin>'
+    c.description = "Install plugin on host. Valid plugins are #{$plugins.join(', ')}"
+    c.option '--nginx-conf', String, 'ningix config file, only for nginx plugin'
+    c.action do |args, options|
+    end
+end
+
+command 'create service' do |c|
+    c.syntax = 'escualo create service'
+    c.description = 'Setup a micro-service deployment'
+    c.action do |args, options|
+        say "...."
+    end
+end
+
+command 'create site' do |c|
+    c.syntax = 'escualo create site'
+    c.description = 'Setup an static site deployment'
+    c.action do |args, options|
+        say "...."
+    end
+end
+
+command 'create executable' do |c|
+    c.syntax = 'escualo create executable'
+    c.description = 'Setup an executable command deployment'
+    c.action do |args, options|
+        say "...."
+    end
+end
+
+
+command 'upload' do |c|
+    c.syntax = 'escualo upload <FILE>'
+    c.description = 'Upload file to host'
+    c.action do |args, options|
+        say "...."
+    end
+end
+
+command 'vars list' do |c|
+    c.syntax = 'escualo vars list'
+    c.description = 'List escualo variables on host'
+    c.action do |args, options|
+        say "...."
+    end
+end
+
+command 'vars set' do |c|
+    c.syntax = 'escualo vars set <NAME>=<VALUE> [<NAME>=<VALUE>...<NAME>=<VALUE>]'
+    c.description = 'Sets one or more escualo variables on host'
+    c.action do |args, options|
+        say "Args: #{parse_args_variables(args)}"
+        say "...."
+    end
+end
+
+command 'vars unset' do |c|
+    c.syntax = 'escualo vars unset <NAME>=<VALUE> [<NAME>=<VALUE>...<NAME>=<VALUE>]'
+    c.description = 'Unset escualo variables on host'
+    c.action do |args, options|
+        say "Args: #{parse_args_variables(args)}"
+        say "...."
+    end
+end
