@@ -3,26 +3,18 @@
 require 'rubygems'
 require "bundler/setup"
 require 'commander/import'
-require 'net/ssh'
-require 'mumukit/core'
+
+require_relative '../lib/escualo'
 
 def parse_args_variables(args)
-  Hash[args.map { |it| it.split('=') }]
-end
-
-class Commander::Command
-  def ssh_action(&block)
-    action do |args, options|
-      Net::SSH.start($hostname, $username, $ssh_options.compact) do |ssh|
-        block.call(args, options, ssh)
-      end
-    end
-  end
+  args.map { |it| it.split('=') }.to_h
 end
 
 program :name, 'escualo'
-program :version, '0.0.1'
+program :version, Escualo::VERSION
 program :description, 'escualo provisioning tool implementation for ruby'
+
+require_relative '../lib/command'
 
 $hostname = 'localhost'
 $username = 'root'
@@ -33,6 +25,10 @@ end
 global_option '-u', '--username USERNAME', String, 'The username to connect. Defaults to "root"' do |username|
   $username = username
 end
+global_option '--password PASSWORD', String, '' do |password|
+  $ssh_options[:password] = password
+end
+
 global_option '-i', '--ssh-key PRIVATE_KEY', String, '' do |private_key|
   $ssh_options[:keys] = [private_key]
 end
@@ -40,14 +36,48 @@ global_option '--ssh-port PORT', String, '' do |port|
   $ssh_options[:port] = port
 end
 
+def step(name, &block)
+  say name
+  say block.call
+end
+
+#libpq-dev
+
 command 'bootstrap' do |c|
     c.syntax = 'escualo bootstrap'
     c.description = 'Prepare environment to be an escualo host'
-    c.option '--swap', FalseClass, 'setup swap?'
+    c.option '--swap', FalseClass, 'Setup swap?'
+    c.option '--monit-version', String, 'Monit version'
+    c.option '--monit-password', String, 'Monit password. Will be prompted otherwise'
 
-    c.action do |args, options|
-      ask("Monit Password: ") { |q| q.echo = "*" }
-      say "...."
+    c.ssh_action do |args, options, ssh|
+      unless options.monit_password
+        password = ask("Monit Password: ") { |q| q.echo = "*" }
+        options.default monit_password: password
+      end
+      options.default monit_version: '5.16'
+
+      step "Configuring variables..." do
+        Escualo::Vars.setup(ssh)
+        Escualo::Vars.set(Escualo::Vars.locale_variables, ssh)
+        Escualo::Vars.set(Escualo::Vars.production_variables, ssh)
+      end
+
+      step "Installing base software..." do
+        Escualo::Bootstrap.install_base(ssh)
+      end
+
+      step "Installing and configuring monit..." do
+        Escualo::Bootstrap.setup_monit(options, ssh)
+      end
+
+      step "Enabling swap..." do
+        Escualo::Bootstrap.enable_swap(ssh)
+      end if options.swap
+
+      step "Installing bundler..." do
+        ssh.exec! 'gem install bundler'
+      end
     end
 end
 
@@ -97,8 +127,7 @@ command 'vars list' do |c|
     c.syntax = 'escualo vars list'
     c.description = 'List escualo variables on host'
     c.ssh_action do |args, options, ssh|
-      dump = ssh.exec!("cat ~/.escualo/vars/*")
-      say dump.gsub("export ", '')
+      say Escualo::Vars.list(ssh)
     end
 end
 
@@ -106,9 +135,7 @@ command 'vars set' do |c|
     c.syntax = 'escualo vars set <NAME>=<VALUE> [<NAME>=<VALUE>...<NAME>=<VALUE>]'
     c.description = 'Sets one or more escualo variables on host'
     c.ssh_action do |args, options, ssh|
-      parse_args_variables(args).each do |key, value|
-        say ssh.exec!("'export #{key}=#{value}' > ~/.escualo/vars/#{key}")
-      end
+      Escualo::Vars.set(parse_args_variables(args), ssh)
     end
 end
 
@@ -124,6 +151,6 @@ command 'vars clean' do |c|
     c.syntax = 'escualo vars clean'
     c.description = 'Unset all escualo variables on host'
     c.action do |args, options|
-        say "Args: #{parse_args_variables(args)}"
+      Escualo::Vars.clean(ssh)
     end
 end
