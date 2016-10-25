@@ -1,11 +1,17 @@
 module Escualo
   module Vars
     def self.setup(ssh)
+      source_escualorc = "'source ~/.escualorc'"
       ssh.exec! "mkdir -p ~/.escualo/vars"
-      ssh.exec! "'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc"
-      ssh.exec! "echo 'export ESCUALO_BASE_VERSION=#{Escualo::BASE_VERSION}' >> ~/.escualorc"
+      ssh.exec! "echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc"
       ssh.exec! "chmod u+x ~/.escualorc"
-      ssh.exec! "'source ~/.escualorc' >> ~/.bashrc"
+      ssh.exec! "grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc"
+    end
+
+    def self.set_builtins(ssh)
+      set ssh, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
+      set ssh, Escualo::Vars.locale_variables
+      set ssh, Escualo::Vars.production_variables
     end
 
     def self.list(ssh)
@@ -14,11 +20,22 @@ module Escualo
 
     def self.clean(ssh)
       ssh.exec!("rm ~/.escualo/vars/*")
+      set_builtins ssh
     end
 
-    def self.set(variables, ssh)
+    def self.present?(ssh, variable)
+      ssh.exec!("cat ~/.escualo/vars/#{variable}").present?
+    end
+
+    def self.set(ssh, variables)
       variables.each do |key, value|
-        ssh.exec!("'export #{key}=#{value}' > ~/.escualo/vars/#{key}")
+        ssh.exec!("echo 'export #{key}=#{value}' > ~/.escualo/vars/#{key}")
+      end
+    end
+
+    def self.unset(ssh, variable_names)
+      variable_names.each do |name|
+        ssh.exec!("rm ~/.escualo/vars/#{name}")
       end
     end
 

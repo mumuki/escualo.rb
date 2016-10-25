@@ -18,13 +18,12 @@ module Escualo
                  ruby2.0-dev \
                  zlib1g \
                  zlib1g-dev \
-                 libreadline-dev && \
-        echo "lc_all is $LC_ALL" ; \
-        if [ $? -eq 0 ]; then echo 'base software installed successfully'; fi }
+                 libreadline-dev }
     end
 
     def self.enable_swap(ssh)
       ssh.exec! %Q{ \
+        test -e /swapfile ||
         fallocate -l 4G /swapfile && \
         chmod 600 /swapfile && \
         mkswap /swapfile && \
@@ -33,7 +32,7 @@ module Escualo
         echo '/swapfile   none    swap    sw    0   0' >> /etc/fstab}
     end
 
-    def self.setup_monit(options, ssh)
+    def self.setup_monit(ssh, options)
       ssh.exec! %Q{
         service monit stop && \
         cd /tmp && \

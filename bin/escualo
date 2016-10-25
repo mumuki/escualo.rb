@@ -38,7 +38,7 @@ end
 
 def step(name, &block)
   say name
-  say block.call
+  block.call
 end
 
 #libpq-dev
@@ -46,9 +46,10 @@ end
 command 'bootstrap' do |c|
     c.syntax = 'escualo bootstrap'
     c.description = 'Prepare environment to be an escualo host'
-    c.option '--swap', FalseClass, 'Setup swap?'
+    c.option '--swap', TrueClass, 'Setup swap?'
     c.option '--monit-version', String, 'Monit version'
     c.option '--monit-password', String, 'Monit password. Will be prompted otherwise'
+    c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
 
     c.ssh_action do |args, options, ssh|
       unless options.monit_password
@@ -57,26 +58,29 @@ command 'bootstrap' do |c|
       end
       options.default monit_version: '5.16'
 
-      step "Configuring variables..." do
-        Escualo::Vars.setup(ssh)
-        Escualo::Vars.set(Escualo::Vars.locale_variables, ssh)
-        Escualo::Vars.set(Escualo::Vars.production_variables, ssh)
-      end
+      if !options.force && Escualo::Vars.present?(ssh, :ESCUALO_BASE_VERSION)
+        say "Escualo already installed. Use --force to install it anyway"
+      else
+        step "Configuring variables..." do
+          Escualo::Vars.setup ssh
+          Escualo::Vars.set_builtins ssh
+        end
 
-      step "Installing base software..." do
-        Escualo::Bootstrap.install_base(ssh)
-      end
+        step "Installing base software..." do
+          Escualo::Bootstrap.install_base ssh
+        end
 
-      step "Installing and configuring monit..." do
-        Escualo::Bootstrap.setup_monit(options, ssh)
-      end
+        step "Installing and configuring monit..." do
+          Escualo::Bootstrap.setup_monit ssh, options
+        end
 
-      step "Enabling swap..." do
-        Escualo::Bootstrap.enable_swap(ssh)
-      end if options.swap
+        step "Enabling swap..." do
+          Escualo::Bootstrap.enable_swap ssh
+        end if options.swap
 
-      step "Installing bundler..." do
-        ssh.exec! 'gem install bundler'
+        step "Installing bundler..." do
+          ssh.exec! 'gem install bundler'
+        end
       end
     end
 end
@@ -127,30 +131,30 @@ command 'vars list' do |c|
     c.syntax = 'escualo vars list'
     c.description = 'List escualo variables on host'
     c.ssh_action do |args, options, ssh|
-      say Escualo::Vars.list(ssh)
+      say Escualo::Vars.list ssh
     end
 end
 
 command 'vars set' do |c|
-    c.syntax = 'escualo vars set <NAME>=<VALUE> [<NAME>=<VALUE>...<NAME>=<VALUE>]'
+    c.syntax = 'escualo vars set <NAME>=<VALUE> [<NAME>=<VALUE>,...<NAME>=<VALUE>]'
     c.description = 'Sets one or more escualo variables on host'
     c.ssh_action do |args, options, ssh|
-      Escualo::Vars.set(parse_args_variables(args), ssh)
+      Escualo::Vars.set ssh, parse_args_variables(args)
     end
 end
 
 command 'vars unset' do |c|
-    c.syntax = 'escualo vars unset <NAME>=<VALUE> [<NAME>=<VALUE>...<NAME>=<VALUE>]'
+    c.syntax = 'escualo vars unset <NAME> [<NAME>,...<NAME>]'
     c.description = 'Unset escualo variables on host'
-    c.action do |args, options|
-        say "Args: #{parse_args_variables(args)}"
+    c.ssh_action do |args, options, ssh|
+      Escualo::Vars.unset ssh, args
     end
 end
 
 command 'vars clean' do |c|
     c.syntax = 'escualo vars clean'
     c.description = 'Unset all escualo variables on host'
-    c.action do |args, options|
-      Escualo::Vars.clean(ssh)
+    c.ssh_action do |args, options, ssh|
+      Escualo::Vars.clean ssh
     end
 end
