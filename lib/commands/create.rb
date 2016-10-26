@@ -8,12 +8,8 @@ command 'create service' do |c|
     launch_command = "exec bundle exec rackup -o 0.0.0.0 -p #{port} > rack.log"
     install_command="bundle install --without development test";
 
-
-    "exec bundle exec rackup -o 0.0.0.0 -p $PORT > rack.log"
-
     #creating init scripts
     ssh.exec! "mkdir -p /var/scripts/#{name}"
-
     ssh.upload_template! "/var/scripts/#{name}/codechange", "codechange.sh", name: name
     ssh.exec! "chmod +x /var/scripts/#{name}/codechange"
 

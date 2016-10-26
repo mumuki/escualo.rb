@@ -3,38 +3,150 @@ require 'spec_helper'
 describe 'install' do
   before { escualo "bootstrap --monit-password sample" }
 
-  it "installs docker" do
-    result = escualo "install docker"
+  describe 'docker' do
+    context 'when installing by force' do
+      it "installs docker by force" do
+        result = escualo "install docker --force"
 
-    expect(result).to include "Successfully installed"
-    expect($?).to eq 0
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install docker" }
+
+      it "installs docker by force" do
+        result = escualo "install docker"
+
+        expect($?).to eq 0
+        expect(result).to include "docker is already installed"
+      end
+    end
   end
 
-  it "installs mongo" do
-    result = escualo "install mongo"
+  describe 'haskell' do
+    context 'when installing by force' do
+      it "installs haskell by force" do
+        result = escualo "install haskell --force"
 
-    expect(result).to include "Successfully installed"
-    expect($?).to eq 0
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install haskell" }
+
+      it "installs haskell by force" do
+        result = escualo "install haskell"
+
+        expect($?).to eq 0
+        expect(result).to include "haskell is already installed"
+      end
+    end
   end
 
-  it "installs haskell" do
-    result = escualo "install haskell"
+  describe 'mongo' do
+    context 'when installing by force' do
+      it "installs mongo by force" do
+        result = escualo "install mongo --force"
 
-    expect(result).to include "Successfully installed"
-    expect($?).to eq 0
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install mongo" }
+
+      it "installs mongo by force" do
+        result = escualo "install mongo"
+
+        expect($?).to eq 0
+        expect(result).to include "mongo is already installed"
+      end
+    end
   end
 
-  it "installs rabbit" do
-    result = escualo "install rabbit"
+  describe 'nginx' do
+    context 'when installing by force' do
+      it "installs nginx by force" do
+        result = escualo "install nginx --force"
 
-    expect(result).to include "Successfully installed"
-    expect($?).to eq 0
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install nginx" }
+
+      it "installs nginx by force" do
+        result = escualo "install nginx"
+
+        expect($?).to eq 0
+        expect(result).to include "nginx is already installed"
+      end
+    end
   end
 
-  it "installs postgre" do
-    result = escualo "install postgre"
+  describe 'node' do
+    context 'when installing by force' do
+      it "installs node by force" do
+        result = escualo "install node --force"
 
-    expect(result).to include "Successfully installed"
-    expect($?).to eq 0
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install node" }
+
+      it "installs node by force" do
+        result = escualo "install node"
+
+        expect($?).to eq 0
+        expect(result).to include "node is already installed"
+      end
+    end
+  end
+
+  describe 'postgre' do
+    context 'when installing by force' do
+      it "installs postgre by force" do
+        result = escualo "install postgre --force"
+
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install postgre" }
+
+      it "installs postgre by force" do
+        result = escualo "install postgre"
+
+        expect($?).to eq 0
+        expect(result).to include "postgre is already installed"
+      end
+    end
+  end
+
+  describe 'rabbit' do
+    context 'when installing by force' do
+      it "installs rabbit by force" do
+        result = escualo "install rabbit --force"
+
+        expect($?).to eq 0
+        expect(result).to include "Installed successfully"
+      end
+    end
+    context 'when already installed' do
+      before { escualo "install rabbit" }
+
+      it "installs rabbit by force" do
+        result = escualo "install rabbit"
+
+        expect($?).to eq 0
+        expect(result).to include "rabbit is already installed"
+      end
+    end
   end
 end
