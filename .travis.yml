@@ -1,4 +1,12 @@
 language: ruby
 rvm:
-  - 2.0.0
+- 2.0.0
 before_install: gem install bundler -v 1.11.2
+deploy:
+  provider: rubygems
+  api_key:
+    secure: PxnhQg8iX4+iTOndimNWkKKm3ISxChdqe4zbHXUi/JMHkvFRoJdl/tCGFNgFXJzV0MjvAGPYCpAd7ilWFFDvoZTKNfvhvMLwaMUHazISjiwMdgvqsgQa9BjU3m5ViLWHiadpWvzCGwPeT7NGP2bmu9j2aA6IpVlrwb/AciLwRIJ2TMYjFiRJP/DyVJjYDkYkPE1FKoZOszMQY1sBMZpxt+/00trd2Cg3cLwqA7f4/Z4yanx35WJLsxD86NOYoH9HiHphLuLIxXfumZrRBjVB1komkx+uMOFGX3S3H0yDcikJQntVXEyvcxlTdSOGCkhaZoQWJ4iLwuGzp1POHnuMA8I0WnilW/mUD3HRd2cA5Ct4i1+eqY+aOe/Xj3tE/y6vR+PrAdK6x6s85WVL+1F9XYMC7xib5fYcR6mFvxnMcAwqa+r74QL9P6nvN16jXEZRIBWIMW6aIzN/wv5p4iQ8u0RMuUGlhvebkJnu7njvum8bpuwnAyqacOABjwBXV68xpqXUDNxeRgxN1ELNMGAGuXmAfT2Sn/bGfxjwKZQulQ6VYPQtpCuu4TzOA0u0m6MEdIT64xCW4WYVel8kEoGiPIJ/rgIxw/cq3+/vNxcBeIS53guxrG2sCsS1w4QUclwXE4NZHPg0HAjR5ieprtuDvBQ+Icly2RFfdoD96v93PZg=
+  gem: escualo
+  on:
+    tags: true
+    repo: mumuki/escualo.rb
