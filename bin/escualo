@@ -6,10 +6,6 @@ require 'commander/import'
 
 require_relative '../lib/escualo'
 
-def parse_args_variables(args)
-  args.map { |it| it.split('=') }.to_h
-end
-
 program :name, 'escualo'
 program :version, Escualo::VERSION
 program :description, 'escualo provisioning tool implementation for ruby'
@@ -40,8 +36,6 @@ def step(name, &block)
   say name
   block.call
 end
-
-#libpq-dev
 
 command 'bootstrap' do |c|
     c.syntax = 'escualo bootstrap'
@@ -85,12 +79,14 @@ command 'bootstrap' do |c|
     end
 end
 
-$plugins = %w(node haskell docker postgre nginx rabbit mongo)
+
 command 'install' do |c|
     c.syntax = 'escualo install <plugin>'
-    c.description = "Install plugin on host. Valid plugins are #{$plugins.join(', ')}"
+    c.description = "Install plugin on host. Valid plugins are #{Escualo::Installers.PLUGINS.join(', ')}"
     c.option '--nginx-conf', String, 'ningix config file, only for nginx plugin'
-    c.action do |args, options|
+    c.ssh_action do |args, options, ssh|
+      installer = Escualo::Installers.load args.first
+      installer.run ssh, options
     end
 end
 
@@ -133,6 +129,11 @@ command 'vars list' do |c|
     c.ssh_action do |args, options, ssh|
       say Escualo::Vars.list ssh
     end
+end
+
+
+def parse_args_variables(args)
+  args.map { |it| it.split('=') }.to_h
 end
 
 command 'vars set' do |c|
