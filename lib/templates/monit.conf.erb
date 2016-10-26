@@ -1,0 +1,11 @@
+check host escualo-<%= @name %> with address $HOST
+  start "/sbin/start <%= @name %>"
+  stop "/sbin/stop <%= @name %>"
+  if failed
+    port $PORT
+    protocol HTTP
+    request "/"
+    status > 199
+    with timeout 30 seconds
+  then restart
+EOF

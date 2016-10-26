@@ -1,0 +1,44 @@
+#!/bin/bash
+REVISION=$1
+
+echo "[Escualo] Running codechange for revision $REVISION..."
+
+cd /var/www/<%= @name %>
+
+if [ -e .escualo/jobs ]; then
+ echo "[Escualo::Service::<%= @name %>] Found jobs, creating monitors..."
+
+ for job_path in .escualo/jobs/*; do
+  job=$(basename $job_path)
+  echo "[Escualo::NewService] setting up Upstart service for job $job..."
+  cat > /etc/init/<%= @name %>-$job.conf <<EOJOB
+description "<%= @name %>-$job configuration"
+author "Escualo - via The Mumuki Project"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+
+chdir /var/www/<%= @name %>
+
+script
+  for var in /root/.escualo/vars/*; do . \\$var; done
+  chmod u+x .escualo/jobs/$job
+  echo \\$\\$ > $job.pid
+  $job_path
+end script
+EOJOB
+
+  echo "[Escualo::NewService] setting up Monit for job $job..."
+  cat > /etc/monit/conf.d/escualo-<%= @name %>-$job <<EOMONIT
+
+check process escualo-<%= @name %>-$job with pidfile /var/www/<%= @name %>/$job.pid
+  start "/sbin/start <%= @name %>-$job"
+  stop "/sbin/stop <%= @name %>-$job"
+EOMONIT
+
+ done
+
+ monit reload
+fi

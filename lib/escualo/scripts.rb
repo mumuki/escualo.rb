@@ -1,0 +1,3 @@
+module Escualo::Scripts
+
+end

@@ -1,0 +1,49 @@
+#!/bin/bash
+REVISION=$1
+
+cd /var/www/<%= @name %>
+
+if [ -e .escualo/install/before ]; then
+ echo "[Escualo::Service::<%= @name %>] .escualo/install/before found. Running it..."
+ chmod u+x .escualo/install/before
+ .escualo/install/before
+fi
+
+echo "[Escualo::Service::<%= @name %>] installing dependencies..."
+<%= @install_command %>
+
+monit unmonitor escualo-<%= @name %>
+service <%= @name %> stop
+
+if [ -e .escualo/jobs ]; then
+ echo "[Escualo::Service::<%= @name %>] Jobs detected, stopping jobs..."
+
+ for job_path in .escualo/jobs/*; do
+   job=$(basename $job_path)
+   echo "[Escualo::Service::<%= @name %>] Stopping job $job..."
+
+   monit unmonitor escualo-<%= @name %>-$job
+   service <%= @name %>-$job stop
+ done
+fi
+
+if [ -e .escualo/install/after ]; then
+ echo "[Escualo::Service::<%= @name %>] .escualo/install/after found. Running it..."
+ chmod u+x .escualo/install/after
+ .escualo/install/after $REVISION
+fi
+
+service <%= @name %> start
+monit monitor escualo-<%= @name %>
+
+if [ -e .escualo/jobs ]; then
+ echo "[Escualo::Service::<%= @name %>] Starting jobs..."
+
+ for job_path in .escualo/jobs/*; do
+   job=$(basename $job_path)
+   echo "[Escualo::NewService] Starting job $job..."
+
+   service <%= @name %>-$job start
+   monit monitor escualo-<%= @name %>-$job
+ done
+fi
