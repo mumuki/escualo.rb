@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'remote' do
+describe 'escualo remote' do
   describe "attach" do
     it "adds a git remote to the current repository" do
       remotes = Dir.mktmpdir do |dir|

@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe "version" do
+describe "escualo --version" do
   it { expect(escualo "--version").to eq "escualo #{Escualo::VERSION}\n" }
 end
