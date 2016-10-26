@@ -10,14 +10,14 @@ command 'install' do |c|
 
     installer = Escualo::Installers.load plugin
 
-    if !options.force && installer.check ssh
+    if !options.force && installer.check(ssh)
       say "Nothing to do. Plugin #{plugin} is already installed"
-      say "Use --force to reinstall it anyway"
+      say 'Use --force to reinstall it anyway'
     else
       log = installer.run ssh, options
 
       if installer.check ssh
-        say "Installed successfully!"
+        say 'Installed successfully!'
       else
         say "Something went wrong. Last output was: \n#{log}"
       end

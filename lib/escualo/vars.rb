@@ -2,10 +2,12 @@ module Escualo
   module Vars
     def self.setup(ssh)
       source_escualorc = "'source ~/.escualorc'"
-      ssh.exec! "mkdir -p ~/.escualo/vars"
-      ssh.exec! "echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc"
-      ssh.exec! "chmod u+x ~/.escualorc"
-      ssh.exec! "grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc"
+      ssh.exec! %Q{
+        mkdir -p ~/.escualo/vars && \
+        echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc && \
+        chmod u+x ~/.escualorc && \
+        grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc
+      }
     end
 
     def self.set_builtins(ssh)
