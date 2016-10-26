@@ -45,10 +45,26 @@ require_relative '../lib/commands/remote'
 require_relative '../lib/commands/deploy'
 
 command 'upload' do |c|
-  c.syntax = 'escualo upload <FILE>'
+  c.syntax = 'escualo upload <FILE> <DESTINATION>'
   c.description = 'Upload file to host'
-  c.action do |args, options|
-    say "...."
+  c.ssh_action do |args, options, ssh|
+    ssh.scp.upload! args.first, args.second
   end
 end
 
+
+command 'script' do |c|
+  c.syntax = 'escualo script <FILE>'
+  c.description = 'Runs a escualo configuration'
+  c.action do |args, options|
+    file = YAML.load_file args.first
+    %x{escualo file['boostrap']}
+    commands = file['script'].map { |it| "escualo #{it}" }
+
+    Net::SSH.start($hostname, $username, $ssh_options.compact) do |ssh|
+      commands.each do |command|
+        ssh.exec! command
+      end
+    end
+  end
+end
