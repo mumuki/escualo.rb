@@ -1,4 +1,5 @@
 require 'net/ssh'
+require 'securerandom'
 require 'mumukit/core'
 
 module Escualo

@@ -21,7 +21,7 @@ escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
 escualo deploy atheneum mumuki/mumuki-atheneum
 ```
 
-### More advanced usages
+### Installing plugins
 
 ```bash
 escualo bootstrap --hostname <hostname>
@@ -31,6 +31,8 @@ escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
 escualo create service bibliotheca 8080
 escualo deploy bibliotheca mumuki/mumuki-bibliotheca
 ```
+
+### Deploying multiple services
 
 ```bash
 escualo bootstrap --hostname <hostname>
@@ -50,6 +52,18 @@ escualo deploy mulang mumuki/mulang
 escualo deploy haskell-runner mumuki/mumuki-haskell-runner
 
 escualo rake db:seed
+```
+
+### Deploying local copy
+
+```bash
+escualo bootstrap --hostname <hostname>
+escualo install postgre
+escualo create service atheneum 80
+escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
+
+escualo remote attach atheneum
+escualo deploy
 ```
 
 ### Scripting
