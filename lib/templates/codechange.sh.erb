@@ -6,11 +6,11 @@ echo "[Escualo] Running codechange for revision $REVISION..."
 cd /var/www/<%= @name %>
 
 if [ -e .escualo/jobs ]; then
- echo "[Escualo::Service::<%= @name %>] Found jobs, creating monitors..."
+ echo "[Escualo] [<%= @name %>] Found jobs, creating monitors..."
 
  for job_path in .escualo/jobs/*; do
   job=$(basename $job_path)
-  echo "[Escualo::NewService] setting up Upstart service for job $job..."
+  echo "[Escualo] [<%= @name %>] setting up Upstart service for job $job..."
   cat > /etc/init/<%= @name %>-$job.conf <<EOJOB
 description "<%= @name %>-$job configuration"
 author "Escualo - via The Mumuki Project"
@@ -30,7 +30,7 @@ script
 end script
 EOJOB
 
-  echo "[Escualo::NewService] setting up Monit for job $job..."
+  echo "[Escualo] [<%= @name %>] setting up Monit for job $job..."
   cat > /etc/monit/conf.d/escualo-<%= @name %>-$job <<EOMONIT
 
 check process escualo-<%= @name %>-$job with pidfile /var/www/<%= @name %>/$job.pid

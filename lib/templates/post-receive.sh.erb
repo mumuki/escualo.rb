@@ -1,18 +1,18 @@
 #!/bin/bash
-echo "[Escualo::LiveHook] Loading environment..."
+echo "[Escualo] [<%= @name %>] Loading environment..."
 source ~/.escualorc
 
-echo "[Escualo::LiveHook] Running live hook..."
+echo "[Escualo] [<%= @name %>] Running live hook..."
 while read oldrev newrev refname
 do
     branch=$(git rev-parse --symbolic --abbrev-ref $refname)
 
-    echo "[Escualo::LiveHook] branch found: $branch"
+    echo "[Escualo] [<%= @name %>] branch found: $branch"
     if [ "master" == "$branch" ]; then
        echo "[Escualo::LiveHook::Version] $ESCUALO_VERSION"
        export ESCUALO_SERVICE_VERSION=$ESCUALO_VERSION
 
-       echo "[Escualo::LiveHook] master branch detected, deploying..."
+       echo "[Escualo] [<%= @name %>] master branch detected, deploying..."
        mkdir -p /var/www/<%= @name %>
        git --work-tree=/var/www/<%= @name %> --git-dir=/var/repo/<%= @name %>.git checkout master -f
 
