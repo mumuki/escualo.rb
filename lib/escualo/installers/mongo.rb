@@ -9,5 +9,9 @@ module Escualo::Installers
         echo 'respawn' >> /etc/init/mongodb"
       }
     end
+
+    def check(ssh)
+      ssh.exec!("mongod --version").include? "db version"
+    end
   end
 end

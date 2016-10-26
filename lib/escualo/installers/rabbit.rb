@@ -11,5 +11,9 @@ module Escualo::Installers
       }
       #TODO set username and password
     end
+
+    def check(ssh)
+      ssh.exec!("rabbitmq-server").include? 'ERROR: node with name "rabbit" already running'
+    end
   end
 end

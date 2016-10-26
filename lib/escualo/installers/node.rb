@@ -7,5 +7,9 @@ module Escualo::Installers
         nvm install 4.2.4
       }
     end
+
+    def check(ssh)
+      ssh.exec!("node -v").start_with? "v4."
+    end
   end
 end

@@ -5,10 +5,15 @@ module Escualo::Installers
       ssh.exec! %Q{
         sudo add-apt-repository ppa:nginx/stable && \
         sudo apt-get update && \
-        sudo apt-get install nginx
+        sudo apt-get install nginx && \
+                                      \
+        /etc/nginx/nginx.conf < cat #{config} && \
+        service nginx restart
       }
-      ssh.exec! "/etc/nginx/nginx.conf < cat #{config}"
-      ssh.exec! "service nginx restart"
+    end
+
+    def check(ssh)
+      ssh.exec!('nginx -v').to include '1.2.2'
     end
   end
 end
