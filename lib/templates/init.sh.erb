@@ -9,6 +9,7 @@ if [ -e .escualo/install/before ]; then
  .escualo/install/before
 fi
 
+<%= unless @static %>
 echo "[Escualo] [<%= @name %>] installing dependencies..."
 <%= @install_command %>
 
@@ -26,6 +27,7 @@ if [ -e .escualo/jobs ]; then
    service <%= @name %>-$job stop
  done
 fi
+<% end %>
 
 if [ -e .escualo/install/after ]; then
  echo "[Escualo] [<%= @name %>] .escualo/install/after found. Running it..."
@@ -33,6 +35,7 @@ if [ -e .escualo/install/after ]; then
  .escualo/install/after $REVISION
 fi
 
+<%= unless @static %>
 service <%= @name %> start
 monit monitor escualo-<%= @name %>
 
@@ -47,3 +50,4 @@ if [ -e .escualo/jobs ]; then
    monit monitor escualo-<%= @name %>-$job
  done
 fi
+<% end %>
