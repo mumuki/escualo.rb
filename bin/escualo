@@ -31,6 +31,7 @@ end
 global_option '--ssh-port PORT', String, '' do |port|
   $ssh_options[:port] = port
 end
+global_option '--verbose', TrueClass, 'Dumps extra output'
 
 def step(name, &block)
   say name

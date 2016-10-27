@@ -1,19 +1,19 @@
 module Escualo::Installers
   class Nginx
     def run(ssh, options)
-      config = File.read options.nginx_conf
-      ssh.exec! %Q{
+      config = options.nginx_conf.try { |it| File.read it }
+
+      ssh.perform! %Q{
         sudo add-apt-repository ppa:nginx/stable && \
         sudo apt-get update && \
-        sudo apt-get install nginx && \
-                                      \
-        /etc/nginx/nginx.conf < cat #{config} && \
+        sudo apt-get install nginx -y && \
+        #{config ? "/etc/nginx/nginx.conf < cat #{config} && " : ''} \
         service nginx restart
-      }
+      }, options
     end
 
     def check(ssh)
-      ssh.exec!('nginx -v').to include '1.2.2'
+      ssh.exec!('nginx -v').include? 'nginx version: nginx/1'
     end
   end
 end
