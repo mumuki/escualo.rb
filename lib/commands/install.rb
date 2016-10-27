@@ -15,7 +15,9 @@ command 'install' do |c|
       say "Nothing to do. Plugin #{plugin} is already installed"
       say 'Use --force to reinstall it anyway'
     else
-      log = installer.run ssh, options
+      step "Installing plugin #{plugin}" do
+        log = installer.run ssh, options
+      end
 
       if installer.check ssh
         say 'Installed successfully!'

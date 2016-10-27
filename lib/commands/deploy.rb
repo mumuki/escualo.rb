@@ -7,9 +7,14 @@ command 'deploy' do |c|
       Escualo::Remote.push Dir.pwd
     else
       Dir.mktmpdir do |dir|
-        Escualo::Remote.clone dir, args.second, options
-        Escualo::Remote.attach dir, args.first
-        Escualo::Remote.push dir
+        step 'Cloning repository...' do
+          Escualo::Remote.clone dir, args.second, options
+          Escualo::Remote.attach dir, args.first
+        end
+
+        step 'Pushing to remote...'do
+          Escualo::Remote.push dir
+        end
       end
     end
   end
