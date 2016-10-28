@@ -1,3 +1,8 @@
+def say_created(kind, name)
+  say "#{kind.titleize} #{name} created successfully"
+  say "Now you can deploy this #{kind}"
+end
+
 command 'create service' do |c|
   c.syntax = 'escualo create service <NAME> <PORT>'
   c.description = 'Setup a micro-service deployment'
@@ -17,6 +22,8 @@ command 'create service' do |c|
     Escualo::Artifacts.configure_upstart ssh, name: name, lanunch_comand: launch_command
     Escualo::Artifacts.configure_monit ssh, name
     Escualo::Artifacts.create_push_infra ssh, name: name, service: true
+
+    say_created 'service', name
   end
 end
 
@@ -29,6 +36,8 @@ command 'create site' do |c|
     Escualo::Artifacts.create_scripts_dir ssh, name
     Escualo::Artifacts.create_init_script ssh, name: name, static: true
     Escualo::Artifacts.create_push_infra ssh, name: name, static: true
+
+    say_created 'site', name
   end
 end
 
@@ -41,5 +50,7 @@ command 'create executable' do |c|
     Escualo::Artifacts.create_scripts_dir ssh, name
     Escualo::Artifacts.create_init_script ssh, name: name, program: true
     Escualo::Artifacts.create_push_infra ssh, name: name, program: true
+
+    say_created 'executable', name
   end
 end
