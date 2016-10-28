@@ -20,10 +20,12 @@ def raw_escualo(args, options='')
 end
 
 unless vagrant_up
-  puts "[WARNING] "
-  puts "[WARNING] ***************************"
-  puts "[WARNING] *Not running vagrant tests*"
-  puts "[WARNING] ***************************"
-  puts "[WARNING] "
-  puts "[WARNING] Please have a look at readme for instructions about installing vagrant machine and running with vagrant support"
+  puts '[WARNING] '
+  puts '[WARNING] ***************************'
+  puts '[WARNING] *Not running vagrant tests*'
+  puts '[WARNING] ***************************'
+  puts '[WARNING] '
+  puts '[WARNING] You have not enabled TEST_ESCUALO_WITH_VAGRANT=true variable'
+  puts '[WARNING] Please have a look at readme for instructions about installing vagrant machine and running with vagrant support'
+  puts '[WARNING] '
 end
