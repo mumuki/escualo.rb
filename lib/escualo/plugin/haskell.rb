@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Haskell
     def run(ssh, options)
       ssh.perform! 'apt-get install -y haskell-platform', options

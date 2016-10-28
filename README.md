@@ -15,9 +15,9 @@ $ gem install escualo
 
 ```bash
 escualo bootstrap --hostname <hostname>
-escualo install postgre
-escualo create service atheneum 80
-escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
+escualo plugin install postgre
+escualo artifact create service atheneum 80
+escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 escualo deploy atheneum mumuki/mumuki-atheneum
 ```
 
@@ -25,10 +25,10 @@ escualo deploy atheneum mumuki/mumuki-atheneum
 
 ```bash
 escualo bootstrap --hostname <hostname>
-escualo install mongo
-escualo install node
-escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
-escualo create service bibliotheca 8080
+escualo plugin install mongo
+escualo plugin install node
+escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
+escualo artifact create service bibliotheca 8080
 escualo deploy bibliotheca mumuki/mumuki-bibliotheca
 ```
 
@@ -37,15 +37,15 @@ escualo deploy bibliotheca mumuki/mumuki-bibliotheca
 ```bash
 escualo bootstrap --hostname <hostname>
 
-escualo install postgre
-escualo install haskell
-escualo install nginx --nginx-conf /home/user/Desktop/nginx.conf
+escualo plugin install postgre
+escualo plugin install haskell
+escualo plugin install nginx --nginx-conf /home/user/Desktop/nginx.conf
 
-escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
+escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 
-escualo create service atheneum 8080
-escualo create service haskell-runner 8081
-escualo create program mulang
+escualo artifact create service atheneum 8080
+escualo artifact create service haskell-runner 8081
+escualo artifact create program mulang
 
 escualo deploy atheneum mumuki/mumuki-atheneum
 escualo deploy mulang mumuki/mulang
@@ -58,12 +58,12 @@ escualo rake db:seed
 
 ```bash
 escualo bootstrap --hostname <hostname>
-escualo install postgre
-escualo create service atheneum 80
-escualo vars set <NAME1=VALUE1> <NAME2=VALUE2>
+escualo plugin install postgre
+escualo artifact create service atheneum 80
+escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 
 escualo remote attach atheneum
-escualo deploy
+escualo remote push
 ```
 
 ### Scripting

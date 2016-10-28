@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Node
     def run(ssh, options)
       ssh.shell.perform! %Q{

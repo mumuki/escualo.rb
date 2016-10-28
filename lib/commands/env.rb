@@ -1,8 +1,8 @@
-command 'vars list' do |c|
-  c.syntax = 'escualo vars list'
+command 'env list' do |c|
+  c.syntax = 'escualo env list'
   c.description = 'List escualo variables on host'
   c.ssh_action do |args, options, ssh|
-    say Escualo::Vars.list ssh
+    say Escualo::Env.list ssh
   end
 end
 
@@ -11,26 +11,26 @@ def parse_args_variables(args)
   args.map { |it| it.split('=') }.to_h
 end
 
-command 'vars set' do |c|
-  c.syntax = 'escualo vars set <NAME>=<VALUE> [<NAME>=<VALUE>,...<NAME>=<VALUE>]'
+command 'env set' do |c|
+  c.syntax = 'escualo env set <NAME>=<VALUE> [<NAME>=<VALUE>,...<NAME>=<VALUE>]'
   c.description = 'Sets one or more escualo variables on host'
   c.ssh_action do |args, options, ssh|
-    Escualo::Vars.set ssh, parse_args_variables(args)
+    Escualo::Env.set ssh, parse_args_variables(args)
   end
 end
 
-command 'vars unset' do |c|
-  c.syntax = 'escualo vars unset <NAME> [<NAME>,...<NAME>]'
+command 'env unset' do |c|
+  c.syntax = 'escualo env unset <NAME> [<NAME>,...<NAME>]'
   c.description = 'Unset escualo variables on host'
   c.ssh_action do |args, options, ssh|
-    Escualo::Vars.unset ssh, args
+    Escualo::Env.unset ssh, args
   end
 end
 
-command 'vars clean' do |c|
-  c.syntax = 'escualo vars clean'
+command 'env clean' do |c|
+  c.syntax = 'escualo env clean'
   c.description = 'Unset all escualo variables on host'
   c.ssh_action do |args, options, ssh|
-    Escualo::Vars.clean ssh
+    Escualo::Env.clean ssh
   end
 end

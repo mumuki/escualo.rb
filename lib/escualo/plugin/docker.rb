@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Docker
     def run(ssh, options)
       ssh.perform! 'apt-get install -y docker.io', options

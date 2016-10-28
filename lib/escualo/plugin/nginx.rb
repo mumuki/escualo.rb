@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Nginx
     def run(ssh, options)
       config = options.nginx_conf.try { |it| File.read it }

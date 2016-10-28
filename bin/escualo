@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require "bundler/setup"
+require 'bundler/setup'
 require 'commander/import'
 
 require_relative '../lib/escualo'
@@ -39,32 +39,13 @@ def step(name, &block)
 end
 
 require_relative '../lib/commands/bootstrap'
-require_relative '../lib/commands/install'
-require_relative '../lib/commands/artifacts'
-require_relative '../lib/commands/create'
-require_relative '../lib/commands/vars'
-require_relative '../lib/commands/remote'
 require_relative '../lib/commands/deploy'
 require_relative '../lib/commands/script'
+require_relative '../lib/commands/upload'
+require_relative '../lib/commands/rake'
 
-command 'upload' do |c|
-  c.syntax = 'escualo upload <FILE> <DESTINATION>'
-  c.description = 'Upload file to host'
-  c.ssh_action do |args, options, ssh|
-    ssh.scp.upload! args.first, args.second
-  end
-end
-
-command 'rake' do |c|
-  c.syntax = 'escualo rake <SERVICE_NAME> <TASK>'
-  c.description = 'Run rake task on host'
-  c.ssh_action do |args, options, ssh|
-    name = args.first
-    task = args.second
-    say ssh.shell.exec! %Q{
-      cd /var/www/#{name}
-      bundle exec rake #{task}
-    }
-  end
-end
+require_relative '../lib/commands/plugin'
+require_relative '../lib/commands/artifact'
+require_relative '../lib/commands/remote'
+require_relative '../lib/commands/env'
 

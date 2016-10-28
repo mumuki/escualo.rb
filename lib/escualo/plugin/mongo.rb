@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Mongo
     def run(ssh, options)
       ssh.shell.perform! %Q{

@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Postgre
     def run(ssh, options)
       pg_hba_conf = '/etc/postgresql/9.3/main/pg_hba.conf'

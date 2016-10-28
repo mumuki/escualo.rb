@@ -1,5 +1,5 @@
 module Escualo
-  module Vars
+  module Env
     def self.setup(ssh)
       source_escualorc = "'source ~/.escualorc'"
       ssh.exec! %Q{
@@ -12,8 +12,8 @@ module Escualo
 
     def self.set_builtins(ssh)
       set ssh, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
-      set ssh, Escualo::Vars.locale_variables
-      set ssh, Escualo::Vars.production_variables
+      set ssh, Escualo::Env.locale_variables
+      set ssh, Escualo::Env.production_variables
     end
 
     def self.list(ssh)

@@ -1,5 +1,15 @@
 module Escualo
-  module Artifacts
+  module Artifact
+    def self.destroy(ssh, name)
+      raise 'name must not be blank' if name.blank?
+      raise 'name must not contains wildcards' if name.include?('*')
+
+      ssh.exec! "rm -rf /var/scripts/#{name}"
+      ssh.exec! "rm -rf /var/repo/#{name}"
+      ssh.exec! "rm -f /etc/monit/conf.d/escualo-#{name}"
+      ssh.exec! "rm -f /etc/init/#{name}.conf"
+    end
+
     def self.create_scripts_dir(ssh, name)
       ssh.exec! "mkdir -p /var/scripts/#{name}"
     end

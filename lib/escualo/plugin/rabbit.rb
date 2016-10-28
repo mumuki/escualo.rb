@@ -1,4 +1,4 @@
-module Escualo::Installers
+module Escualo::Plugin
   class Rabbit
     def run(ssh, options)
       raise 'missing rabbit password' unless options.rabbit_admin_password
