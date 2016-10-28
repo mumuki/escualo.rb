@@ -11,6 +11,10 @@ module Escualo
       ssh.exec! "chmod +x /var/scripts/#{options[:name]}/init"
     end
 
+    def self.list(ssh)
+      ssh.exec!('ls /var/repo/').captures(/(.*)\.git/).map { $1 }
+    end
+
     def self.create_push_infra(ssh, options)
       name = options[:name]
       ssh.exec! %Q{\

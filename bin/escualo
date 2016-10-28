@@ -40,6 +40,7 @@ end
 
 require_relative '../lib/commands/bootstrap'
 require_relative '../lib/commands/install'
+require_relative '../lib/commands/artifacts'
 require_relative '../lib/commands/create'
 require_relative '../lib/commands/vars'
 require_relative '../lib/commands/remote'
