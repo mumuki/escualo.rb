@@ -3,7 +3,7 @@ command 'plugin install' do |c|
   c.description = "Install plugin on host. Valid plugins are #{Escualo::Plugin::PLUGINS.join(', ')}"
   c.option '--nginx-conf FILENAME', String, 'ningix config file, only for nginx plugin'
   c.option '--rabbit-admin-password PASSWORD', String, 'rabbitmq admin password, only for rabbit plugin'
-  c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
+  c.option '-f', '--force', TrueClass, 'Force reinstalling even if already done'
 
   c.ssh_action do |args, options, ssh|
     plugin = args.first
@@ -11,10 +11,10 @@ command 'plugin install' do |c|
 
     installer = Escualo::Plugin.load plugin
 
-    if !options.force && installer.check(ssh)
-      say "Nothing to do. Plugin #{plugin} is already installed"
-      say 'Use --force to reinstall it anyway'
-    else
+    do_unless installer.check(ssh),
+              "Plugin #{plugin} is already installed",
+              options do
+
       step "Installing plugin #{plugin}" do
         log = installer.run ssh, options
       end

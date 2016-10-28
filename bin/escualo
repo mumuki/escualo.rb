@@ -38,6 +38,15 @@ def step(name, &block)
   block.call
 end
 
+def do_unless(done, done_message, options)
+  if !options.force && done
+    say "Nothing to do. #{done_message}"
+    say 'Use --force to proceed it anyway'
+  else
+    yield
+  end
+end
+
 require_relative '../lib/commands/bootstrap'
 require_relative '../lib/commands/deploy'
 require_relative '../lib/commands/script'

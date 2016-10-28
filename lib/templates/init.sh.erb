@@ -29,7 +29,7 @@ if [ -e .escualo/jobs ]; then
 fi
 <% end %>
 
-<% if @program %>
+<% if @executable %>
 echo '[Escualo] [<%= @name %>] adding executable to /usr/bin...'
 rm -f /usr/bin/<%= @name %>
 ln -s /var/bin/<%= @name %>/<%= @name %> /usr/bin

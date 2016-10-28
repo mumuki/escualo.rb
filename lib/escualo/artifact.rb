@@ -10,6 +10,10 @@ module Escualo
       ssh.exec! "rm -f /etc/init/#{name}.conf"
     end
 
+    def self.present?(ssh, name)
+      list(ssh).include? name
+    end
+
     def self.create_scripts_dir(ssh, name)
       ssh.exec! "mkdir -p /var/scripts/#{name}"
     end

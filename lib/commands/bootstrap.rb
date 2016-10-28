@@ -13,9 +13,9 @@ command 'bootstrap' do |c|
     end
     options.default monit_version: '5.16'
 
-    if !options.force && Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION)
-      say 'Escualo already installed. Use --force to install it anyway'
-    else
+    do_unless Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION),
+              'This host has already been bootstrapped',
+              options do
       step 'Configuring variables...' do
         Escualo::Env.setup ssh
         Escualo::Env.set_builtins ssh
