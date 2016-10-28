@@ -9,8 +9,8 @@ do
 
     echo "[Escualo] [<%= @name %>] branch found: $branch"
     if [ "master" == "$branch" ]; then
-       echo "[Escualo::LiveHook::Version] <%= Escualo::Version::BASE_VERSION %>"
-       export ESCUALO_SERVICE_VERSION=<%= Escualo::Version::BASE_VERSION %>
+       echo "[Escualo::LiveHook::Version] <%= Escualo::BASE_VERSION %>"
+       export ESCUALO_SERVICE_VERSION=<%= Escualo::BASE_VERSION %>
 
        echo "[Escualo] [<%= @name %>] master branch detected, deploying..."
        mkdir -p /var/www/<%= @name %>

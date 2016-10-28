@@ -9,7 +9,7 @@ if [ -e .escualo/install/before ]; then
  .escualo/install/before
 fi
 
-<%= if @service %>
+<% if @service %>
 echo "[Escualo] [<%= @name %>] installing dependencies..."
 <%= @install_command %>
 

@@ -28,6 +28,7 @@ module Escualo
     end
 
     def self.configure_monit(ssh, name)
+      ssh.exec! 'mkdir -p /etc/monit/conf.d/'
       ssh.upload_template! "/etc/monit/conf.d/escualo-#{name}", 'monit.conf', name: name
       ssh.exec! 'monit reload'
     end
@@ -38,7 +39,7 @@ module Escualo
     end
 
     def self.configure_upstart(ssh, options)
-      ssh.upload_template "/etc/init/#{name}.conf", 'upstart.conf', options
+      ssh.upload_template! "/etc/init/#{name}.conf", 'upstart.conf', options
     end
   end
 end
