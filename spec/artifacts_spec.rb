@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'escualo artifact create' do
   before do
-    escualo('list').split.each do |it|
+    escualo('artifact list').split.each do |it|
       escualo "artifact destroy #{it}"
     end
   end

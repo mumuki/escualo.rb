@@ -1,5 +1,8 @@
 require 'spec_helper'
 
 describe 'escualo --help' do
-  it { expect(escualo '--help').to include 'escualo provisioning tool implementation for ruby' }
+  it do
+    escualo '--help'
+    expect($?).to eq 0
+  end
 end
