@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'plugin' do
+describe 'plugin', if: vagrant_up do
   describe 'install' do
     before { escualo 'bootstrap --monit-password sample' }
 

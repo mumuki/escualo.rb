@@ -79,4 +79,4 @@ escualo script atheneum.standalone.escualo.yml
 1. `bundle install`
 1. Install a `vagrant`
 1. Start a the testing machine: `vagrant up` - may take several minutes
-1. Run tests: `bundle exec rspec`
+1. Run tests: `TEST_ESCUALO_WITH_VAGRANT=true bundle exec rspec`

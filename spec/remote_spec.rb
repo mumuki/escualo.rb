@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe 'escualo remote' do
-  describe "attach" do
-    it "adds a git remote to the current repository" do
+describe 'escualo remote', if: vagrant_up do
+  describe 'attach' do
+    it 'adds a git remote to the current repository' do
       remotes = Dir.mktmpdir do |dir|
         %x{cd #{dir} && git init .}
         raw_escualo "remote attach foo --hostname deploy.com --username astor --repo-path #{dir}"
@@ -13,7 +13,7 @@ describe 'escualo remote' do
       expect(remotes.split.size).to eq 1
     end
 
-    it "supports adding multiple attachments" do
+    it 'supports adding multiple attachments' do
       remotes = Dir.mktmpdir do |dir|
         %x{cd #{dir} && git init .}
         raw_escualo "remote attach foo --hostname s1.deploy.com --username astor --repo-path #{dir}"
