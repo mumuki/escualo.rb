@@ -46,5 +46,10 @@ module Escualo
         '  allow admin:#{options.monit_password}' >> /etc/monit/conf.d/web-server && \
         monit reload}
     end
+
+    def self.install_gems(ssh)
+      ssh.exec! 'gem install bundler'
+      ssh.exec! 'gem install escualo'
+    end
   end
 end

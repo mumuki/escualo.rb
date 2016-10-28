@@ -33,8 +33,8 @@ command 'bootstrap' do |c|
         Escualo::Bootstrap.enable_swap ssh
       end if options.swap
 
-      step 'Installing bundler...' do
-        ssh.exec! 'gem install bundler'
+      step 'Installing gems...' do
+        Escualo::Bootstrap.install_gems ssh
       end
     end
   end
