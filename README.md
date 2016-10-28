@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mumuki/escualo.rb.svg?branch=master)](https://travis-ci.org/mumuki/escualo.rb)
+
 # escualo.rb
 
 > Ruby implementation of the mumuki's escualo provisioning tool
