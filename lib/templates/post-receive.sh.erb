@@ -16,7 +16,7 @@ do
        mkdir -p /var/www/<%= @name %>
        git --work-tree=/var/www/<%= @name %> --git-dir=/var/repo/<%= @name %>.git checkout master -f
 
-       <% unless @static %>
+       <% if @service %>
        /var/scripts/<%= @name %>/codechange $newrev
        <% end %>
        /var/scripts/<%= @name %>/init $newrev

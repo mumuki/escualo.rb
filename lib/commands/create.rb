@@ -11,30 +11,35 @@ command 'create service' do |c|
     Escualo::Artifacts.create_scripts_dir ssh, name
     Escualo::Artifacts.create_init_script ssh,
                                           name: name,
+                                          service: true,
                                           install_command: install_command
     Escualo::Artifacts.create_codechange_script ssh, name
     Escualo::Artifacts.configure_upstart ssh, name: name, lanunch_comand: launch_command
     Escualo::Artifacts.configure_monit ssh, name
-    Escualo::Artifacts.create_push_infra ssh, name: name
+    Escualo::Artifacts.create_push_infra ssh, name: name, service: true
   end
 end
 
 command 'create site' do |c|
-  c.syntax = 'escualo create site'
+  c.syntax = 'escualo create site <NAME>'
   c.description = 'Setup an static site deployment'
   c.ssh_action do |args, options, ssh|
     name = args.first
 
-    Escualo::Artifacts.create_scripts_dir shh, name
+    Escualo::Artifacts.create_scripts_dir ssh, name
     Escualo::Artifacts.create_init_script ssh, name: name, static: true
     Escualo::Artifacts.create_push_infra ssh, name: name, static: true
   end
 end
 
 command 'create executable' do |c|
-  c.syntax = 'escualo create executable'
+  c.syntax = 'escualo create executable <NAME>'
   c.description = 'Setup an executable command deployment'
-  c.action do |args, options|
-    say "...."
+  c.ssh_action do |args, options, ssh|
+    name = args.first
+
+    Escualo::Artifacts.create_scripts_dir ssh, name
+    Escualo::Artifacts.create_init_script ssh, name: name, program: true
+    Escualo::Artifacts.create_push_infra ssh, name: name, program: true
   end
 end

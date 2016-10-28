@@ -9,7 +9,7 @@ if [ -e .escualo/install/before ]; then
  .escualo/install/before
 fi
 
-<%= unless @static %>
+<%= if @service %>
 echo "[Escualo] [<%= @name %>] installing dependencies..."
 <%= @install_command %>
 
@@ -29,13 +29,19 @@ if [ -e .escualo/jobs ]; then
 fi
 <% end %>
 
+<% if @program %>
+echo '[Escualo] [<%= @name %>] adding executable to /usr/bin...'
+rm -f /usr/bin/<%= @name %>
+ln -s /var/bin/<%= @name %>/<%= @name %> /usr/bin
+<% end %>
+
 if [ -e .escualo/install/after ]; then
  echo "[Escualo] [<%= @name %>] .escualo/install/after found. Running it..."
  chmod u+x .escualo/install/after
  .escualo/install/after $REVISION
 fi
 
-<%= unless @static %>
+<% if @service %>
 service <%= @name %> start
 monit monitor escualo-<%= @name %>
 
