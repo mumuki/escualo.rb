@@ -1,6 +1,7 @@
 require 'net/ssh'
 require 'net/scp'
 require 'securerandom'
+require 'yaml'
 require 'mumukit/core'
 
 module Escualo
