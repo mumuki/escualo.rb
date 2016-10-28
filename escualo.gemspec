@@ -4,15 +4,16 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'escualo/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "escualo"
+  spec.name          = 'escualo'
   spec.version       = Escualo::VERSION
-  spec.authors       = ["Franco Leonardo Bulgarelli"]
-  spec.email         = ["flbulgarelli@yahoo.com.ar"]
+  spec.authors       = ['Franco Leonardo Bulgarelli']
+  spec.email         = ['flbulgarelli@yahoo.com.ar']
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  spec.summary       = 'Mumuki Platform provisioning tool'
+  spec.description   = 'escualo.rb is command-line tools that implements of the escualo provisioning format used by Mumuki Platform.
+                        It allows to deploy mumuki artifacts to any host'
+  spec.homepage      = 'http://github.com/mumuki/escualo.rb'
+  spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
