@@ -21,13 +21,13 @@ Gem::Specification.new do |spec|
     raise 'RubyGems 2.0 or newer is required to protect against public gem pushes.'
   end
 
-  spec.files         = Dir['bin/**'] + Dir['lib/**']
+  spec.files         = Dir['lib/**/*', 'bin/**/*']
+  spec.require_paths = %w(lib bin)
   spec.executables   = ['escualo']
-  spec.require_paths = ['lib']
 
-  spec.add_dependency 'commander'
-  spec.add_dependency 'net-ssh'
-  spec.add_dependency 'net-scp'
+  spec.add_dependency 'commander', '~> 4.4'
+  spec.add_dependency 'net-ssh', '~> 2.9'
+  spec.add_dependency 'net-scp', '~> 1.2'
   spec.add_dependency 'mumukit-core'
 
   spec.add_development_dependency 'bundler', '~> 1.11'
