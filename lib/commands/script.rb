@@ -8,9 +8,9 @@ end
 def ssh_options
   [$hostname.try { |it| "--hostname #{it}" },
    $username.try { |it| "--username #{it}" },
-   $password.try { |it| "--$password #{it}" },
-   $ssh_options[:keys].try { |it| "--ssh-key #{it}" },
-   $ssh_options[:port].try { |it| "--ssh-port #{it}" }
+   $password.try { |it| "--password #{it}" },
+   $ssh_key.try { |it| "--ssh-key #{it}" },
+   $ssh_port.try { |it| "--ssh-port #{it}" }
   ].compact.join(' ')
 end
 
