@@ -47,7 +47,7 @@ escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 
 escualo artifact create service atheneum 8080
 escualo artifact create service haskell-runner 8081
-escualo artifact create program mulang
+escualo artifact create executable mulang
 
 escualo deploy atheneum mumuki/mumuki-atheneum
 escualo deploy mulang mumuki/mulang
