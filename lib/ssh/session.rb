@@ -1,10 +1,9 @@
 class Net::SSH::Connection::Session
-  def upload_template!(destination, name, bindings)
-    Mumukit::Core::Template
-        .new(File.join(__dir__, 'templates', "#{name}.erb"), bindings)
-        .with_tempfile!('template') do |file|
-      scp.upload! file, destination
-    end
+  include Net::SSH::Connection::Perform
+  include Net::SSH::Connection::Upload
+
+  def upload_file!(file, destination)
+    scp.upload! file, destination
   end
 
   def tell!(command)
@@ -24,14 +23,6 @@ class Net::SSH::Connection::Session
 
   def shell
     Shell.new self
-  end
-
-  def perform!(command, options)
-    if options.verbose
-      tell! command
-    else
-      exec! command
-    end
   end
 
   class Shell
