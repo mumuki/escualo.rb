@@ -4,7 +4,7 @@ module Escualo::Plugin
       pg_hba_conf = '/etc/postgresql/9.3/main/pg_hba.conf'
 
       ssh.shell.perform! %Q{
-        apt-get install curl git postgresql libpq-dev -y && \
+        apt-get install postgresql libpq-dev -y && \
                                                             \
         echo 'local   all             postgres                                peer' > #{pg_hba_conf} && \
         echo 'local   all             postgres                                peer' >> #{pg_hba_conf} && \
