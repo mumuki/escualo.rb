@@ -41,8 +41,9 @@ module Escualo
         cd #{name}.git && \
         git init --bare
       }
-      ssh.upload_template! "/var/repo/#{name}.git/hooks/post-receive", 'post-receive.sh', options
-      ssh.exec! 'chmod +x post-receive'
+      hook_file = "/var/repo/#{name}.git/hooks/post-receive"
+      ssh.upload_template! hook_file, 'post-receive.sh', options
+      ssh.exec! "chmod +x #{hook_file}"
     end
 
     def self.configure_monit(ssh, name)
