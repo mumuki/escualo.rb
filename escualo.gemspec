@@ -28,7 +28,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'commander', '~> 4.4'
   spec.add_dependency 'net-ssh', '~> 2.9'
   spec.add_dependency 'net-scp', '~> 1.2'
-  spec.add_dependency 'mumukit-core'
+  spec.add_dependency 'mumukit-core', '~> 0.1'
+
 
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 10.0'
