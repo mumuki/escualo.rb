@@ -6,7 +6,7 @@ command 'bootstrap' do |c|
   c.option '--monit-password PASSWORD', String, 'Monit password. Will be prompted otherwise'
   c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
 
-  c.ssh_action do |args, options, ssh|
+  c.ssh_action do |_args, options, ssh|
     unless options.monit_password
       password = ask('Monit Password: ') { |q| q.echo = '*' }
       options.default monit_password: password
