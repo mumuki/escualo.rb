@@ -4,15 +4,16 @@ command 'script' do |c|
   c.action do |args, options|
     file = YAML.load_file args.first
 
-    step 'Bootstrapping host' do
-      %x{escualo file['boostrap']}
+    step 'Bootstrapping host..' do
+      puts "escualo #{file['boostrap']}"
+      say %x{escualo #{file['boostrap']}}
     end
 
     step 'Provisioning host' do
       commands = file['script'].map { |it| "escualo #{it}" }
       Net::SSH.start($hostname, $username, $ssh_options.compact) do |ssh|
         commands.each do |command|
-          ssh.exec! command
+          say ssh.exec! command
         end
       end
     end
