@@ -42,7 +42,7 @@ module Escualo
     end
 
     def self.locale_variables
-      %w{LANG LC_ALL LC_NAME LC_PAPER LC_ADDRESS LC_NUMERIC LC_MONETARY LC_TELEPHONE LC_MEASUREMENT}.map do |it|
+      %w{LANG LC_ALL LC_NAME LC_IDENTIFICATION LC_PAPER LC_ADDRESS LC_TIME LC_NUMERIC LC_MONETARY LC_TELEPHONE LC_MEASUREMENT}.map do |it|
         [it, 'en_US.UTF-8']
       end.to_h
     end
