@@ -9,4 +9,5 @@ remote:
            POSTGRESQL_DB_USERNAME=atheneum
            POSTGRESQL_DB_PASSWORD=sample_postgre_password
            POSTGRESQL_DB_HOST=localhost
+deploy:
  - deploy atheneum mumuki/mumuki-atheneum
