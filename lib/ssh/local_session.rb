@@ -6,7 +6,7 @@ class Net::SSH::Connection::LocalSession
   include Net::SSH::Connection::Upload
 
   def exec!(command)
-    Open3.capture2e(command) rescue 'command not found'
+    Open3.capture2e(command).first rescue 'command not found'
   end
 
   def upload_file!(file, destination)
