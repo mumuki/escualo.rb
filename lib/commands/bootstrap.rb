@@ -36,6 +36,10 @@ command 'bootstrap' do |c|
       step 'Installing gems...' do
         Escualo::Bootstrap.install_gems ssh
       end
+
+      step 'Setup artifact directories...' do
+        Escualo::Artifact.setup ssh
+      end
     end
   end
 end
