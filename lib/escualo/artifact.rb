@@ -53,9 +53,10 @@ module Escualo
       ssh.exec! "chmod +x #{hook_file}"
     end
 
-    def self.configure_monit(ssh, name)
+    def self.configure_monit(ssh, options)
+      name = options[:name]
       ssh.exec! 'mkdir -p /etc/monit/conf.d/'
-      ssh.upload_template! "/etc/monit/conf.d/escualo-#{name}", 'monit.conf', name: name
+      ssh.upload_template! "/etc/monit/conf.d/escualo-#{name}", 'monit.conf', options
       ssh.exec! 'monit reload'
     end
 

@@ -1,8 +1,8 @@
-check host escualo-<%= @name %> with address $HOST
-  start "/sbin/start <%= @name %>"
-  stop "/sbin/stop <%= @name %>"
+check host escualo-<%= name %> with address localhost
+  start "/sbin/start <%= name %>"
+  stop "/sbin/stop <%= name %>"
   if failed
-    port $PORT
+    port <%= port %>
     protocol HTTP
     request "/"
     status > 199

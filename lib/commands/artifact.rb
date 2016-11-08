@@ -53,7 +53,7 @@ command 'artifact create service' do |c|
       end
 
       step 'Configuring monit...' do
-        Escualo::Artifact.configure_monit ssh, name
+        Escualo::Artifact.configure_monit ssh, name: name, port: port
       end
 
       step 'Creating push infrastructure' do
