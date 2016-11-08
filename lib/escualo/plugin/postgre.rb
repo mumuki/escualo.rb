@@ -13,7 +13,7 @@ module Escualo::Plugin
     end
 
     def check(ssh)
-      ssh.shell.exec!('psql').include? 'FATAL:  role "root" does not exist'
+      ssh.shell.exec!('psql --version').include? 'psql (PostgreSQL) 9.3'
     end
   end
 end
