@@ -13,6 +13,7 @@ module Escualo
                  libreadline6-dev \
                  curl \
                  git \
+                 monit \
                  libssl-dev \
                  ruby2.0 \
                  ruby2.0-dev \
@@ -34,7 +35,7 @@ module Escualo
     end
 
     def self.setup_monit(ssh, options)
-      ssh.exec! %Q{
+      ssh.perform! %Q{
         service monit stop
         cd /tmp &&
         wget https://mmonit.com/monit/dist/binary/5.16/monit-#{options.monit_version}-linux-x64.tar.gz &&
@@ -46,7 +47,7 @@ module Escualo
         '  allow 0.0.0.0/0.0.0.0' >> /etc/monit/conf.d/web-server
         '  allow admin:#{options.monit_password}' >> /etc/monit/conf.d/web-server
         monit reload
-    }
+    }, options
     end
 
     def self.install_gems(ssh, options)
