@@ -1,7 +1,7 @@
 def run_commands_for!(script, extra='', ssh)
   script.map { |it| "escualo #{it} #{extra}" }.each do |command|
-    puts command
-    puts ssh.exec! command
+    puts "Running `#{command}`"
+    puts ssh.shell.exec! command
   end
 end
 
