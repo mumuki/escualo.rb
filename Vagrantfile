@@ -61,9 +61,8 @@ Vagrant.configure("2") do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
-  config.vm.provision "shell", inline: <<-SHELL
-    echo -e "123456\n123456" | (passwd root)
-    sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-    service ssh restart
+  ssh_public_key = File.readlines(File.join Dir.home, '.ssh', 'id_rsa.pub').first.strip
+  config.vm.provision 'shell', inline: <<-SHELL
+    echo #{ssh_public_key} >> /root/.ssh/authorized_keys
   SHELL
 end

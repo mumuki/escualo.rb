@@ -10,7 +10,6 @@ end
 def escualo(args)
   options = '--hostname 127.0.0.1 ' +
   '--username root ' +
-  '--password 123456 ' +
   '--ssh-port 2222 '
   raw_escualo args, options
 end
