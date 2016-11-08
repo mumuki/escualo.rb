@@ -60,12 +60,12 @@ module Escualo
     end
 
     def self.create_codechange_script(ssh, name)
-      ssh.upload_template! "/var/scripts/#{name}/codechange", "codechange.sh", name: name
+      ssh.upload_template! "/var/scripts/#{name}/codechange", 'codechange.sh', name: name
       ssh.exec! "chmod +x /var/scripts/#{name}/codechange"
     end
 
     def self.configure_upstart(ssh, options)
-      ssh.upload_template! "/etc/init/#{name}.conf", 'upstart.conf', options
+      ssh.upload_template! "/etc/init/#{options[:name]}.conf", 'upstart.conf', options
     end
   end
 end
