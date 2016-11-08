@@ -26,7 +26,12 @@ module Escualo
     end
 
     def self.present?(ssh, variable)
-      ssh.exec!("cat ~/.escualo/vars/#{variable}").present?
+      value = get(ssh, variable)
+      value.present? && !value.include?('No such file or directory')
+    end
+
+    def self.get(ssh, variable)
+      ssh.exec!("cat ~/.escualo/vars/#{variable}")
     end
 
     def self.set(ssh, variables)
