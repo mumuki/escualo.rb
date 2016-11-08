@@ -1,7 +1,7 @@
 module Escualo
   module Bootstrap
-    def self.install_base(ssh)
-      ssh.exec! %Q{ \
+    def self.install_base(ssh, options)
+      ssh.shell.perform! %q{ \
         apt-get install software-properties-common -y && \
         apt-add-repository ppa:brightbox/ruby-ng && \
         apt-get update && \
@@ -18,7 +18,8 @@ module Escualo
                  ruby2.0-dev \
                  zlib1g \
                  zlib1g-dev \
-                 libreadline-dev }
+                 libreadline-dev
+      }, options
     end
 
     def self.enable_swap(ssh)
@@ -47,9 +48,8 @@ module Escualo
         monit reload}
     end
 
-    def self.install_gems(ssh)
-      ssh.exec! 'gem install bundler'
-      ssh.exec! 'gem install escualo'
+    def self.install_gems(ssh, options)
+      ssh.perform! 'gem install bundler && gem install escualo', options
     end
   end
 end

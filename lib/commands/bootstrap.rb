@@ -22,7 +22,7 @@ command 'bootstrap' do |c|
       end
 
       step 'Installing base software...' do
-        Escualo::Bootstrap.install_base ssh
+        Escualo::Bootstrap.install_base ssh, options
       end
 
       step 'Installing and configuring monit...' do
@@ -34,7 +34,7 @@ command 'bootstrap' do |c|
       end if options.swap
 
       step 'Installing gems...' do
-        Escualo::Bootstrap.install_gems ssh
+        Escualo::Bootstrap.install_gems ssh, options
       end
 
       step 'Setup artifact directories...' do
