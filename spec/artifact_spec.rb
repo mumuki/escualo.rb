@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe 'escualo artifact create', if: vagrant_up do
+  before { escualo 'bootstrap --monit-password sample' }
+
   before do
     escualo('artifact list').split.each do |it|
       escualo "artifact destroy #{it}"
