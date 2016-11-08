@@ -43,9 +43,9 @@ module Escualo
         cp monit-#{options.monit_version}/bin/monit /usr/bin/monit
         ln -s /etc/monit/monitrc /etc/monitrc
         service monit start
-        'set httpd port 2812 and' > /etc/monit/conf.d/web-server
-        '  allow 0.0.0.0/0.0.0.0' >> /etc/monit/conf.d/web-server
-        '  allow admin:#{options.monit_password}' >> /etc/monit/conf.d/web-server
+        echo 'set httpd port 2812 and' > /etc/monit/conf.d/web-server
+        echo '  allow 0.0.0.0/0.0.0.0' >> /etc/monit/conf.d/web-server
+        echo '  allow admin:#{options.monit_password}' >> /etc/monit/conf.d/web-server
         monit reload
     }, options
     end
