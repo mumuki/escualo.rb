@@ -7,6 +7,10 @@ def vagrant_up
   @vagrant_up ||= ENV['TEST_ESCUALO_WITH_VAGRANT']
 end
 
+def ssh(args)
+  %x{ssh root@127.0.0.1 -p 2222 -q -t #{args}}
+end
+
 def escualo(args)
   options = '--hostname 127.0.0.1 ' +
   '--username root ' +
