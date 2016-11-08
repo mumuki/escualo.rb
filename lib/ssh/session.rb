@@ -11,10 +11,10 @@ class Net::SSH::Connection::Session
       ch.exec command do |ch, success|
         raise 'could not execute command' unless success
         ch.on_data do |c, data|
-          $stdout.print data
+          $stdout.print data unless garbage? data
         end
         ch.on_extended_data do |c, type, data|
-          $stderr.print data
+          $stderr.print data unless garbage? data
         end
       end
     end
@@ -23,6 +23,12 @@ class Net::SSH::Connection::Session
 
   def shell
     Shell.new self
+  end
+
+  private
+
+  def garbage?(data)
+    data.start_with?('bash: cannot set terminal process group') || data.start_with?('bash: no job control in this shell')
   end
 
   class Shell
