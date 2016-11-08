@@ -18,6 +18,7 @@ describe 'escualo artifact create', if: vagrant_up do
       expect(result).to include 'Now you can deploy this service'
 
       expect(escualo 'artifact list').to include 'atheneum'
+      expect(ssh 'service atheneum status').to include 'atheneum stop/waiting'
     end
 
     context 'when already created' do
