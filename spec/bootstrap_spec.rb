@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'escualo bootstrap', if: vagrant_up do
-  it 'can force bootstrap' do
-    escualo 'bootstrap --monit-password sample --force '
+  it 'can bootstrap' do
+    escualo 'bootstrap --monit-password sample'
 
     expect($?).to eq 0
 
