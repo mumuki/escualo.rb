@@ -1,13 +1,13 @@
 local:
  - bootstrap --monit-password sample_monit_password
 remote:
- - plugin install postgre
- - artifact create service atheneum 80
  - env set RAILS_ENV=production
            SECRET_KEY_BASE=sample_secret_base
            PGDATABASE=atheneum
            POSTGRESQL_DB_USERNAME=atheneum
            POSTGRESQL_DB_PASSWORD=sample_postgre_password
            POSTGRESQL_DB_HOST=localhost
+ - plugin install postgre --trace
+ - artifact create service atheneum 80 --trace
 deploy:
  - deploy atheneum mumuki/mumuki-atheneum
