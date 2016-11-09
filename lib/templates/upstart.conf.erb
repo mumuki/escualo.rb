@@ -1,14 +1,14 @@
-description "<%= @name %> configuration"
-  author "Escualo - via The Mumuki Project"
+description "<%= name %> configuration"
+author "Escualo - via The Mumuki Project"
 
-  start on runlevel [2345]
-  stop on runlevel [!2345]
+start on runlevel [2345]
+stop on runlevel [!2345]
 
-  respawn
+respawn
 
-  chdir /var/www/<%= @name %>
+chdir /var/www/<%= name %>
 
-  script
-    for var in /root/.escualo/vars/*; do . \\$var; done
-    <%= @launch_command %>
-  end script
+script
+  for var in /root/.escualo/vars/*; do . $var; done
+  <%= launch_command %>
+end script

@@ -49,7 +49,7 @@ command 'artifact create service' do |c|
       end
 
       step 'Configuring upstart...' do
-        Escualo::Artifact.configure_upstart ssh, name: name, lanunch_comand: launch_command
+        Escualo::Artifact.configure_upstart ssh, name: name, launch_command: launch_command
       end
 
       step 'Configuring monit...' do

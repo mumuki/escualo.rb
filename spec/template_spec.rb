@@ -7,7 +7,8 @@ describe Mumukit::Core::Template do
   it { expect(template.render).to include 'chdir /var/www/foo' }
   it do
     template.with_tempfile!('foo') do |file|
-      expect(File.read file).to include 'for var in /root/.escualo/vars/*; do . \\\\$var; done'
+      expect(File.read file).to include 'for var in /root/.escualo/vars/*; do . $var; done'
+      expect(File.read file).to include 'bar'
     end
   end
 end
