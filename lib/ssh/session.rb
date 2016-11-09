@@ -54,7 +54,7 @@ class Net::SSH::Connection::Session
 
     def wrap(command)
       "bash -i -s <<EOBASH
-#{command}
+#{command.gsub('$', '\$')}
 EOBASH"
     end
   end
