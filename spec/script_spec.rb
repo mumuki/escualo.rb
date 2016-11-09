@@ -7,8 +7,7 @@ describe 'escualo script' do
 
     expect(ssh 'ruby --version').to include 'ruby 2.0'
     expect(ssh 'psql --version').to include 'PostgreSQL'
-    expect(ssh 'service atheneum status').to include 'service atheneum running'
-    expect(ssh 'service atheneum-commands status').to include 'service atheneum running'
+    expect(ssh 'service atheneum status').to include 'atheneum start/running'
   end
 end
 
