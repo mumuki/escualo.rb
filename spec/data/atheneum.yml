@@ -7,7 +7,10 @@ remote:
            POSTGRESQL_DB_USERNAME=atheneum
            POSTGRESQL_DB_PASSWORD=sample_postgre_password
            POSTGRESQL_DB_HOST=localhost
- - plugin install postgre --trace
- - artifact create service atheneum 80 --trace
+           QUEUELESS_MODE=true
+ - plugin install postgre
+ - artifact create service atheneum 80
+ - rake atheneum 'db:create db:schema:load db:seed'
 deploy:
- - deploy atheneum mumuki/mumuki-atheneum
+ - deploy atheneum mumuki/mumuki-atheneum --tag 4756c7cf19ff05864050f69eef6483982c443236
+

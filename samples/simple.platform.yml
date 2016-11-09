@@ -1,0 +1,24 @@
+# simple platform is complete atheneum + classroom solution
+local:
+ - bootstrap --monit-password <MONIT_PASSWORD>
+remote:
+ - env set RAILS_ENV=production
+           SECRET_KEY_BASE=<SECRET>
+           PGDATABASE=atheneum
+           POSTGRESQL_DB_USERNAME=<POSTGRE_USERNAME>
+           POSTGRESQL_DB_PASSWORD=<POSTGRE_PASSWORD>
+           POSTGRESQL_DB_HOST=localhost
+ - plugin install postgre
+ - plugin install mongo
+ - plugin install node # necessary to allow compilation of assets
+ - plugin install rabbit --rabbit-admin-password <RABBIT_ADMIN_PASSWORD>
+ - artifact create service atheneum 8081
+ - artifact create service classroom-api 8082
+ - artifact create site classroom
+ - plugin install nginx --nginx-config configs/simple.platform.nginx.conf
+ - rake atheneum 'db:create db:schema:load db:seed'
+deploy:
+ - deploy atheneum mumuki/mumuki-atheneum
+ - deploy classroom mumuki/mumuki-classroom
+ - deploy classroom-api mumuki/mumuki-classroom-api
+
