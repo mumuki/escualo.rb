@@ -4,10 +4,10 @@ command 'rake' do |c|
   c.ssh_action do |args, options, ssh|
     name = args.first
     task = args.second
-    say ssh.shell.exec! %Q{
+    ssh.shell.perform! %Q{
       cd /var/www/#{name}
-      bundle exec rake #{task}
-    }
+      rake #{task}
+    }, options
   end
 end
 
