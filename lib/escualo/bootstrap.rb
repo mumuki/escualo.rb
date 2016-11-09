@@ -1,10 +1,11 @@
 module Escualo
   module Bootstrap
     def self.install_base(ssh, options)
-      ssh.shell.perform! %q{ \
-        apt-get install software-properties-common -y && \
-        apt-add-repository ppa:brightbox/ruby-ng && \
-        apt-get update && \
+      ssh.shell.perform! %q{
+        apt-get purge libruby* -y &&
+        apt-get install software-properties-common -y &&
+        apt-add-repository ppa:brightbox/ruby-ng &&
+        apt-get update &&
         apt-get install -y \
                  autoconf \
                  bison \
