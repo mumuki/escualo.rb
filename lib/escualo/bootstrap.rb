@@ -25,7 +25,7 @@ module Escualo
     end
 
     def self.enable_swap(ssh)
-      ssh.exec! %Q{ \
+      ssh.exec! %q{ \
         test -e /swapfile ||
         fallocate -l 4G /swapfile && \
         chmod 600 /swapfile && \
