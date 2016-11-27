@@ -1,5 +1,5 @@
 def run_commands_for!(script, extra='', ssh, options)
-  script.map { |it| "escualo #{it} #{extra}" }.each do |command|
+  Escualo::Script.each_command script, extra do |command|
     puts "Running `#{command}`"
     ssh.shell.perform! command, options
   end
