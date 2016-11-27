@@ -1,6 +1,14 @@
 require 'spec_helper'
 
-describe 'escualo script', if: vagrant_up do
+describe 'escualo script' do
+  describe 'with_commands_for' do
+    let(:extra) { '--verbose=true' }
+
+    it { expect(Escualo::Script.each_command(%w(foo bar), extra).to_a).to eq ['escualo foo --verbose=true',
+                                                                              'escualo bar --verbose=true'] }
+    it { expect(Escualo::Script.each_command(nil, extra).to_a).to eq [] }
+  end
+
   it 'can run simple atheneum server script', if: vagrant_up do
     result = escualo 'script samples/server.simple.atheneum.yml'
     expect($?).to eq 0
