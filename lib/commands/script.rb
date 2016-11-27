@@ -2,7 +2,7 @@ def run_commands_for!(script, extra='', ssh, options)
   script.map { |it| "escualo #{it} #{extra}" }.each do |command|
     puts "Running `#{command}`"
     ssh.shell.perform! command, options
-  end
+  end if script
 end
 
 def ssh_options
