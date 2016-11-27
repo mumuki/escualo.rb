@@ -16,11 +16,17 @@ module Escualo
                  git \
                  monit \
                  libssl-dev \
-                 ruby2.0 \
-                 ruby2.0-dev \
                  zlib1g \
                  zlib1g-dev \
                  libreadline-dev
+      }, options
+    end
+
+    def self.install_ruby(ssh, options)
+        ssh.shell.perform! %q{
+        apt-get install -y \
+                 ruby2.0 \
+                 ruby2.0-dev
       }, options
     end
 

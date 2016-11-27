@@ -25,6 +25,7 @@ command 'bootstrap' do |c|
 
       step 'Installing base software...' do
         Escualo::Bootstrap.install_base ssh, options
+        Escualo::Bootstrap.install_ruby ssh, options
       end
 
       step 'Installing and configuring monit...' do
