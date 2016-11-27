@@ -4,6 +4,8 @@ command 'bootstrap' do |c|
   c.option '--swap', TrueClass, 'Setup swap?'
   c.option '--monit-version VERSION', String, 'Monit version'
   c.option '--monit-password PASSWORD', String, 'Monit password. Will be prompted otherwise'
+  c.option '--no-monit', TrueClass, 'Skip monit installation'
+
   c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
 
   c.ssh_action do |_args, options, ssh|
@@ -27,7 +29,7 @@ command 'bootstrap' do |c|
 
       step 'Installing and configuring monit...' do
         Escualo::Bootstrap.setup_monit ssh, options
-      end
+      end unless options.no_monit
 
       step 'Enabling swap...' do
         Escualo::Bootstrap.enable_swap ssh
