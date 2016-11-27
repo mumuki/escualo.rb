@@ -1,5 +1,7 @@
 # desktop Atheneum is a low-level resources installation
 # that lets you run it in a end-user machine, packaged in a vm
+#
+# See https://github.com/mumuki/mumuki-desktop
 local:
  - bootstrap --monit-password <MONIT_PASSWORD>
 remote:
