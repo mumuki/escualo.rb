@@ -1,4 +1,4 @@
-# embedded Atheneum is a low-level resources installation
+# desktop Atheneum is a low-level resources installation
 # that lets you run it in a end-user machine, packaged in a vm
 local:
  - bootstrap --monit-password <MONIT_PASSWORD>
