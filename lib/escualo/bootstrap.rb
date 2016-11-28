@@ -25,15 +25,16 @@ module Escualo
     def self.install_ruby(ssh, options)
       if options.with_rbenv
         ssh.shell.perform! %q{
-        curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash &&
-        echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc &&
-        echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-      }, options
+          curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash &&
+          echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc &&
+          echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+        }, options
+        ssh.shell.perform! 'rbenv install 2.3.1', options
       else
         ssh.shell.perform! %q{
         apt-get install -y \
-                 ruby2.0 \
-                 ruby2.0-dev
+                 ruby2.3 \
+                 ruby2.3-dev
       }, options
       end
     end
