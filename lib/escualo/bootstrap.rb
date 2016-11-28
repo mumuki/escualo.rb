@@ -28,7 +28,7 @@ module Escualo
         curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
         echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
         echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-      }
+      }, options
       else
         ssh.shell.perform! %q{
         apt-get install -y \
