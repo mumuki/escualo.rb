@@ -1,3 +1,8 @@
+def ask_monit_password(options)
+  password = ask('Monit Password: ') { |q| q.echo = '*' }
+  options.default monit_password: password
+end
+
 command 'bootstrap' do |c|
   c.syntax = 'escualo bootstrap'
   c.description = 'Prepare environment to be an escualo host'
@@ -10,10 +15,8 @@ command 'bootstrap' do |c|
   c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
 
   c.ssh_action do |_args, options, ssh|
-    unless options.monit_password
-      password = ask('Monit Password: ') { |q| q.echo = '*' }
-      options.default monit_password: password
-    end
+    ask_monit_password(options) unless  options.monit_password || options.no_monit
+
     options.default monit_version: '5.16'
 
     do_unless Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION),
