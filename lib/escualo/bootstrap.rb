@@ -25,8 +25,8 @@ module Escualo
     def self.install_ruby(ssh, options)
       if options.with_rbenv
         ssh.shell.perform! %q{
-        curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
-        echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+        curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash &&
+        echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc &&
         echo 'eval "$(rbenv init -)"' >> ~/.bashrc
       }, options
       else
