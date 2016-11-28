@@ -10,7 +10,7 @@ command 'bootstrap' do |c|
   c.option '--monit-version VERSION', String, 'Monit version'
   c.option '--monit-password PASSWORD', String, 'Monit password. Will be prompted otherwise'
   c.option '--no-monit', TrueClass, 'Skip monit installation'
-  c.option '--env', String, 'Environment. Valid options are development and production. default is production'
+  c.option '--env ENVIRONMENT', String, 'Environment. Valid options are development and production. default is production'
   c.option '--with-rbenv', TrueClass, 'Use rbenv instead of native ruby installation'
 
   c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
