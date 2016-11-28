@@ -10,21 +10,22 @@ command 'bootstrap' do |c|
   c.option '--monit-version VERSION', String, 'Monit version'
   c.option '--monit-password PASSWORD', String, 'Monit password. Will be prompted otherwise'
   c.option '--no-monit', TrueClass, 'Skip monit installation'
+  c.option '--env', String, 'Environment. Valid options are development and production. default is production'
   c.option '--with-rbenv', TrueClass, 'Use rbenv instead of native ruby installation'
 
   c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
 
   c.ssh_action do |_args, options, ssh|
     ask_monit_password(options) unless  options.monit_password || options.no_monit
-
-    options.default monit_version: '5.16'
+    options.default monit_version: '5.16',
+                    environment: 'production'
 
     do_unless Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION),
               'This host has already been bootstrapped',
               options do
       step 'Configuring variables...' do
         Escualo::Env.setup ssh
-        Escualo::Env.set_builtins ssh
+        Escualo::Env.set_builtins ssh, options
       end
 
       step 'Installing base software...' do

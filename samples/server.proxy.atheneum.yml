@@ -4,8 +4,7 @@
 local:
  - bootstrap --monit-password <MONIT_PASSWORD>
 remote:
- - env set RAILS_ENV=production
-           SECRET_KEY_BASE=<SECRET>
+ - env set SECRET_KEY_BASE=<SECRET>
            PGDATABASE=atheneum
            POSTGRESQL_DB_USERNAME=<POSTGRE_USERNAME>
            POSTGRESQL_DB_PASSWORD=<POSTGRE_PASSWORD>

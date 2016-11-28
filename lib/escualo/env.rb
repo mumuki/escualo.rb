@@ -10,19 +10,19 @@ module Escualo
       }
     end
 
-    def self.set_builtins(ssh)
+    def self.set_builtins(ssh, options)
       set ssh, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
       set ssh, Escualo::Env.locale_variables
-      set ssh, Escualo::Env.production_variables
+      set ssh, Escualo::Env.environment_variables(options.environment)
     end
 
     def self.list(ssh)
       ssh.exec!("cat ~/.escualo/vars/*").gsub("export ", '')
     end
 
-    def self.clean(ssh)
+    def self.clean(ssh, options)
       ssh.exec!("rm ~/.escualo/vars/*")
-      set_builtins ssh
+      set_builtins ssh, options
     end
 
     def self.present?(ssh, variable)
@@ -52,9 +52,9 @@ module Escualo
       end.to_h
     end
 
-    def self.production_variables
+    def self.environment_variables(environment)
       %w{RAILS_ENV NODE_ENV RACK_ENV}.map do |it|
-        [it, 'production']
+        [it, environment]
       end.to_h
     end
 

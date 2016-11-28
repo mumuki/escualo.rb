@@ -31,6 +31,6 @@ command 'env clean' do |c|
   c.syntax = 'escualo env clean'
   c.description = 'Unset all escualo variables on host'
   c.ssh_action do |args, options, ssh|
-    Escualo::Env.clean ssh
+    Escualo::Env.clean ssh, options
   end
 end

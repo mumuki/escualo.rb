@@ -4,10 +4,9 @@
 #
 # See https://github.com/mumuki/mumuki-development-installer, which uses this script
 local:
- - bootstrap --no-monit --with-rbenv --verbose
+ - bootstrap --no-monit --with-rbenv --environment=development --verbose
 remote:
- - env set RAILS_ENV=development
-           PGDATABASE=atheneum
+ - env set PGDATABASE=atheneum
            POSTGRESQL_DB_USERNAME=mumuki
            POSTGRESQL_DB_PASSWORD=mumuki
            POSTGRESQL_DB_HOST=localhost
