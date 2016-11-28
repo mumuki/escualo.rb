@@ -29,7 +29,7 @@ module Escualo
           echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc &&
           echo 'eval "$(rbenv init -)"' >> ~/.bashrc
         }, options
-        ssh.shell.perform! 'rbenv install 2.3.1', options
+        ssh.shell.perform! 'rbenv install 2.3.1 && rbenv global 2.3.1 && rbenv rehash', options
       else
         ssh.shell.perform! %q{
         apt-get install -y \
