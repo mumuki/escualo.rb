@@ -9,6 +9,18 @@ describe 'escualo script' do
     it { expect(Escualo::Script.each_command(nil, extra).to_a).to eq [] }
   end
 
+  describe 'delegated_options' do
+    it { expect(Escualo::Script.delegated_options(struct ssh_port: 2222,
+                                                         trace: true)).to eq '--ssh-port 2222 --trace' }
+
+    it { expect(Escualo::Script.delegated_options(struct username: 'root',
+                                                         ssh_port: 2222,
+                                                         verbose: true)).to eq '--username root --ssh-port 2222 --verbose' }
+
+    it { expect(Escualo::Script.delegated_options(struct username: 'root',
+                                                         trace: nil)).to eq '--username root' }
+  end
+
   it 'can run simple atheneum server script', if: vagrant_up do
     result = escualo 'script samples/server.simple.atheneum.yml'
     expect($?).to eq 0
