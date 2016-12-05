@@ -2,6 +2,7 @@ $hostname = 'localhost'
 $username = 'root'
 $ssh_options = {}
 $ssh_remote = false
+$debug = false
 
 global_option '-h', '--hostname HOSTNAME', String, 'The host to connect. Defaults to "localhost"' do |hostname|
   $hostname = hostname
@@ -31,11 +32,16 @@ global_option '--ssh-port PORT', String, 'The ssh port to connect. Defaults to 2
   $ssh_remote = true
 end
 
+global_option '--debug', TrueClass, 'debug commands instead of executing them' do
+  $debug = true
+end
+
 global_option '--verbose', TrueClass, 'Dumps extra output'
 
 def ssh_session_options
   $ssh_options.merge(
       username: $username,
       hostname: $hostname,
-      local: !$ssh_remote).compact
+      local: !$ssh_remote,
+      debug: $debug).compact
 end

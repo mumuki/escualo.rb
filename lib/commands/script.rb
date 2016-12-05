@@ -10,11 +10,13 @@ command 'script' do |c|
   c.description = 'Runs a escualo configuration'
   c.action do |args, options|
     file = YAML.load_file args.first
-    local_ssh = Net::SSH::Connection::LocalSession.new
+    ssh_local_session_options = options.__hash__.merge(local: true)
     delegated_options = Escualo::Script.delegated_options options
 
     step 'Running local commands...' do
-      run_commands_for! file['local'], delegated_options, local_ssh, options
+      Net::SSH.with_session(ssh_local_session_options) do |ssh|
+        run_commands_for! file['local'], delegated_options, ssh, options
+      end
     end
 
     step 'Running remote commands...' do
@@ -24,7 +26,9 @@ command 'script' do |c|
     end
 
     step 'Running deploy commands...' do
-      run_commands_for! file['deploy'], delegated_options, local_ssh, options
+      Net::SSH.with_session(ssh_local_session_options) do |ssh|
+        run_commands_for! file['deploy'], delegated_options, ssh, options
+      end
     end
   end
 end
