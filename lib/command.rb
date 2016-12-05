@@ -3,12 +3,10 @@ class Commander::Command
     action do |args, options|
       if $ssh_remote
         say "Connecting to remote host #{$hostname}... " if options.verbose
-        Net::SSH.start($hostname, $username, $ssh_options.compact) do |ssh|
-          block.call(args, options, ssh)
-        end
       else
-        block.call(args, options, Net::SSH::Connection::LocalSession.new)
+        say 'Running commands locally... ' if options.verbose
       end
+      Net::SSH.with_session(ssh_session_options) { |ssh| block.call(args, options, ssh) }
     end
   end
 end

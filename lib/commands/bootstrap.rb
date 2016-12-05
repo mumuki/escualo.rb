@@ -18,7 +18,7 @@ command 'bootstrap' do |c|
   c.ssh_action do |_args, options, ssh|
     ask_monit_password(options) unless  options.monit_password || options.no_monit
     options.default monit_version: '5.16',
-                    environment: 'production'
+                    env: 'production'
 
     do_unless Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION),
               'This host has already been bootstrapped',

@@ -13,7 +13,7 @@ module Escualo
     def self.set_builtins(ssh, options)
       set ssh, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
       set ssh, Escualo::Env.locale_variables
-      set ssh, Escualo::Env.environment_variables(options.environment)
+      set ssh, Escualo::Env.environment_variables(options.env)
     end
 
     def self.list(ssh)
@@ -21,6 +21,7 @@ module Escualo
     end
 
     def self.clean(ssh, options)
+      options.env = get(ssh, 'RACK_ENV').split('=').second.strip
       ssh.exec!("rm ~/.escualo/vars/*")
       set_builtins ssh, options
     end
