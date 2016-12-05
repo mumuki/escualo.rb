@@ -3,9 +3,6 @@ module Escualo
     def self.install_base(ssh, options)
       ssh.shell.perform! %q{
         apt-get purge libruby* -y &&
-        apt-get install software-properties-common -y &&
-        apt-add-repository ppa:brightbox/ruby-ng &&
-        apt-get update &&
         apt-get install -y \
                  autoconf \
                  bison \
@@ -32,6 +29,9 @@ module Escualo
         ssh.shell.perform! 'rbenv install 2.3.1 && rbenv global 2.3.1 && rbenv rehash', options
       else
         ssh.shell.perform! %q{
+        apt-get install software-properties-common -y &&
+        apt-add-repository ppa:brightbox/ruby-ng &&
+        apt-get update &&
         apt-get install -y \
                  ruby2.3 \
                  ruby2.3-dev
