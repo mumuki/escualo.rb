@@ -43,7 +43,7 @@ escualo deploy atheneum mumuki/mumuki-atheneum
 > 
 > :warning: **Don't run escualo directly against your development machine**. Run it always against a virtualized environment or an fresh new production machine.
 > 
-> :warning: **Don't run `bootstrap` command locally, since it will override the ruby executable that is running the command itself.** 
+> :warning: **Don't run `bootstrap` and `scripts` commands locally**, since it will override the ruby executable that is running the command itself.
 
 ```bash
 escualo plugin install postgre
