@@ -22,20 +22,6 @@ And that's all!
 
 Instead of a deep explanation of the gem, I will show you some usage examples. Let's begin with something easy.
 
-### Simple local usage
-
-> It will execute escualo commands in localhost context, without requiring an ssh connection
-> 
-> :warning: **Don't run escualo directly against your development machine**. Run it always against a virtualized environment or an fresh new production machine. :warning:
-
-```bash
-escualo bootstrap
-escualo plugin install postgre
-escualo artifact create service atheneum 80
-escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
-escualo deploy atheneum mumuki/mumuki-atheneum
-```
-
 ### Remote usage
 
 > It will connect to a remote ssh host, and exec escualo commands on it.
@@ -50,6 +36,22 @@ escualo artifact create service atheneum 80 $OPTIONS
 escualo env set <NAME1=VALUE1> <NAME2=VALUE2> $OPTIONS
 escualo deploy atheneum mumuki/mumuki-atheneum
 ```
+
+### Local usage
+
+> It will execute escualo commands in localhost context, without requiring an ssh connection
+> 
+> :warning: **Don't run escualo directly against your development machine**. Run it always against a virtualized environment or an fresh new production machine.
+> 
+> :warning: **Don't run `bootstrap` command locally, since it will override the ruby executable that is running the command itself.** 
+
+```bash
+escualo plugin install postgre
+escualo artifact create service atheneum 80
+escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
+escualo deploy atheneum mumuki/mumuki-atheneum
+```
+
 
 ### Installing plugins
 
