@@ -1,7 +1,14 @@
+require 'timeout'
+
+def timeout(*args, &block)
+  Timeout.timeout(*args, &block)
+end
+
 require 'net/ssh'
 require 'net/scp'
 require 'yaml'
 require 'mumukit/core'
+
 
 module Escualo
 end
