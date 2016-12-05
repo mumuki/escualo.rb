@@ -25,7 +25,7 @@ describe 'escualo script' do
     result = escualo 'script spec/data/sample.script.yml'
     expect($?).to eq 0
 
-    expect(ssh 'ruby --version').to include 'ruby 2.0'
+    expect(ssh 'ruby --version').to include 'ruby 2.3'
     expect(ssh 'psql --version').to include 'PostgreSQL'
 
     expect(result).to_not include 'ERROR'
