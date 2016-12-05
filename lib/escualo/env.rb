@@ -21,6 +21,7 @@ module Escualo
     end
 
     def self.clean(ssh, options)
+      options.env = get(ssh, 'RACK_ENV').split('=').second.strip
       ssh.exec!("rm ~/.escualo/vars/*")
       set_builtins ssh, options
     end
