@@ -25,6 +25,8 @@ Instead of a deep explanation of the gem, I will show you some usage examples. L
 ### Simple local usage
 
 > It will execute escualo commands in localhost context, without requiring an ssh connection
+> 
+> :warning: **Don't run escualo directly against your development machine**. Run it always against a virtualized environment or an fresh new production machine. :warning:
 
 ```bash
 escualo bootstrap
