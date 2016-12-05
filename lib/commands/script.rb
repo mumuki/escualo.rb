@@ -18,7 +18,7 @@ command 'script' do |c|
     end
 
     step 'Running remote commands...' do
-      Net::SSH.start($hostname, $username, $ssh_options.compact) do |ssh|
+      Net::SSH.with_session(ssh_session_options) do |ssh|
         run_commands_for! file['remote'], ssh, options
       end
     end

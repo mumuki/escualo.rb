@@ -32,3 +32,10 @@ global_option '--ssh-port PORT', String, 'The ssh port to connect. Defaults to 2
 end
 
 global_option '--verbose', TrueClass, 'Dumps extra output'
+
+def ssh_session_options
+  $ssh_options.merge(
+      username: $username,
+      hostname: $hostname,
+      local: !$ssh_remote).compact
+end
