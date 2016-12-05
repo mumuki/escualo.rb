@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'escualo remote', if: vagrant_up do
+describe 'escualo remote' do
   describe 'attach' do
     it 'adds a git remote to the current repository' do
       remotes = Dir.mktmpdir do |dir|
