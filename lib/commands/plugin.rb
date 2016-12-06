@@ -22,7 +22,7 @@ command 'plugin install' do |c|
       if installer.check ssh
         say 'Installed successfully!'
       else
-        say "Something went wrong. Last output was: \n#{log}"
+        say "Something went wrong"
       end
     end
   end
