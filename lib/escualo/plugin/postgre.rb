@@ -1,7 +1,7 @@
 module Escualo::Plugin
   class Postgre
     def run(ssh, options)
-      pg_hba_conf = '/etc/postgresql/9.3/main/pg_hba.conf'
+      pg_hba_conf = "/etc/postgresql/#{options.pg_version}/main/pg_hba.conf"
 
       ssh.shell.perform! %Q{
         apt-get install postgresql libpq-dev -y &&
@@ -16,8 +16,8 @@ EOF
       }, options
     end
 
-    def check(ssh)
-      ssh.shell.exec!('psql --version').include? 'psql (PostgreSQL) 9.3'
+    def check(ssh, options)
+      ssh.shell.exec!('psql --version').include? "psql (PostgreSQL) #{options.pg_version}"
     end
   end
 end

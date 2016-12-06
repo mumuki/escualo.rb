@@ -10,7 +10,7 @@ module Escualo::Plugin
       }, options
     end
 
-    def check(ssh)
+    def check(ssh, _options)
       ssh.shell.exec!('mongod --version').include? 'db version v3.2'
     end
   end

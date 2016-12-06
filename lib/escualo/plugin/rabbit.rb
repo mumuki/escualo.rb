@@ -15,7 +15,7 @@ module Escualo::Plugin
       }, options
     end
 
-    def check(ssh)
+    def check(ssh, _options)
       ssh.exec!('rabbitmq-server').include? 'node with name "rabbit" already running'
     end
   end
