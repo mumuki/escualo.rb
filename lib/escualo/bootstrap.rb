@@ -28,13 +28,11 @@ module Escualo
         }, options
         ssh.shell.perform! 'rbenv install 2.3.1 && rbenv global 2.3.1 && rbenv rehash', options
       else
-        ssh.shell.perform! %q{
+        ssh.shell.perform! %Q{
         apt-get install software-properties-common -y &&
-        apt-add-repository ppa:brightbox/ruby-ng &&
+        apt-add-repository #{Escualo::PPA.for 'brightbox/ruby-ng'} &&
         apt-get update &&
-        apt-get install -y \
-                 ruby2.3 \
-                 ruby2.3-dev
+        apt-get install -y ruby2.3 ruby2.3-dev
       }, options
       end
     end
