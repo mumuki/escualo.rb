@@ -1,0 +1,58 @@
+require 'spec_helper'
+
+describe Escualo::Script do
+  describe Escualo::Script::Mode do
+    it do
+      mode = Escualo::Script::Dockerized.new
+      mode.start! struct base_image: 'debian'
+      mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+
+      expect(mode.dockerfile).to include "\nFROM debian/jessie\n"
+      expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n"
+      expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n"
+    end
+
+    it do
+      mode = Escualo::Script::Dockerized.new
+      mode.start! struct base_image: 'ubuntu'
+      mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+
+      expect(mode.dockerfile).to include "\nFROM ubuntu/xenial\n"
+      expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n"
+      expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n"
+    end
+  end
+
+  describe 'with_commands_for' do
+    let(:extra) { '--verbose=true' }
+
+    it { expect(Escualo::Script.each_command(%w(foo bar), extra).to_a).to eq ['escualo foo --verbose=true',
+                                                                              'escualo bar --verbose=true'] }
+    it { expect(Escualo::Script.each_command(nil, extra).to_a).to eq [] }
+  end
+
+  describe 'delegated_options' do
+    it { expect(Escualo::Script.delegated_options(struct ssh_port: 2222,
+                                                         trace: true)).to eq '--ssh-port 2222 --trace' }
+
+    it { expect(Escualo::Script.delegated_options(struct username: 'root',
+                                                         ssh_port: 2222,
+                                                         verbose: true)).to eq '--username root --ssh-port 2222 --verbose' }
+
+    it { expect(Escualo::Script.delegated_options(struct username: 'root',
+                                                         trace: nil)).to eq '--username root' }
+  end
+
+  it 'can run simple atheneum server script', if: vagrant_up do
+    result = escualo 'script spec/data/sample.script.yml'
+    expect($?).to eq 0
+
+    expect(ssh 'ruby --version').to include 'ruby 2.3'
+    expect(ssh 'psql --version').to include 'PostgreSQL'
+
+    expect(result).to_not include 'ERROR'
+    expect(ssh 'service atheneum status').to include 'atheneum start/running'
+  end
+end
+
+

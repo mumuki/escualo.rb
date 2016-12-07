@@ -1,26 +1,6 @@
 require 'spec_helper'
 
 describe 'escualo script' do
-  describe 'with_commands_for' do
-    let(:extra) { '--verbose=true' }
-
-    it { expect(Escualo::Script.each_command(%w(foo bar), extra).to_a).to eq ['escualo foo --verbose=true',
-                                                                              'escualo bar --verbose=true'] }
-    it { expect(Escualo::Script.each_command(nil, extra).to_a).to eq [] }
-  end
-
-  describe 'delegated_options' do
-    it { expect(Escualo::Script.delegated_options(struct ssh_port: 2222,
-                                                         trace: true)).to eq '--ssh-port 2222 --trace' }
-
-    it { expect(Escualo::Script.delegated_options(struct username: 'root',
-                                                         ssh_port: 2222,
-                                                         verbose: true)).to eq '--username root --ssh-port 2222 --verbose' }
-
-    it { expect(Escualo::Script.delegated_options(struct username: 'root',
-                                                         trace: nil)).to eq '--username root' }
-  end
-
   it 'can run simple atheneum server script', if: vagrant_up do
     result = escualo 'script spec/data/sample.script.yml'
     expect($?).to eq 0
