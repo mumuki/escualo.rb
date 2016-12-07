@@ -63,6 +63,7 @@ Vagrant.configure("2") do |config|
 
   ssh_public_key = File.readlines(File.join Dir.home, '.ssh', 'id_rsa.pub').first.strip
   config.vm.provision 'shell', inline: <<-SHELL
+    mkdir -p /root/.ssh
     echo #{ssh_public_key} >> /root/.ssh/authorized_keys
   SHELL
 end
