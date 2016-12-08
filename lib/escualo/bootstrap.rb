@@ -11,7 +11,6 @@ module Escualo
                  libreadline6-dev \
                  curl \
                  git \
-                 monit \
                  libssl-dev \
                  zlib1g \
                  zlib1g-dev \
@@ -48,24 +47,8 @@ module Escualo
         echo '/swapfile   none    swap    sw    0   0' >> /etc/fstab}
     end
 
-    def self.setup_monit(ssh, options)
-      ssh.perform! %Q{
-        service monit stop
-        cd /tmp &&
-        wget https://mmonit.com/monit/dist/binary/5.16/monit-#{options.monit_version}-linux-x64.tar.gz &&
-        tar -xzf monit-#{options.monit_version}-linux-x64.tar.gz &&
-        cp monit-#{options.monit_version}/bin/monit /usr/bin/monit
-        ln -s /etc/monit/monitrc /etc/monitrc
-        service monit start
-        echo 'set httpd port 2812 and' > /etc/monit/conf.d/web-server
-        echo '  allow 0.0.0.0/0.0.0.0' >> /etc/monit/conf.d/web-server
-        echo '  allow admin:#{options.monit_password}' >> /etc/monit/conf.d/web-server
-        monit reload
-    }, options
-    end
-
-    def self.install_gems(ssh, options)
-      ssh.shell.perform! 'gem install bundler && gem install escualo', options
+    def self.check(ssh)
+      Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION) && Escualo::Gems.present?(ssh)
     end
   end
 end

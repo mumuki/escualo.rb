@@ -2,12 +2,18 @@ command 'plugin install' do |c|
   c.syntax = 'escualo plugin install <plugin>'
   c.description = "Install plugin on host. Valid plugins are #{Escualo::Plugin::PLUGINS.join(', ')}"
   c.option '--nginx-conf FILENAME', String, 'ningix config file, only for nginx plugin'
+
   c.option '--rabbit-admin-password PASSWORD', String, 'rabbitmq admin password, only for rabbit plugin'
+
   c.option '--pg-version VERSION', String, 'PostgreSQL major and minor version. Default is 9.3, only for postgre plugin'
+
+  c.option '--monit-version VERSION', String, 'Monit version. Default is 5.16'
+  c.option '--monit-password PASSWORD', String, 'Monit password. Required with monit plugin'
 
   c.option '-f', '--force', TrueClass, 'Force reinstalling even if already done'
   c.ssh_action do |args, options, ssh|
-    options.default pg_version: '9.3'
+    options.default pg_version: '9.3',
+                    monit_version: '5.16'
 
     plugin = args.first
     say "Installing #{plugin}"

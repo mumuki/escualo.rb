@@ -16,13 +16,13 @@ command 'script' do |c|
     mode.start! options
 
     file = YAML.load_file args.first
+
     local_ssh = Net::SSH::Connection::LocalSession.new
     delegated_options = Escualo::Script.delegated_options options
 
     step 'Running local commands...' do
       mode.run_commands_for! file['local'], delegated_options, local_ssh, options
     end
-
     step 'Running remote commands...' do
       Net::SSH.with_session(ssh_session_options) do |ssh|
         mode.run_commands_for! file['remote'], ssh, options

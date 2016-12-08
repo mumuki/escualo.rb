@@ -15,7 +15,12 @@ command 'artifact destroy' do |c|
     name = args.first
 
     Escualo::Artifact.destroy(ssh, name)
-    say "#{name} destroyed successfully"
+
+    if !Escualo::Artifact.present? ssh, name
+      say "#{name} destroyed successfully"
+    else
+      abort "Could not destroy artifact #{name}"
+    end
   end
 end
 

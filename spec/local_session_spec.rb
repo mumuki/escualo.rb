@@ -8,8 +8,10 @@ describe Net::SSH::Connection::LocalSession do
   end
 
   let(:session) { Net::SSH::Connection::LocalSession.new }
-  it { expect(session.exec! 'ls ./spec/data').to eq "sample.script.yml\n" }
+  it { expect(session.exec! 'ls ./spec/data').to eq "bootstrapped.yml\nempty.yml\nserviced.yml\nwith.foo.env.yml\n" }
   it { session.tell! 'ls ./spec/data' }
+
+
 
   it { expect { session.exec! 'ls ./spec/this-repo-does-not-exist' }.to raise_error RuntimeError }
   it { expect { session.tell! 'ls ./spec/this-repo-does-not-exist' }.to raise_error RuntimeError }

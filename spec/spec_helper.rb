@@ -1,34 +1,18 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'escualo'
+require 'docker'
 
-
-
-def vagrant_up
-  @vagrant_up ||= ENV['TEST_ESCUALO_WITH_VAGRANT']
+def raw_escualo(command)
+  %x{escualo #{command}}
 end
 
-def ssh(args)
-  %x{ssh root@127.0.0.1 -p 2222 -q -t #{args}}
-end
-
-def escualo(args)
-  options = '--hostname 127.0.0.1 ' +
-  '--username root ' +
-  '--ssh-port 2222 '
-  raw_escualo args, options
-end
-
-def raw_escualo(args, options='')
-  %x{./bin/escualo #{args} #{options}}
-end
-
-unless vagrant_up
-  puts '[WARNING] '
-  puts '[WARNING] ***************************'
-  puts '[WARNING] *Not running vagrant tests*'
-  puts '[WARNING] ***************************'
-  puts '[WARNING] '
-  puts '[WARNING] You have not enabled TEST_ESCUALO_WITH_VAGRANT=true variable'
-  puts '[WARNING] Please have a look at readme for instructions about installing vagrant machine and running with vagrant support'
-  puts '[WARNING] '
+def escualo(command, env)
+  %x{bin/escualo script spec/data/#{env} --dockerized --trace}
+  image = Docker::Image.build_from_dir('.')
+  result = image.run("escualo #{command}").tap do |container|
+    container.commit
+  end
+  [result, 0]
+rescue => e
+  [e, -1]
 end
