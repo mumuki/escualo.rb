@@ -37,8 +37,12 @@ module Escualo
 
     def self.set(ssh, variables)
       variables.each do |key, value|
-        ssh.exec!("echo 'export #{key}=#{value}' > ~/.escualo/vars/#{key}")
+        ssh.exec!(set_command key, value)
       end
+    end
+
+    def self.set_command(key, value)
+      "echo export #{key}=#{value} > ~/.escualo/vars/#{key}"
     end
 
     def self.unset(ssh, variable_names)
