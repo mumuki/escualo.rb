@@ -2,24 +2,25 @@ require 'spec_helper'
 
 describe Escualo::Script do
   describe Escualo::Script::Mode do
-    it do
-      mode = Escualo::Script::Dockerized.new
-      mode.start! struct base_image: 'debian'
-      mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
-
-      expect(mode.dockerfile).to include "\nFROM debian/jessie\n"
-      expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n"
-      expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n"
+    let(:mode) { Escualo::Script::Dockerized.new }
+    context 'debian' do
+      before do
+        mode.start! struct base_image: 'debian'
+        mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+      end
+      it { expect(mode.dockerfile).to include "\nFROM debian:jessie\n" }
+      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n" }
+      it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
     end
 
-    it do
-      mode = Escualo::Script::Dockerized.new
-      mode.start! struct base_image: 'ubuntu'
-      mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
-
-      expect(mode.dockerfile).to include "\nFROM ubuntu/xenial\n"
-      expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n"
-      expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n"
+    context 'ubuntu' do
+      before do
+        mode.start! struct base_image: 'ubuntu'
+        mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+      end
+      it { expect(mode.dockerfile).to include "\nFROM ubuntu:xenial\n" }
+      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n" }
+      it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
     end
   end
 

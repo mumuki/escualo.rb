@@ -49,9 +49,9 @@ RUN gem install escualo
 
       def base_image(options)
         if options.base_image == 'ubuntu'
-          'ubuntu/xenial'
+          'ubuntu:xenial'
         elsif options.base_image == 'debian'
-          'debian/jessie'
+          'debian:jessie'
         else
           raise "Unsupported base image #{options.base_image}. Only debian and ubuntu are supported"
         end
