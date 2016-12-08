@@ -5,6 +5,11 @@ module Escualo
     def self.load(name)
       "Escualo::Plugin::#{name.capitalize}".constantize.new
     end
+
+    def self.run_and_check(plugin, ssh, options)
+      plugin.run ssh, options
+      plugin.check ssh, options
+    end
   end
 end
 

@@ -19,13 +19,11 @@ command 'plugin install' do |c|
               options do
 
       step "Installing plugin #{plugin}" do
-        log = installer.run ssh, options
-      end
-
-      if installer.check ssh, options
-        say 'Installed successfully!'
-      else
-        say "Something went wrong"
+        if Escualo::Plugin.run_and_check installer, ssh, options
+          say 'Installed successfully!'
+        else
+          say "Something went wrong"
+        end
       end
     end
   end
