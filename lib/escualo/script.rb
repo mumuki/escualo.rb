@@ -43,7 +43,7 @@ module Escualo
 FROM #{base_image options}
 MAINTAINER #{ENV['USER']}
 RUN apt-get update && apt-get install ruby ruby-dev build-essential -y
-RUN gem install escualo
+RUN gem install escualo -v #{Escualo::VERSION}
 "
       end
 
