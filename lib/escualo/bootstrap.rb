@@ -2,7 +2,6 @@ module Escualo
   module Bootstrap
     def self.install_base(ssh, options)
       ssh.shell.perform! %q{
-        apt-get purge libruby* -y &&
         apt-get install -y \
                  autoconf \
                  bison \
@@ -19,6 +18,7 @@ module Escualo
     end
 
     def self.install_ruby(ssh, options)
+      ssh.shell.perform! 'apt-get purge libruby* -y', options
       if options.with_rbenv
         ssh.shell.perform! %q{
           curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash &&
