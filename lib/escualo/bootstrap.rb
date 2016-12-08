@@ -29,7 +29,7 @@ module Escualo
       else
         ssh.shell.perform! %Q{
         apt-get install software-properties-common -y &&
-        apt-add-repository #{Escualo::PPA.for 'brightbox/ruby-ng'} &&
+        apt-add-repository '#{Escualo::PPA.for 'brightbox/ruby-ng'}' &&
         apt-get update &&
         apt-get install -y ruby2.3 ruby2.3-dev
       }, options
