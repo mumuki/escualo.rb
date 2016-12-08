@@ -28,7 +28,9 @@ module Escualo
 
     def self.present?(ssh, variable)
       value = get(ssh, variable)
-      value.present? && !value.include?('No such file or directory')
+      value.present?
+    rescue
+      false
     end
 
     def self.get(ssh, variable)
