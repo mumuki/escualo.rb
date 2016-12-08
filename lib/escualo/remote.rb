@@ -2,8 +2,16 @@ module Escualo
   module Remote
     def self.attach(dir, name)
       remote_name = "escualo-#{name}-#{$hostname}"
-      remote_url = "ssh://#{$username}@#{$hostname}:#{$ssh_port}/var/repo/#{name}.git"
+      remote_url = remote_git_url(name)
       %x{cd #{dir} && git remote add #{remote_name} #{remote_url}}
+    end
+
+    def self.remote_git_url(name)
+      if $ssh_remote
+        "ssh://#{$username}@#{$hostname}:#{$ssh_port}/var/repo/#{name}.git"
+      else
+        "/var/repo/#{name}.git"
+      end
     end
 
     def self.clone(dir, repo, options)

@@ -1,6 +1,22 @@
 require 'spec_helper'
 
 describe 'escualo remote' do
+  describe 'remote_git_url' do
+    context 'remote' do
+      before do
+        $ssh_remote = true
+        $ssh_port = 2222
+        $username = 'the-user'
+        $hostname = 'the-hostname'
+      end
+      it { expect(Escualo::Remote.remote_git_url 'foo').to eq 'ssh://the-user@the-hostname:2222/var/repo/foo.git' }
+    end
+    context 'local' do
+      before { $ssh_remote = false }
+      it { expect(Escualo::Remote.remote_git_url 'foo').to eq '/var/repo/foo.git' }
+    end
+  end
+
   describe 'attach' do
     it 'adds a git remote to the current repository' do
       remotes = Dir.mktmpdir do |dir|
