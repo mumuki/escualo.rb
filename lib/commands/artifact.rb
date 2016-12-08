@@ -19,9 +19,13 @@ command 'artifact destroy' do |c|
   end
 end
 
-def say_created(kind, name)
-  say "#{kind.titleize} #{name} created successfully"
-  say "Now you can deploy this #{kind}"
+def check_created(kind, name)
+  if Escualo::Artifact.present?(ssh, name)
+    say "#{kind.titleize} #{name} created successfully"
+    say "Now you can deploy this #{kind}"
+  else
+    abort "Failed to create artifact #{name}"
+  end
 end
 
 command 'artifact create service' do |c|
@@ -60,7 +64,7 @@ command 'artifact create service' do |c|
         Escualo::Artifact.create_push_infra ssh, name: name, service: true
       end
 
-      say_created 'service', name
+      check_created 'service', name
     end
   end
 end
@@ -84,7 +88,7 @@ command 'artifact create site' do |c|
       step 'Creating push infrastructure' do
         Escualo::Artifact.create_push_infra ssh, name: name, static: true
       end
-      say_created 'site', name
+      check_created 'site', name
     end
   end
 end
@@ -108,7 +112,7 @@ command 'artifact create executable' do |c|
       step 'Creating push infrastructure' do
         Escualo::Artifact.create_push_infra ssh, name: name, executable: true
       end
-      say_created 'executable', name
+      check_created 'executable', name
     end
   end
 end

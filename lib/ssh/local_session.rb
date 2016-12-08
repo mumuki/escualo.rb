@@ -20,7 +20,9 @@ class Net::SSH::Connection::LocalSession
   include Net::SSH::Connection::Upload
 
   def exec!(command)
-    Open3.capture2e(command).first rescue 'command not found'
+    out, status = Open3.capture2e(command)
+    raise out unless status.success?
+    out
   end
 
   def upload_file!(file, destination)
@@ -28,10 +30,11 @@ class Net::SSH::Connection::LocalSession
   end
 
   def tell!(command)
-    Open3.popen2e command do |_input, output|
+    Open3.popen2e command do |_input, output, wait|
       output.each do |line|
         $stdout.print line
       end
+      raise "command #{command} failed" unless wait.value.success?
     end
   end
 

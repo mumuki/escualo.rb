@@ -22,7 +22,7 @@ command 'plugin install' do |c|
         if Escualo::Plugin.run_and_check installer, ssh, options
           say 'Installed successfully!'
         else
-          say "Something went wrong"
+          abort 'Installation of plugin failed'
         end
       end
     end

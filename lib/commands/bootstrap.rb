@@ -48,6 +48,12 @@ command 'bootstrap' do |c|
       step 'Setup artifact directories...' do
         Escualo::Artifact.setup ssh
       end
+
+      if Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION)
+        say 'Host bootstrapped successfully '
+      else
+        abort 'bootstrapping failed'
+      end
     end
   end
 end
