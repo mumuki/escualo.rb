@@ -13,7 +13,7 @@ module Escualo::Plugin
     end
 
     def check(ssh, _options)
-      ssh.exec!('nginx -v').include? 'nginx version: nginx/1'
+      ssh.exec!('nginx -v').include? 'nginx version: nginx/1' rescue false
     end
   end
 end

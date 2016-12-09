@@ -1,4 +1,4 @@
 module Escualo
-  VERSION = '1.0.2'
+  VERSION = '1.0.3'
   BASE_VERSION = '3.2'
 end

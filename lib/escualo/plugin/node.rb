@@ -9,7 +9,7 @@ module Escualo::Plugin
     end
 
     def check(ssh, _options)
-      ssh.shell.exec!('nvm use node').include? 'Now using node v4.2.4'
+      ssh.shell.exec!('nvm use node').include? 'Now using node v4.2.4' rescue false
     end
   end
 end

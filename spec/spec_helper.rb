@@ -12,7 +12,7 @@ def escualo(command, env)
   image = Docker::Image.build_from_dir('.')
   result = image.run("escualo #{command}").tap do |container|
     container.commit
-  end
+  end.logs(stdout: true, stderr: true)
   [result, 0]
 rescue => e
   [e, -1]

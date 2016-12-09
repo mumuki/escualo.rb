@@ -5,7 +5,7 @@ module Escualo::Plugin
     end
 
     def check(ssh, _options)
-      ssh.exec!('ghc --version').include? 'The Glorious Glasgow Haskell Compilation System'
+      ssh.exec!('ghc --version').include? 'The Glorious Glasgow Haskell Compilation System' rescue false
     end
   end
 end

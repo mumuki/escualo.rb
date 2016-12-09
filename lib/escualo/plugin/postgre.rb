@@ -17,7 +17,7 @@ EOF
     end
 
     def check(ssh, options)
-      ssh.shell.exec!('psql --version').include? "psql (PostgreSQL) #{options.pg_version}"
+      ssh.shell.exec!('psql --version').include? "psql (PostgreSQL) #{options.pg_version}" rescue false
     end
   end
 end

@@ -17,6 +17,7 @@ command 'bootstrap' do |c|
 
       step 'Configuring variables...' do
         Escualo::Env.setup ssh
+        Escualo::Env.set_locale ssh, options
         Escualo::Env.set_builtins ssh, options
       end
 

@@ -18,7 +18,7 @@ module Escualo::Plugin
     end
 
     def check(ssh, options)
-      ssh.shell.exec!('monit --version').include? 'This is Monit version 5'
+      ssh.shell.exec!('monit --version').include? 'This is Monit version 5' rescue false
     end
   end
 end

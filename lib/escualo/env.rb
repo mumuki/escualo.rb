@@ -10,6 +10,10 @@ module Escualo
       }
     end
 
+    def self.set_locale(ssh, options)
+      ssh.perform! "locale-gen #{locale} && update-locale LANG=#{locale}", options
+    end
+
     def self.set_builtins(ssh, options)
       set ssh, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
       set ssh, Escualo::Env.locale_variables
@@ -55,8 +59,12 @@ module Escualo
 
     def self.locale_variables
       %w{LANG LC_ALL LC_NAME LC_IDENTIFICATION LC_PAPER LC_ADDRESS LC_TIME LC_NUMERIC LC_MONETARY LC_TELEPHONE LC_MEASUREMENT}.map do |it|
-        [it, 'en_US.UTF-8']
+        [it, locale]
       end.to_h
+    end
+
+    def self.locale
+      'en_US.UTF-8'
     end
 
     def self.environment_variables(environment)

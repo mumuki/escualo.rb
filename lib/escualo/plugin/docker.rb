@@ -5,7 +5,7 @@ module Escualo::Plugin
     end
 
     def check(ssh, _options)
-      ssh.exec!('docker -v').include? 'Docker version'
+      ssh.exec!('docker -v').include? 'Docker version' rescue false
     end
   end
 end
