@@ -8,7 +8,7 @@ module Escualo
 
     def self.run_and_check(plugin, ssh, options)
       plugin.run ssh, options
-      plugin.check ssh, options
+      plugin.check ssh, options rescue false
     end
   end
 end
