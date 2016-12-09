@@ -1,26 +1,24 @@
 module Escualo
   module Bootstrap
-    def self.install_ruby(ssh, options)
-      ssh.shell.perform! 'apt-get purge libruby* -y', options
+    def self.install_ruby(session, options)
+      session.tell! 'apt-get purge libruby* -y'
       if options.with_rbenv
-        ssh.shell.perform! %q{
+        session.tell! %q{
           curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash &&
           echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc &&
           echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-        }, options
-        ssh.shell.perform! 'rbenv install 2.3.1 && rbenv global 2.3.1 && rbenv rehash', options
+        }
+        session.tell! 'rbenv install 2.3.1 && rbenv global 2.3.1 && rbenv rehash'
       else
-        ssh.shell.perform! %Q{
-        apt-get install software-properties-common -y &&
-        apt-add-repository '#{Escualo::PPA.for 'brightbox/ruby-ng'}' &&
+        session.tell! %Q{apt-add-repository '#{Escualo::PPA.for 'brightbox/ruby-ng'}' &&
         apt-get update &&
         apt-get install -y ruby2.3 ruby2.3-dev
-      }, options
+      }
       end
     end
 
-    def self.enable_swap(ssh)
-      ssh.exec! %q{ \
+    def self.enable_swap(session)
+      session.tell! %q{ \
         test -e /swapfile ||
         fallocate -l 4G /swapfile && \
         chmod 600 /swapfile && \
@@ -31,7 +29,7 @@ module Escualo
     end
 
     def self.check(ssh)
-      Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION) && Escualo::Gems.present?(ssh)
+      Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION) && Escualo::Gems.check(ssh)
     end
   end
 end

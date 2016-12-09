@@ -6,7 +6,11 @@ def raw_escualo(command)
   %x{bin/escualo #{command}}
 end
 
-def escualo(command, env)
+def dockerized_escualo(command)
+  %x{bin/escualo #{command} --dockerized --trace}
+end
+
+def scripted_escualo(command, env)
   %x{bin/escualo script spec/data/#{env} --dockerized --trace --development}
   %x{gem build escualo.gemspec}
   image = Docker::Image.build_from_dir('.')

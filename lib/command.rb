@@ -1,12 +1,7 @@
 class Commander::Command
-  def ssh_action(&block)
+  def session_action(&block)
     action do |args, options|
-      if $ssh_remote
-        say "Connecting to remote host #{$hostname}... " if options.verbose
-      else
-        say 'Running commands locally... ' if options.verbose
-      end
-      Net::SSH.with_session(ssh_session_options) { |ssh| block.call(args, options, ssh) }
+      Escualo::Session.within(options) { |session| block.call(args, options, session) }
     end
   end
 end

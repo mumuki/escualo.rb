@@ -5,11 +5,6 @@ module Escualo
     def self.load(name)
       "Escualo::Plugin::#{name.capitalize}".constantize.new
     end
-
-    def self.run_and_check(plugin, ssh, options)
-      plugin.run ssh, options
-      plugin.check ssh, options
-    end
   end
 end
 
@@ -19,5 +14,5 @@ require_relative './plugin/haskell'
 require_relative './plugin/mongo'
 require_relative './plugin/nginx'
 require_relative './plugin/node'
-require_relative './plugin/postgre'
+require_relative './plugin/postgres'
 require_relative './plugin/rabbit'

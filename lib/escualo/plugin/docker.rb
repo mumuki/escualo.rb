@@ -1,11 +1,11 @@
 module Escualo::Plugin
   class Docker
-    def run(ssh, options)
-      ssh.perform! 'apt-get install -y docker.io', options
+    def run(session, _options)
+      session.tell! 'apt-get install -y docker.io'
     end
 
-    def check(ssh, _options)
-      ssh.exec!('docker -v').include? 'Docker version' rescue false
+    def check(session, _options)
+      session.ask('docker -v').include? 'Docker version' rescue false
     end
   end
 end

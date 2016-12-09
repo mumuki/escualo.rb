@@ -1,13 +1,11 @@
 command 'rake' do |c|
   c.syntax = 'escualo rake <SERVICE_NAME> <TASK>'
   c.description = 'Run rake task on host'
-  c.ssh_action do |args, options, ssh|
+  c.session_action do |args, _options, session|
     name = args.first
     task = args.second
-    ssh.shell.perform! %Q{
-      cd /var/www/#{name}
-      rake #{task}
-    }, options
+
+    session.tell! "cd /var/www/#{name} && rake #{task}"
   end
 end
 

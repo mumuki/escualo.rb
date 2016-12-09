@@ -1,7 +1,7 @@
 module Escualo::Plugin
   class Monit
-    def run(ssh, options)
-      ssh.perform! %Q{
+    def run(session, options)
+      session.tell! %Q{
         apt-get install monit
         service monit stop
         cd /tmp &&
@@ -14,11 +14,11 @@ module Escualo::Plugin
         echo '  allow 0.0.0.0/0.0.0.0' >> /etc/monit/conf.d/web-server
         echo '  allow admin:#{options.monit_password}' >> /etc/monit/conf.d/web-server
         monit reload
-    }, options
+    }
     end
 
-    def check(ssh, options)
-      ssh.shell.exec!('monit --version').include? 'This is Monit version 5' rescue false
+    def check(session, options)
+      session.tell!('monit --version').include? 'This is Monit version 5' rescue false
     end
   end
 end

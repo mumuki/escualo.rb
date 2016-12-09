@@ -10,27 +10,17 @@ command 'plugin install' do |c|
   c.option '--monit-version VERSION', String, 'Monit version. Default is 5.16'
   c.option '--monit-password PASSWORD', String, 'Monit password. Required with monit plugin'
 
-  c.option '-f', '--force', TrueClass, 'Force reinstalling even if already done'
-  c.ssh_action do |args, options, ssh|
+  c.session_action do |args, options, session|
     options.default pg_version: '9.3',
                     monit_version: '5.16'
 
     plugin = args.first
-    say "Installing #{plugin}"
-
     installer = Escualo::Plugin.load plugin
 
-    do_unless installer.check(ssh, options),
-              "Plugin #{plugin} is already installed",
-              options do
+    exit_if("Plugin #{plugin} is already installed", options) { installer.check(session, options) }
 
-      step "Installing plugin #{plugin}" do
-        if Escualo::Plugin.run_and_check installer, ssh, options
-          say 'Installed successfully!'
-        else
-          abort 'Installation of plugin failed'
-        end
-      end
+    step "Installing plugin #{plugin}", options do
+      installer.run session, options
     end
   end
 end
@@ -39,11 +29,9 @@ command 'plugin list' do |c|
   c.syntax = 'escualo plugin list'
   c.description = 'List installed plugins on host'
 
-  c.ssh_action do |_args, _options, ssh|
+  c.session_action do |_args, _options, session|
     Escualo::Plugin::PLUGINS.each do |plugin|
-      if Escualo::Plugin.load(plugin).check ssh
-        say plugin
-      end
+      say plugin if Escualo::Plugin.load(plugin).check session
     end
   end
 end

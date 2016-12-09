@@ -1,16 +1,16 @@
 module Escualo
   module Remote
-    def self.attach(dir, name)
-      remote_name = "escualo-#{name}-#{$hostname}"
-      remote_url = remote_git_url(name)
+    def self.attach(dir, name, session_options)
+      remote_name = "escualo-#{name}-#{session_options.hostname}"
+      remote_url = remote_git_url(name, session_options)
       %x{cd #{dir} && git remote add #{remote_name} #{remote_url}}
     end
 
-    def self.remote_git_url(name)
-      if $ssh_remote
-        "ssh://#{$username}@#{$hostname}:#{$ssh_port}/var/repo/#{name}.git"
-      else
+    def self.remote_git_url(name, session_options)
+      if session_options.local || session_options.dockerized
         "/var/repo/#{name}.git"
+      else
+        "ssh://#{session_options.username}@#{session_options.hostname}:#{session_options.ssh_options[:port]}/var/repo/#{name}.git"
       end
     end
 

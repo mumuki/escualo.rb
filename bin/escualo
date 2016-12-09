@@ -10,17 +10,16 @@ program :description, 'escualo provisioning tool implementation for ruby'
 
 require_relative '../lib/command'
 
-def step(name, &block)
-  say name
+def step(name, options=struct, &block)
+  say name unless options.dockerized
   block.call
 end
 
-def do_unless(done, done_message, options)
-  if !options.force && done
+def exit_if(done_message, options)
+  if !options.force && yield
     say "Nothing to do. #{done_message}"
     say 'Use --force to proceed it anyway'
-  else
-    yield
+    exit
   end
 end
 

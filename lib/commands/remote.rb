@@ -5,8 +5,9 @@ command 'remote attach' do |c|
 
   c.action do |args, options|
     options.default repo_path: Dir.pwd
+    session_options = Escualo::Session.parse_session_options options
 
-    Escualo::Remote.attach options.repo_path, args.first
+    Escualo::Remote.attach options.repo_path, args.first, session_options
   end
 end
 

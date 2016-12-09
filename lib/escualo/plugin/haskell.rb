@@ -1,11 +1,11 @@
 module Escualo::Plugin
   class Haskell
-    def run(ssh, options)
-      ssh.perform! 'apt-get install -y haskell-platform', options
+    def run(session, _options)
+      session.tell! 'apt-get install -y haskell-platform'
     end
 
-    def check(ssh, _options)
-      ssh.exec!('ghc --version').include? 'The Glorious Glasgow Haskell Compilation System' rescue false
+    def check(session, _options)
+      session.ask('ghc --version').include? 'The Glorious Glasgow Haskell Compilation System' rescue false
     end
   end
 end

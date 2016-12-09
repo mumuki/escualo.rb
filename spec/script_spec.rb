@@ -1,27 +1,44 @@
 require 'spec_helper'
 
 describe Escualo::Script do
-  describe Escualo::Script::Mode do
-    let(:mode) { Escualo::Script::Dockerized.new }
-    context 'debian' do
-      before do
-        mode.start! struct base_image: 'debian'
-        mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+  describe 'run!' do
+    let(:session) { Escualo::Session::Docker.new({}) }
+    context 'with dockerfile' do
+      context 'debian' do
+        before do
+          session.start! struct base_image: 'debian', write_dockerfile: true
+          Escualo::Script.run! session, ['bootstrap', 'env set FOO=BAR']
+        end
+        it { expect(session.dockerfile).to include "\nFROM debian:jessie\n" }
+        it { expect(session.dockerfile).to_not include 'escualo' }
+        it { expect(session.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
       end
-      it { expect(mode.dockerfile).to include "\nFROM debian:jessie\n" }
-      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo -v" }
-      it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
+
+      context 'ubuntu' do
+        before do
+          session.start! struct base_image: 'ubuntu', write_dockerfile: true
+          Escualo::Script.run! session, ['bootstrap', 'env set FOO=BAR']
+        end
+
+        it { expect(session.dockerfile).to include "\nFROM ubuntu:xenial\n" }
+        it { expect(session.dockerfile).to include "\nMAINTAINER #{ENV['USER']}\n" }
+
+        it { expect(session.dockerfile).to_not include 'escualo' }
+        it { expect(session.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
+      end
+    end
+    context 'no dockerfile' do
+      before do
+        session.start! struct base_image: 'ubuntu', write_dockerfile: false
+        Escualo::Script.run! session, ['bootstrap', 'env set FOO=BAR']
+      end
+
+      it { expect(session.dockerfile).to_not include "\nFROM ubuntu:xenial\n" }
+      it { expect(session.dockerfile).to_not include 'escualo' }
+      it { expect(session.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
     end
 
-    context 'ubuntu' do
-      before do
-        mode.start! struct base_image: 'ubuntu'
-        mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
-      end
-      it { expect(mode.dockerfile).to include "\nFROM ubuntu:xenial\n" }
-      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo -v" }
-      it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
-    end
+
   end
 
   describe 'with_commands_for' do

@@ -1,8 +1,8 @@
 module Escualo
   module Env
-    def self.setup(ssh)
+    def self.setup(session)
       source_escualorc = "'source ~/.escualorc'"
-      ssh.exec! %Q{
+      session.tell! %Q{
         mkdir -p ~/.escualo/vars && \
         echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc && \
         chmod u+x ~/.escualorc && \
@@ -10,40 +10,38 @@ module Escualo
       }
     end
 
-    def self.set_locale(ssh, options)
-      ssh.perform! "locale-gen #{locale} && update-locale LANG=#{locale}", options
+    def self.set_locale(session)
+      session.tell! "locale-gen #{locale} && update-locale LANG=#{locale}"
     end
 
-    def self.set_builtins(ssh, options)
-      set ssh, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
-      set ssh, Escualo::Env.locale_variables
-      set ssh, Escualo::Env.environment_variables(options.env)
+    def self.set_builtins(session, options)
+      set session, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
+      set session, Escualo::Env.locale_variables
+      set session, Escualo::Env.environment_variables(options.env)
     end
 
-    def self.list(ssh)
-      ssh.exec!("cat ~/.escualo/vars/*").gsub("export ", '')
+    def self.list(session)
+      session.ask('cat ~/.escualo/vars/*').gsub('export ', '')
     end
 
-    def self.clean(ssh, options)
-      options.env = get(ssh, 'RACK_ENV').split('=').second.strip
-      ssh.exec!("rm ~/.escualo/vars/*")
-      set_builtins ssh, options
+    def self.clean(session, options)
+      session.tell! 'rm ~/.escualo/vars/*'
+      set_builtins session, options
     end
 
-    def self.present?(ssh, variable)
-      value = get(ssh, variable)
-      value.present?
+    def self.present?(session, variable)
+      get(session, variable).present?
     rescue
       false
     end
 
-    def self.get(ssh, variable)
-      ssh.exec!("cat ~/.escualo/vars/#{variable}")
+    def self.get(session, variable)
+      session.ask("cat ~/.escualo/vars/#{variable}")
     end
 
-    def self.set(ssh, variables)
+    def self.set(session, variables)
       variables.each do |key, value|
-        ssh.exec!(set_command key, value)
+        session.tell!(set_command key, value)
       end
     end
 
@@ -51,9 +49,9 @@ module Escualo
       "echo export #{key}=#{value} > ~/.escualo/vars/#{key}"
     end
 
-    def self.unset(ssh, variable_names)
+    def self.unset(session, variable_names)
       variable_names.each do |name|
-        ssh.exec!("rm ~/.escualo/vars/#{name}")
+        session.tell!("rm ~/.escualo/vars/#{name}")
       end
     end
 

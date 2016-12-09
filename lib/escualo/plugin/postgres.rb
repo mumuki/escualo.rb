@@ -1,9 +1,9 @@
 module Escualo::Plugin
-  class Postgre
-    def run(ssh, options)
+  class Postgres
+    def run(session, options)
       pg_hba_conf = "/etc/postgresql/#{options.pg_version}/main/pg_hba.conf"
 
-      ssh.shell.perform! %Q{
+      session.tell! %Q{
         apt-get install postgresql libpq-dev -y &&
         echo 'local   all             postgres                                peer' > #{pg_hba_conf} &&
         echo 'local   all             postgres                                peer' >> #{pg_hba_conf} &&
@@ -13,11 +13,11 @@ module Escualo::Plugin
         sudo -u postgres PGDATABASE='' psql <<EOF
         create role $POSTGRESQL_DB_USERNAME with createdb login password '$POSTGRESQL_DB_PASSWORD';
 EOF
-      }, options
+      }
     end
 
-    def check(ssh, options)
-      ssh.shell.exec!('psql --version').include? "psql (PostgreSQL) #{options.pg_version}" rescue false
+    def check(session, options)
+      session.ask('psql --version').include? "psql (PostgreSQL) #{options.pg_version}" rescue false
     end
   end
 end
