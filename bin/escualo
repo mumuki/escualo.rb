@@ -16,7 +16,7 @@ def step(name, options=struct, &block)
 end
 
 def exit_if(done_message, options)
-  if !options.force && yield
+  if !options.force && !options.dockerized && yield
     say "Nothing to do. #{done_message}"
     say 'Use --force to proceed it anyway'
     exit

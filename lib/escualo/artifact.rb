@@ -1,21 +1,19 @@
 module Escualo
   module Artifact
     def self.setup(session)
-      session.tell! %q{
-        mkdir -p /var/repo/ && \
-        mkdir -p /var/scripts/
-    }
+      session.tell_all! 'mkdir -p /var/repo/',
+                        'mkdir -p /var/scripts/'
     end
 
     def self.destroy(session, name)
       raise 'name must not be blank' if name.blank?
       raise 'name must not contains wildcards' if name.include?('*')
 
-      session.tell! "rm -rf /var/scripts/#{name}"
-      session.tell! "rm -rf /var/repo/#{name}.git"
-      session.tell! "rm -f /etc/monit/conf.d/escualo-#{name}"
-      session.tell! "rm -f /etc/init/#{name}.conf"
-      session.tell! "test ! -e /var/repo/#{name}.git"
+      session.tell_all! "rm -rf /var/scripts/#{name}",
+                        "rm -rf /var/repo/#{name}.git",
+                        "rm -f /etc/monit/conf.d/escualo-#{name}",
+                        "rm -f /etc/init/#{name}.conf",
+                        "test ! -e /var/repo/#{name}.git"
     end
 
     def self.present?(session, name)
@@ -28,8 +26,8 @@ module Escualo
 
     def self.create_init_script(session, options)
       session.upload_template! "/var/scripts/#{options[:name]}/init",
-                           'init.sh',
-                           options
+                               'init.sh',
+                               options
       session.tell! "chmod +x /var/scripts/#{options[:name]}/init"
     end
 
@@ -39,16 +37,14 @@ module Escualo
 
     def self.create_push_infra(session, options)
       name = options[:name]
-      session.tell! %Q{
-        cd /var && \
-        mkdir -p www && \
-        mkdir -p repo && \
-        cd repo && \
-        rm -rf #{name}.git && \
-        mkdir #{name}.git && \
-        cd #{name}.git && \
-        git init --bare
-      }
+      session.tell_all! 'cd /var',
+                        'mkdir -p www',
+                        'mkdir -p repo',
+                        'cd repo',
+                        "rm -rf #{name}.git",
+                        "mkdir #{name}.git",
+                        "cd #{name}.git",
+                        'git init --bare'
       hook_file = "/var/repo/#{name}.git/hooks/post-receive"
       session.upload_template! hook_file, 'post-receive.sh', options
       session.tell! "chmod +x #{hook_file}"

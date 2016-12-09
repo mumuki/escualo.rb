@@ -9,8 +9,8 @@ describe 'escualo bootstrap' do
   it { expect(result).to include 'apt-get install -y ruby2.3 ruby2.3-dev' }
   it { expect(result).to include 'RUN gem install bundler && gem install escualo' }
   it { expect(result).to include 'RUN mkdir -p /var/repo/ && mkdir -p /var/scripts/'}
-  it { expect(result).to include 'RAILS_ENV=development' }
-  it { expect(result).to include 'RACK_ENV=development' }
+  it { expect(result).to include 'RAILS_ENV=production' }
+  it { expect(result).to include 'RACK_ENV=production' }
 
   describe '--with-rbenv' do
     let(:result) { dockerized_escualo 'bootstrap --with-rbenv' }
@@ -24,6 +24,7 @@ describe 'escualo bootstrap' do
     let(:result) { dockerized_escualo 'bootstrap --swap' }
 
     it { expect(result).to include 'RUN test -e /swapfile' }
+    it { expect(result).to include 'swapon /swapfile' }
   end
 
   describe '--env development' do

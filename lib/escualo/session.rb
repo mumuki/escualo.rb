@@ -1,33 +1,19 @@
 require 'fileutils'
 require 'open3'
 
-class Net::SSH::Connection::Session
-  def stream!(command)
-    channel = self.open_channel do |channel|
-      channel.exec command do |ch, success|
-        raise 'could not execute command' unless success
-        ch.on_data do |c, data|
-          yield :stdout, data unless garbage? data
-        end
-        ch.on_extended_data do |c, type, data|
-          yield :stderr, data unless garbage? data
-        end
-        ch.on_request('exit-status') do |c, data|
-          exit_code = data.read_long
-        end
-      end
-    end
-    channel.wait
-    raise 'command failed' if exit_code != 0
-    nil
-  end
-end
-
 class Escualo::Session
   attr_accessor :options
 
-  def initialize(options={})
+  def initialize(options=struct)
     @options = options
+  end
+
+  def embed!(command)
+    tell! command
+  end
+
+  def tell_all!(*commands)
+    tell! commands.join(' && ')
   end
 
   def tell!(command)
@@ -85,127 +71,8 @@ class Escualo::Session
       block.call(Escualo::Session::Remote.new ssh, session_options)
     end
   end
-
-  class Remote < Escualo::Session
-    def initialize(ssh, options)
-      super(options)
-      @ssh = ssh
-    end
-
-    def upload!(file, destination)
-      scp.upload! file, destination
-    end
-
-    def exec!(command)
-      ask command
-      nil
-    end
-
-    def ask(command)
-      out = []
-      @ssh.stream! wrap(command) do |_stream, data|
-        out << data
-      end
-      out
-    end
-
-    def stream!(command)
-      command = wrap(command)
-      @ssh.stream! command do |stream, data|
-        if stream == :stdout
-          $stdout.print data
-        else
-          stderr.print data
-        end
-      end
-    end
-
-    private
-
-    def garbage?(data)
-      data.start_with?('bash: cannot set terminal process group') || data.start_with?('bash: no job control in this shell')
-    end
-
-    def wrap(command)
-      "bash -i -s <<EOBASH
-#{command.gsub('$', '\$')}
-EOBASH"
-    end
-  end
-
-  class Local < Escualo::Session
-    def exec!(command)
-      ask command
-      nil
-    end
-
-    def ask(command)
-      out, status = Open3.capture2e(command)
-      raise out unless status.success?
-      out
-    end
-
-    def stream!(command)
-      Open3.popen2e command do |_input, output, wait|
-        output.each do |line|
-          $stdout.print line
-        end
-        raise "command #{command} failed" unless wait.value.success?
-      end
-    end
-
-    def upload!(file, destination)
-      FileUtils.cp file, destination
-    end
-  end
-
-  class Docker < Escualo::Session
-    attr_accessor :dockerfile
-
-    def tell!(command)
-      dockerfile << "RUN #{command}\n"
-    end
-
-    def upload!(file, destination)
-      dockerfile << "COPY #{file.path} #{destination}\n"
-    end
-
-    def ask(*)
-      raise 'can not ask on a docker session'
-    end
-
-    def start!(options)
-      if options.write_dockerfile
-        @dockerfile = "
-FROM #{base_image options}
-MAINTAINER #{ENV['USER']}"
-      else
-        @dockerfile = ''
-      end
-    end
-
-    def base_image(options)
-      if options.base_image == 'ubuntu'
-        'ubuntu:xenial'
-      elsif options.base_image == 'debian'
-        'debian:jessie'
-      else
-        raise "Unsupported base image #{options.base_image}. Only debian and ubuntu are supported"
-      end
-    end
-
-    def finish!(options)
-      if options.write_dockerfile
-        File.write('Dockerfile', dockerfile)
-      else
-        puts dockerfile
-      end
-    end
-
-    def self.started(options = struct)
-      new.tap do |it|
-        it.start!(options)
-      end
-    end
-  end
 end
+
+require_relative './session/docker_session'
+require_relative './session/remote_session'
+require_relative './session/local_session'

@@ -14,6 +14,7 @@ module Escualo
 end
 
 require_relative './template'
+require_relative './ssh'
 
 require_relative './escualo/version'
 require_relative './escualo/session'

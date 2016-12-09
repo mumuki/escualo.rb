@@ -2,12 +2,10 @@ module Escualo
   module Env
     def self.setup(session)
       source_escualorc = "'source ~/.escualorc'"
-      session.tell! %Q{
-        mkdir -p ~/.escualo/vars && \
-        echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc && \
-        chmod u+x ~/.escualorc && \
-        grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc
-      }
+      session.tell_all! 'mkdir -p ~/.escualo/vars',
+                        %q{echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc},
+                        %q{chmod u+x ~/.escualorc},
+                        "grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc"
     end
 
     def self.set_locale(session)

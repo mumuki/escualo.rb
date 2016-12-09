@@ -15,7 +15,7 @@ command 'script' do |c|
     delegated_options = Escualo::Script.delegated_options options
 
     Escualo::Session.within(options) do |session|
-      Escualo::Script.run! session, file, delegated_options
+      Escualo::Script.run!(session, ARGV[0], script, extra)
     end
   end
 end

@@ -1,7 +1,7 @@
 module Escualo
   module Script
-    def self.each_command(script, extra='', &block)
-      script.map { |it| "escualo #{it} #{extra}" }.each(&block) if script
+    def self.commands(escualo, script, extra)
+      (script||[]).map { |it| "#{escualo} #{it} #{extra}" }
     end
 
     def self.delegated_options(options)
@@ -11,13 +11,13 @@ module Escualo
        options.ssh_key.try { |it| "--ssh-key #{it}" },
        options.ssh_port.try { |it| "--ssh-port #{it}" },
        options.trace && '--trace',
-       options.verbose && '--verbose'
+       options.verbose && '--verbose',
       ].compact.join(' ')
     end
 
-    def self.run!(session, script, extra='')
-      Escualo::Script.each_command script, extra do |command|
-        session.tell! command
+    def self.run!(session, escualo, script, extra='')
+      Escualo::Script.commands(escualo, script, extra).each do |command|
+        session.embed! command
       end
     end
   end
