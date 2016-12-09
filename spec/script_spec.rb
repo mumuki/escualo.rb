@@ -9,7 +9,7 @@ describe Escualo::Script do
         mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
       end
       it { expect(mode.dockerfile).to include "\nFROM debian:jessie\n" }
-      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n" }
+      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo -v" }
       it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
     end
 
@@ -19,7 +19,7 @@ describe Escualo::Script do
         mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
       end
       it { expect(mode.dockerfile).to include "\nFROM ubuntu:xenial\n" }
-      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo\n" }
+      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo -v" }
       it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
     end
   end
