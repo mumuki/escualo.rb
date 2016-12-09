@@ -2,7 +2,7 @@ module Escualo
   module Artifact
     def self.setup(ssh)
       ssh.exec! %q{
-        mkdir -p/var/repo/ && \
+        mkdir -p /var/repo/ && \
         mkdir -p /var/scripts/
     }
     end

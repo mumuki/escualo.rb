@@ -2,6 +2,7 @@ command 'script' do |c|
   c.syntax = 'escualo script <FILE>'
   c.description = 'Runs a escualo configuration'
   c.option '--dockerized', TrueClass, 'Create a Dockerfile instead of running commands'
+  c.option '--development', TrueClass, 'Use local escualo gemspec instead of fetching from internet'
   c.option '--base-image BASE_IMAGE', String, 'Default base image. Only for dockerized runs'
 
   c.action do |args, options|
