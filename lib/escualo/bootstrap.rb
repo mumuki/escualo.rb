@@ -1,22 +1,5 @@
 module Escualo
   module Bootstrap
-    def self.install_base(ssh, options)
-      ssh.shell.perform! %q{
-        apt-get install -y \
-                 autoconf \
-                 bison \
-                 build-essential \
-                 libreadline6 \
-                 libreadline6-dev \
-                 curl \
-                 git \
-                 libssl-dev \
-                 zlib1g \
-                 zlib1g-dev \
-                 libreadline-dev
-      }, options
-    end
-
     def self.install_ruby(ssh, options)
       ssh.shell.perform! 'apt-get purge libruby* -y', options
       if options.with_rbenv

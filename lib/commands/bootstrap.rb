@@ -10,19 +10,19 @@ command 'bootstrap' do |c|
     options.default env: 'production'
 
     do_unless Escualo::Bootstrap.check(ssh), 'This host has already been bootstrapped', options do
+
+      step 'Enabling swap...' do
+        Escualo::Bootstrap.enable_swap ssh
+      end if options.swap
+
       step 'Configuring variables...' do
         Escualo::Env.setup ssh
         Escualo::Env.set_builtins ssh, options
       end
 
-      step 'Installing base software...' do
-        Escualo::Bootstrap.install_base ssh, options
+      step 'Installing Ruby...' do
         Escualo::Bootstrap.install_ruby ssh, options
       end
-
-      step 'Enabling swap...' do
-        Escualo::Bootstrap.enable_swap ssh
-      end if options.swap
 
       step 'Installing gems...' do
         Escualo::Gems.install ssh, options

@@ -26,6 +26,7 @@ end
 
 require_relative '../lib/commands/globals'
 
+require_relative '../lib/commands/base'
 require_relative '../lib/commands/bootstrap'
 require_relative '../lib/commands/deploy'
 require_relative '../lib/commands/script'
