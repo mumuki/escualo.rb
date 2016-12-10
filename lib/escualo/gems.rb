@@ -4,6 +4,6 @@ module Escualo::Gems
   end
 
   def self.check(session)
-    session.ask('escualo --version').include? "escualo #{Escualo::VERSION}"
+    session.ask('escualo --version').include? "escualo #{Escualo::VERSION}" rescue false
   end
 end

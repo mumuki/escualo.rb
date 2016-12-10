@@ -6,11 +6,7 @@ module Escualo::Plugin
 
       pg_hba_conf = "/etc/postgresql/#{options.pg_version}/main/pg_hba.conf"
 
-      session.tell_all! 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list',
-                        'wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -'
-
-      session.tell_all! 'apt-get update',
-                        "apt-get install -y postgresql-#{options.pg_version} libpq-dev"
+      session.tell_all! "apt-get install -y postgresql-#{options.pg_version} libpq-dev"
 
       session.tell_all! "echo 'local   all             postgres                                peer' > #{pg_hba_conf}",
                         "echo 'local   all             postgres                                peer' >> #{pg_hba_conf}",
