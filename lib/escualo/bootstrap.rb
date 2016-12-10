@@ -10,7 +10,7 @@ module Escualo
                           'rbenv global 2.3.1',
                           'rbenv rehash'
       else
-        session.tell_all! 'apt-get install -y ruby2.3 ruby2.3-dev'
+        Escualo::AptGet.install session, 'ruby2.3 ruby2.3-dev'
       end
     end
 

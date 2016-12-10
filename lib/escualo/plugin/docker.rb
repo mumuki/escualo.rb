@@ -1,7 +1,7 @@
 module Escualo::Plugin
   class Docker
     def run(session, _options)
-      session.tell! 'apt-get install -y docker.io'
+      Escualo::AptGet.install session, 'docker.io'
     end
 
     def installed?(session, _options)

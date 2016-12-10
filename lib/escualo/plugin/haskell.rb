@@ -1,7 +1,7 @@
 module Escualo::Plugin
   class Haskell
     def run(session, _options)
-      session.tell! 'apt-get install -y haskell-platform'
+      Escualo::AptGet.install session, 'haskell-platform'
     end
 
     def installed?(session, _options)

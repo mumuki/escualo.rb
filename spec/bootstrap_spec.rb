@@ -6,7 +6,7 @@ describe 'escualo bootstrap' do
   it { expect(result).to include 'RUN locale-gen en_US.UTF-8' }
   it { expect(result).to include 'RUN echo export ESCUALO_BASE_VERSION=' }
   it { expect(result).to include 'RUN apt-get purge libruby* -y' }
-  it { expect(result).to include 'apt-get install -y ruby2.3 ruby2.3-dev' }
+  it { expect(result).to include 'apt-get install -y --force-yes ruby2.3 ruby2.3-dev' }
   it { expect(result).to include 'RUN gem install bundler && gem install escualo' }
   it { expect(result).to include 'RUN mkdir -p /var/repo/ && mkdir -p /var/scripts/'}
   it { expect(result).to include 'RAILS_ENV=production' }

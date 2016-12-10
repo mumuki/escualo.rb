@@ -4,7 +4,7 @@ module Escualo
               curl git libssl-dev zlib1g zlib1g-dev libreadline-dev software-properties-common wget ca-certificates sudo upstart locales)
 
     def self.install_base(session)
-      session.tell! "apt-get update && apt-get install -y #{DEPS.join(' ')}"
+      Escualo::AptGet.install session, DEPS.join(' '), update: true
 
       session.tell_all! 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list',
                         'wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -'
