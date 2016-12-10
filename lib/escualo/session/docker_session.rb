@@ -2,7 +2,7 @@ class Escualo::Session::Docker < Escualo::Session
   attr_accessor :dockerfile
 
   def embed!(command)
-    dockerfile << %x{#{command} --dockerized}
+    dockerfile << Open3.exec!("#{command} --dockerized")
   end
 
   def tell!(command)

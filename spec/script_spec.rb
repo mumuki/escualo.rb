@@ -1,5 +1,13 @@
 require 'spec_helper'
 
+describe 'escualo script' do
+  it { expect(dockerized_escualo 'script spec/data/empty.yml').to eq "\n" }
+  it { expect(dockerized_escualo 'script spec/data/bootstrapped.yml').to start_with 'RUN apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/serviced.yml').to start_with 'RUN apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/with.foo.env.yml').to start_with 'RUN apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/full.yml').to start_with 'RUN apt-get install -y autoconf bison' }
+end
+
 describe Escualo::Script do
   describe 'run!' do
     let(:session) { Escualo::Session::Docker.new({}) }
@@ -48,7 +56,7 @@ describe Escualo::Script do
     let(:extra) { '--verbose=true' }
 
     it { expect(Escualo::Script.commands('escualo', %w(foo bar), extra).to_a).to eq ['escualo foo --verbose=true',
-                                                                          'escualo bar --verbose=true'] }
+                                                                                     'escualo bar --verbose=true'] }
     it { expect(Escualo::Script.commands('escualo', nil, extra).to_a).to eq [] }
   end
 

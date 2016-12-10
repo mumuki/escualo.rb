@@ -34,10 +34,6 @@ class Escualo::Session::Remote < Escualo::Session
 
   private
 
-  def garbage?(data)
-    data.start_with?('bash: cannot set terminal process group') || data.start_with?('bash: no job control in this shell')
-  end
-
   def wrap(command)
     "bash -i -s <<EOBASH
 #{command.gsub('$', '\$')}

@@ -13,6 +13,16 @@ require 'mumukit/core'
 module Escualo
 end
 
+require 'open3'
+
+module Open3
+  def self.exec!(command)
+    out, status = Open3.capture2e(command)
+    raise "command failed #{command}: #{out}" unless status.success?
+    out
+  end
+end
+
 require_relative './template'
 require_relative './ssh'
 

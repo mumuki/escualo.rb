@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'open3'
 
 class Escualo::Session
   attr_accessor :options
@@ -44,12 +43,12 @@ class Escualo::Session
            dockerized: options.dockerized
   end
 
-  def self.within(options, &block)
+  def self.within(options, force_local=false, &block)
     session_options = parse_session_options options
 
     if session_options.dockerized
       within_dockerized_session session_options, options, &block
-    elsif session_options.local
+    elsif session_options.local || force_local
       block.call(Escualo::Session::Local.new session_options)
     else
       within_ssh_session(session_options, &block)

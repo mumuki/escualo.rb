@@ -1,5 +1,6 @@
 class Net::SSH::Connection::Session
   def stream!(command)
+    exit_code = 0
     channel = self.open_channel do |channel|
       channel.exec command do |ch, success|
         raise 'could not execute command' unless success
@@ -15,7 +16,11 @@ class Net::SSH::Connection::Session
       end
     end
     channel.wait
-    raise 'command failed' if exit_code != 0
+    raise "command failed #{command}" if exit_code != 0
     nil
+  end
+
+  def garbage?(data)
+    data.start_with?('bash: cannot set terminal process group') || data.start_with?('bash: no job control in this shell')
   end
 end

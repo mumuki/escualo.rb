@@ -1,0 +1,10 @@
+ - base
+ - bootstrap
+ - plugin install monit --monit-password 'foo#34!!'
+ - plugin install postgres
+ - plugin install mongo
+ - plugin install rabbit --rabbit-admin-password conejito2014
+ - artifact create service atheneum 80
+ - artifact create site editor
+ - deploy atheneum mumuki/atheneum
+ - deploy editor mumuki/editor

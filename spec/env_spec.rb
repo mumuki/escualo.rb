@@ -1,6 +1,11 @@
 require 'spec_helper'
 
+describe 'escualo env set' do
+  it { expect(dockerized_escualo 'env set FOO=BAR BAZ=GOO').to eq "RUN echo export FOO=BAR > ~/.escualo/vars/FOO && echo export BAZ=GOO > ~/.escualo/vars/BAZ\n" }
+end
+
 describe Escualo::Env do
+
   it { expect(Escualo::Env.set_command 'FOO', 'bar').to eq 'echo export FOO=bar > ~/.escualo/vars/FOO' }
   it { expect(Escualo::Env.set_command 'FOO', '"bar"').to eq "echo export FOO=\"bar\" > ~/.escualo/vars/FOO" }
   it { expect(Escualo::Env.set_command 'FOO', "'bar'").to eq "echo export FOO='bar' > ~/.escualo/vars/FOO" }

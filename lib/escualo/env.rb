@@ -38,9 +38,7 @@ module Escualo
     end
 
     def self.set(session, variables)
-      variables.each do |key, value|
-        session.tell!(set_command key, value)
-      end
+      session.tell_all! *variables.map { |key, value| set_command key, value }
     end
 
     def self.set_command(key, value)

@@ -5,9 +5,7 @@ class Escualo::Session::Local < Escualo::Session
   end
 
   def ask(command)
-    out, status = Open3.capture2e(command)
-    raise out unless status.success?
-    out
+    Open3.exec! command
   end
 
   def stream!(command)

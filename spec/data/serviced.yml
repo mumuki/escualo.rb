@@ -1,6 +1,3 @@
-local:
  - base
  - bootstrap
-remote:
  - artifact create service atheneum 80
-

@@ -4,7 +4,7 @@ module Escualo
               curl git libssl-dev zlib1g zlib1g-dev libreadline-dev software-properties-common)
 
     def self.install_base(session)
-      session.tell! "apt-get install -y #{DEPS.join(' ')}"
+      session.tell! "apt-get update && apt-get install -y #{DEPS.join(' ')}"
     end
   end
 end
