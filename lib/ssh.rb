@@ -16,7 +16,7 @@ class Net::SSH::Connection::Session
       end
     end
     channel.wait
-    raise "command failed #{command}" if exit_code != 0
+    raise "command failed #{command}!" if exit_code != 0
     nil
   end
 

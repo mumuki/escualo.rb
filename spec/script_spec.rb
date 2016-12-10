@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'escualo script' do
   it { expect(dockerized_escualo 'script spec/data/empty.yml').to eq "\n" }
-  it { expect(dockerized_escualo 'script spec/data/bootstrapped.yml').to start_with 'RUN apt-get install -y autoconf bison' }
-  it { expect(dockerized_escualo 'script spec/data/serviced.yml').to start_with 'RUN apt-get install -y autoconf bison' }
-  it { expect(dockerized_escualo 'script spec/data/with.foo.env.yml').to start_with 'RUN apt-get install -y autoconf bison' }
-  it { expect(dockerized_escualo 'script spec/data/full.yml').to start_with 'RUN apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/bootstrapped.yml').to start_with 'RUN apt-get update && apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/serviced.yml').to start_with 'RUN apt-get update && apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/with.foo.env.yml').to start_with 'RUN apt-get update && apt-get install -y autoconf bison' }
+  it { expect(dockerized_escualo 'script spec/data/full.yml').to start_with 'RUN apt-get update && apt-get install -y autoconf bison' }
 end
 
 describe Escualo::Script do
@@ -32,7 +32,7 @@ describe Escualo::Script do
 
         it { expect(session.dockerfile).to_not include 'escualo env set' }
 
-        it { expect(session.dockerfile).to include "RUN apt-get install -y autoconf bison build-essential" }
+        it { expect(session.dockerfile).to include "RUN apt-get update && apt-get install -y autoconf bison build-essential" }
         it { expect(session.dockerfile).to include "RUN mkdir -p /var/repo/" }
         it { expect(session.dockerfile).to include "RUN chmod +x /var/scripts/baz/init" }
         it { expect(session.dockerfile).to include "RUN chmod +x /var/repo/baz.git/hooks/post-receive" }
