@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'escualo bootstrap' do
   let(:result) { dockerized_escualo 'bootstrap' }
 
-  it { expect(result).to include 'RUN locale-gen en_US.UTF-8' }
   it { expect(result).to include 'RUN echo export ESCUALO_BASE_VERSION=' }
   it { expect(result).to include 'RUN apt-get purge libruby* -y' }
   it { expect(result).to include 'apt-get install -y --force-yes ruby2.3 ruby2.3-dev' }

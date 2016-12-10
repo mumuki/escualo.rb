@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'escualo script' do
   it { expect(dockerized_escualo 'script spec/data/empty.yml').to eq "\n" }
-  it { expect(dockerized_escualo 'script spec/data/bootstrapped.yml').to start_with 'RUN apt-get update && apt-get install' }
-  it { expect(dockerized_escualo 'script spec/data/serviced.yml').to start_with 'RUN apt-get update && apt-get install' }
-  it { expect(dockerized_escualo 'script spec/data/with.foo.env.yml').to start_with 'RUN apt-get update && apt-get install' }
-  it { expect(dockerized_escualo 'script spec/data/full.yml').to start_with 'RUN apt-get update && apt-get install' }
+  it { expect(dockerized_escualo 'script spec/data/bootstrapped.yml').to include 'RUN apt-get update && apt-get install' }
+  it { expect(dockerized_escualo 'script spec/data/serviced.yml').to include 'RUN apt-get update && apt-get install' }
+  it { expect(dockerized_escualo 'script spec/data/with.foo.env.yml').to include 'RUN apt-get update && apt-get install' }
+  it { expect(dockerized_escualo 'script spec/data/full.yml').to include 'RUN apt-get update && apt-get install' }
 end
 
 describe Escualo::Script do
@@ -46,7 +46,6 @@ describe Escualo::Script do
 
       it { expect(session.dockerfile).to_not include "FROM ubuntu:xenial\n" }
       it { expect(session.dockerfile).to_not include 'escualo env set' }
-      it { expect(session.dockerfile).to include "RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8\n" }
       it { expect(session.dockerfile).to include "RUN gem install bundler && gem install escualo" }
       it { expect(session.dockerfile).to include "RUN echo export FOO=BAR > ~/.escualo/vars/FOO\n" }
     end

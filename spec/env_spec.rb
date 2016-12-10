@@ -25,10 +25,4 @@ describe Escualo::Env do
   it { expect(Escualo::Env.environment_variables('production')).to eq 'NODE_ENV' => 'production',
                                                                       'RACK_ENV' => 'production',
                                                                       'RAILS_ENV' => 'production' }
-
-  describe 'set_locale' do
-    let(:result) { dockerized { |s| Escualo::Env.set_locale(s) } }
-
-    it { expect(result).to eq "RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8\n"}
-  end
 end

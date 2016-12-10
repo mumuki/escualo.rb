@@ -16,7 +16,6 @@ command 'bootstrap' do |c|
 
     step 'Configuring variables...', options do
       Escualo::Env.setup session
-      Escualo::Env.set_locale session
       Escualo::Env.set_builtins session, options
     end
 

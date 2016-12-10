@@ -8,10 +8,6 @@ module Escualo
                         "grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc"
     end
 
-    def self.set_locale(session)
-      session.tell! "locale-gen #{locale} && update-locale LANG=#{locale}"
-    end
-
     def self.set_builtins(session, options)
       set session, ESCUALO_BASE_VERSION: Escualo::BASE_VERSION
       set session, Escualo::Env.locale_variables
