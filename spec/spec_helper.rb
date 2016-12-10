@@ -21,3 +21,10 @@ def scripted_escualo(command, env)
 rescue => e
   [e, -1]
 end
+
+
+def dockerized
+  session = Escualo::Session::Docker.started
+  yield session
+  session.dockerfile
+end

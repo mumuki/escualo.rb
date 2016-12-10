@@ -60,8 +60,15 @@ describe Escualo::Session do
     end
 
     describe 'tell_all!' do
-      before { session.tell_all! 'foo', 'bar', 'baz' }
-      it { expect(session.dockerfile).to eq "RUN foo && bar && baz\n" }
+      context 'no nil command' do
+        before { session.tell_all! 'foo', 'bar', 'baz' }
+        it { expect(session.dockerfile).to eq "RUN foo && bar && baz\n" }
+      end
+
+      context 'nil command' do
+        before { session.tell_all! 'foo', nil, 'baz' }
+        it { expect(session.dockerfile).to eq "RUN foo && baz\n" }
+      end
     end
   end
 end

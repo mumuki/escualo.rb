@@ -16,7 +16,7 @@ class Escualo::Session
   end
 
   def tell_all!(*commands)
-    tell! commands.join(' && ')
+    tell! commands.compact.join(' && ')
   end
 
   def tell!(command)
