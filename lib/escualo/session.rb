@@ -21,9 +21,9 @@ class Escualo::Session
 
   def tell!(command)
     if options.verbose
-      exec! command
-    else
       stream! command
+    else
+      exec! command
     end
   end
 
