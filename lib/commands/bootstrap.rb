@@ -14,11 +14,6 @@ command 'bootstrap' do |c|
       Escualo::Bootstrap.enable_swap session
     end if options.swap
 
-    step 'Configuring variables...', options do
-      Escualo::Env.setup session
-      Escualo::Env.set_builtins session, options
-    end
-
     step 'Installing Ruby...', options do
       Escualo::Bootstrap.install_ruby session, options
     end
