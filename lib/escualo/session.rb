@@ -24,11 +24,13 @@ class Escualo::Session
   end
 
   def upload_template!(destination, name, bindings)
-    Mumukit::Core::Template
-        .new(File.join(__dir__, '..', 'templates', "#{name}.erb"), bindings)
-        .with_tempfile!('template') do |file|
+    write_template! name, Mumukit::Core::Template.new(File.join(__dir__, '..', 'templates', "#{name}.erb"), bindings) do |file|
       upload! file, destination
     end
+  end
+
+  def write_template!(name, template, &block)
+    template.with_tempfile!('template', &block)
   end
 
   def self.parse_session_options(options)

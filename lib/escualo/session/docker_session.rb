@@ -10,7 +10,12 @@ class Escualo::Session::Docker < Escualo::Session
   end
 
   def upload!(file, destination)
-    dockerfile << "COPY #{file.path} #{destination}\n"
+    dockerfile << "COPY #{file} #{destination}\n"
+  end
+
+  def write_template!(name, template, &block)
+    template.write! name
+    block.call name
   end
 
   def ask(*)
