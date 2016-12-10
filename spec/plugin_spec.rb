@@ -6,7 +6,7 @@ describe 'escualo plugin' do
     let(:result) { dockerized_escualo 'plugin install postgres --pg-username foo --pg-password abcdefg' }
 
     it { expect(result).to start_with 'RUN apt-get install -y postgresql-9.3 libpq-dev' }
-    it { expect(result).to include 'create role $POSTGRESQL_DB_USERNAME' }
+    it { expect(result).to include "create role foo with createdb login password 'abcdefg';" }
     it { expect(result).to include '> /etc/postgresql/9.3/main/pg_hba.conf' }
     it { expect(result).to_not include 'echo "deb http://apt.postgresql.org/pub/repos/apt/' }
   end
