@@ -30,13 +30,7 @@ module Escualo
     end
 
     def self.push(session, dir)
-      remotes(session, dir).each do |remote|
-        session.tell! "cd #{dir} && git push #{remote} HEAD"
-      end
-    end
-
-    def self.simple_push(session, dir)
-      session.tell! "cd #{dir} && for r in $(git remote); do git push $r HEAD; done"
+      session.tell! "cd #{dir} && for r in $(git remote show | grep escualo-); do git push $r HEAD; done"
     end
   end
 end

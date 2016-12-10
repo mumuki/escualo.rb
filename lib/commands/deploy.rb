@@ -12,7 +12,7 @@ command 'deploy' do |c|
       end
 
       step 'Pushing to remote...', options do
-        Escualo::Remote.simple_push session, dir
+        Escualo::Remote.push session, dir
       end
     end
   end
