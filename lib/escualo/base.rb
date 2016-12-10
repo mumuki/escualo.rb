@@ -3,7 +3,7 @@ module Escualo
     DEPS = %w(autoconf bison build-essential libreadline6 libreadline6-dev
               curl git libssl-dev zlib1g zlib1g-dev libreadline-dev software-properties-common wget ca-certificates sudo upstart)
 
-    def self.install_base(session)
+    def self.install(session)
       Escualo::AptGet.install session, DEPS.join(' ')
     end
 
@@ -27,5 +27,15 @@ module Escualo
                         "echo 'locales locales/default_environment_locale select      en_US.UTF-8' | debconf-set-selections"
       Escualo::AptGet.install session, 'locales', update: true
     end
+
+    def self.enable_swap(session)
+      session.tell_all! 'test -e /swapfile || fallocate -l 4 G /swapfile',
+                        'chmod 600 /swapfile',
+                        'mkswap /swapfile',
+                        'swapon /swapfile',
+                        'swapon -s',
+                        %Q{echo '/swapfile   none    swap    sw    0   0' >> /etc/ fstab}
+    end
+
   end
 end

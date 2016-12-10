@@ -1,6 +1,6 @@
 module Escualo
-  module Bootstrap
-    def self.install_ruby(session, options)
+  module Ruby
+    def self.install(session, options)
       session.tell! 'apt-get purge libruby* -y'
       if options.with_rbenv
         session.tell_all! 'curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash',
@@ -12,19 +12,6 @@ module Escualo
       else
         Escualo::AptGet.install session, 'ruby2.3 ruby2.3-dev'
       end
-    end
-
-    def self.enable_swap(session)
-      session.tell_all! 'test -e /swapfile || fallocate -l 4 G /swapfile',
-                        'chmod 600 /swapfile',
-                        'mkswap /swapfile',
-                        'swapon /swapfile',
-                        'swapon -s',
-                        %Q{echo '/swapfile   none    swap    sw    0   0' >> /etc/ fstab}
-    end
-
-    def self.installed?(ssh)
-      Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION) && Escualo::Gems.installed?(ssh)
     end
   end
 end

@@ -1,13 +1,5 @@
 require 'spec_helper'
 
-describe 'escualo script' do
-  it { expect(dockerized_escualo 'script spec/data/empty.yml').to eq "\n" }
-  it { expect(dockerized_escualo 'script spec/data/bootstrapped.yml').to include 'RUN apt-get update && apt-get install' }
-  it { expect(dockerized_escualo 'script spec/data/serviced.yml').to include 'RUN apt-get update && apt-get install' }
-  it { expect(dockerized_escualo 'script spec/data/with.foo.env.yml').to include 'RUN apt-get update && apt-get install' }
-  it { expect(dockerized_escualo 'script spec/data/full.yml').to include 'RUN apt-get update && apt-get install' }
-end
-
 describe Escualo::Script do
   describe 'run!' do
     let(:session) { Escualo::Session::Docker.new({}) }
@@ -24,7 +16,7 @@ describe Escualo::Script do
       context 'ubuntu' do
         before do
           session.start! struct base_image: 'ubuntu', write_dockerfile: true
-          Escualo::Script.run! session, 'bin/escualo', ['base', 'bootstrap', 'env set FOO=BAR', 'artifact create site baz']
+          Escualo::Script.run! session, 'bin/escualo', ['bootstrap', 'env set FOO=BAR', 'artifact create site baz']
         end
 
         it { expect(session.dockerfile).to include "FROM ubuntu:xenial\n" }

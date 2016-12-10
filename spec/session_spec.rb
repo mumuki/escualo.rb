@@ -31,7 +31,7 @@ describe Escualo::Session do
 
   describe Escualo::Session::Local do
     let(:session) { Escualo::Session::Local.new }
-    it { expect(session.ask 'ls ./spec/data').to eq "based.yml\nbootstrapped.yml\nempty.yml\nfull.yml\nserviced.yml\nwith.foo.env.yml\n" }
+    it { expect(session.ask 'ls ./spec/data').to eq "bootstrapped.yml\nempty.yml\nfull.yml\nserviced.yml\nwith.foo.env.yml\n" }
 
     describe 'tell!' do
       it { session.tell! 'ls ./spec/data' }

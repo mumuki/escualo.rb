@@ -1,4 +1,3 @@
- - base
  - bootstrap
  - plugin install monit --monit-password 'foo#34!!'
  - plugin install postgres --pg-password foo1235 --pg-username foo

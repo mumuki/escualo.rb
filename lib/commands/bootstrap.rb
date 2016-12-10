@@ -8,14 +8,33 @@ command 'bootstrap' do |c|
   c.session_action do |_args, options, session|
     options.default env: 'production'
 
-    exit_if('This host has already been bootstrapped', options) { Escualo::Bootstrap.installed?(session) }
+    exit_if('This host has already been bootstrapped', options) do
+      Escualo::Env.present?(session, :ESCUALO_BASE_VERSION) && Escualo::Gems.installed?(session)
+    end
+
+    step 'Configuring variables...', options do
+      Escualo::Env.setup session
+      Escualo::Env.set_builtins session, options
+    end
+
+    step 'Configuring locales...', options do
+      Escualo::Base.configure_locales session
+    end
+
+    step 'Installing base software', options do
+      Escualo::Base.install session
+    end
+
+    step 'Adding package repositories', options do
+      Escualo::Base.add_repositories session
+    end
 
     step 'Enabling swap...', options do
-      Escualo::Bootstrap.enable_swap session
+      Escualo::Base.enable_swap session
     end if options.swap
 
     step 'Installing Ruby...', options do
-      Escualo::Bootstrap.install_ruby session, options
+      Escualo::Ruby.install session, options
     end
 
     step 'Installing gems...', options do
