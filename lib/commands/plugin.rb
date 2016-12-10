@@ -19,7 +19,7 @@ command 'plugin install' do |c|
     plugin = args.first
     installer = Escualo::Plugin.load plugin
 
-    exit_if("Plugin #{plugin} is already installed", options) { installer.check(session, options) }
+    exit_if("Plugin #{plugin} is already installed", options) { installer.installed?(session, options) }
 
     step "Installing plugin #{plugin}", options do
       installer.run session, options
@@ -33,7 +33,7 @@ command 'plugin list' do |c|
 
   c.session_action do |_args, _options, session|
     Escualo::Plugin::PLUGINS.each do |plugin|
-      say plugin if Escualo::Plugin.load(plugin).check session
+      say plugin if Escualo::Plugin.load(plugin).installed? session
     end
   end
 end

@@ -4,8 +4,8 @@ module Escualo::Plugin
       session.tell! 'apt-get install -y docker.io'
     end
 
-    def check(session, _options)
-      session.ask('docker -v').include? 'Docker version' rescue false
+    def installed?(session, _options)
+      session.check? 'docker -v', 'Docker version'
     end
   end
 end

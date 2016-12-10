@@ -15,7 +15,7 @@ module Escualo::Plugin
                     "monit reload"
     end
 
-    def check(session, options)
+    def installed?(session, options)
       session.tell!('monit --version').include? 'This is Monit version 5' rescue false
     end
   end

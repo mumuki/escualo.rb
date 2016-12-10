@@ -23,8 +23,8 @@ module Escualo
                         %Q{echo '/swapfile   none    swap    sw    0   0' >> /etc/ fstab}
     end
 
-    def self.check(ssh)
-      Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION) && Escualo::Gems.check(ssh)
+    def self.installed?(ssh)
+      Escualo::Env.present?(ssh, :ESCUALO_BASE_VERSION) && Escualo::Gems.installed?(ssh)
     end
   end
 end

@@ -8,8 +8,8 @@ module Escualo::Plugin
                         'service nginx restart'
     end
 
-    def check(session, _options)
-      session.ask('nginx -v').include? 'nginx version: nginx/1' rescue false
+    def installed?(session, _options)
+      session.check? 'nginx -v', 'nginx version: nginx/1'
     end
   end
 end

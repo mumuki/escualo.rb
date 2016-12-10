@@ -19,8 +19,8 @@ module Escualo::Plugin
     end
 
 
-    def check(session, options)
-      session.ask('psql --version').include? "psql (PostgreSQL) #{options.pg_version}" rescue false
+    def installed?(session, options)
+      session.check? 'psql --version', "psql (PostgreSQL) #{options.pg_version}"
     end
   end
 end

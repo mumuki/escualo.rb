@@ -3,7 +3,7 @@ module Escualo::Gems
     session.tell! "gem install bundler && gem install escualo -v #{Escualo::VERSION}"
   end
 
-  def self.check(session)
-    session.ask('escualo --version').include? "escualo #{Escualo::VERSION}" rescue false
+  def self.installed?(session)
+    session.check? 'escualo --version', "escualo #{Escualo::VERSION}"
   end
 end

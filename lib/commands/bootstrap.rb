@@ -8,7 +8,7 @@ command 'bootstrap' do |c|
   c.session_action do |_args, options, session|
     options.default env: 'production'
 
-    exit_if('This host has already been bootstrapped', options) { Escualo::Bootstrap.check(session) }
+    exit_if('This host has already been bootstrapped', options) { Escualo::Bootstrap.installed?(session) }
 
     step 'Enabling swap...', options do
       Escualo::Bootstrap.enable_swap session

@@ -14,7 +14,7 @@ module Escualo
 
       session.tell! %Q{echo 'deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse' | tee /etc/apt/sources.list.d/mongodb-org-3.2.list}
       session.tell! %Q{apt-add-repository '#{Escualo::PPA.for 'brightbox/ruby-ng'}'}
-      session.tell! %Q{add-apt-repository #{Escualo::PPA.for 'nginx/stable'}}
+      session.tell! %Q{add-apt-repository '#{Escualo::PPA.for 'nginx/stable'}'}
 
       session.tell! 'apt-get update'
     end

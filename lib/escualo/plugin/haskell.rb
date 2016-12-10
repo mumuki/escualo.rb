@@ -4,8 +4,8 @@ module Escualo::Plugin
       session.tell! 'apt-get install -y haskell-platform'
     end
 
-    def check(session, _options)
-      session.ask('ghc --version').include? 'The Glorious Glasgow Haskell Compilation System' rescue false
+    def installed?(session, _options)
+      session.check? 'ghc --version', 'The Glorious Glasgow Haskell Compilation System'
     end
   end
 end

@@ -32,14 +32,27 @@ describe Escualo::Session do
   describe Escualo::Session::Local do
     let(:session) { Escualo::Session::Local.new }
     it { expect(session.ask 'ls ./spec/data').to eq "based.yml\nbootstrapped.yml\nempty.yml\nfull.yml\nserviced.yml\nwith.foo.env.yml\n" }
-    it { session.tell! 'ls ./spec/data' }
+
+    describe 'tell!' do
+      it { session.tell! 'ls ./spec/data' }
+      it { expect { session.tell! 'ls ./spec/this-repo-does-not-exist' }.to raise_error RuntimeError }
+    end
+
+    describe 'check?' do
+      it { expect(session.check? 'the-rare-command', 'foo').to be false }
+      it { expect(session.check? 'ls ./spec/data', 'the-rare-output').to be false }
+      it { expect(session.check? 'ls ./spec/data', 'empty.yml').to be true }
+    end
 
     it { expect { session.exec! 'ls ./spec/this-repo-does-not-exist' }.to raise_error RuntimeError }
-    it { expect { session.tell! 'ls ./spec/this-repo-does-not-exist' }.to raise_error RuntimeError }
   end
 
   describe Escualo::Session::Docker do
     let(:session) { Escualo::Session::Docker.started }
+
+    describe 'ask' do
+      it { expect { session.ask 'ls ./spec/data' }.to raise_error RuntimeError }
+    end
 
     describe 'tell!' do
       before { session.tell! 'foo' }

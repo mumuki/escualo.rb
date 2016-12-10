@@ -6,8 +6,8 @@ module Escualo::Plugin
                         "echo 'respawn' >> /etc/init/mongodb"
     end
 
-    def check(session, _options)
-      session.ask('mongod --version').include? 'db version v3.2' rescue false
+    def installed?(session, _options)
+      session.check? 'mongod --version', 'db version v3.2'
     end
   end
 end

@@ -6,7 +6,7 @@ module Escualo::Plugin
                         'nvm install 4.2.4'
     end
 
-    def check(session, _options)
+    def installed?(session, _options)
       session.tell!('nvm use node').include? 'Now using node v4.2.4' rescue false
     end
   end

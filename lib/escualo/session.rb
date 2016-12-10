@@ -7,6 +7,10 @@ class Escualo::Session
     @options = options
   end
 
+  def check?(command, include)
+    ask(command).include? include rescue false
+  end
+
   def embed!(command)
     tell! command
   end

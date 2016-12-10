@@ -5,10 +5,10 @@ describe 'escualo plugin' do
   describe 'install postgres' do
     let(:result) { dockerized_escualo 'plugin install postgres --pg-username foo --pg-password abcdefg' }
 
-    it { expect(result).to include 'RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main"' }
-    it { expect(result).to include 'apt-get install -y postgresql-9.3 libpq-dev' }
+    it { expect(result).to start_with 'RUN apt-get install -y postgresql-9.3 libpq-dev' }
     it { expect(result).to include 'create role $POSTGRESQL_DB_USERNAME' }
     it { expect(result).to include '> /etc/postgresql/9.3/main/pg_hba.conf' }
+    it { expect(result).to_not include 'echo "deb http://apt.postgresql.org/pub/repos/apt/' }
   end
 
   describe 'install monit' do
@@ -28,8 +28,9 @@ describe 'escualo plugin' do
   describe 'install mongo' do
     let(:result) { dockerized_escualo 'plugin install mongo' }
 
-    it { expect(result).to start_with "RUN echo 'deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse'" }
+    it { expect(result).to start_with "RUN apt-get install -y --force-yes mongodb-org" }
     it { expect(result).to include "RUN apt-get install -y --force-yes mongodb-org\n" }
+    it { expect(result).to_not include "'deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse'" }
   end
 
   describe 'install node' do

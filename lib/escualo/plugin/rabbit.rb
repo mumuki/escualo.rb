@@ -8,8 +8,8 @@ module Escualo::Plugin
                         'rabbitmqctl set_user_tags admin administrator'
     end
 
-    def check(session, _options)
-      session.ask('rabbitmq-server').include? 'node with name "rabbit" already running' rescue false
+    def installed?(session, _options)
+      session.check? 'rabbitmq-server', 'node with name "rabbit" already running'
     end
   end
 end
