@@ -13,7 +13,7 @@ command 'script' do |c|
     file = YAML.load_file args.first
     delegated_options = Escualo::Script.delegated_options options
 
-    Escualo::Session.within(options) do |session|
+    Escualo::Session.within(options, true) do |session|
       Escualo::Script.run!(session, $PROGRAM_NAME, file, delegated_options)
     end
   end
