@@ -1,7 +1,7 @@
 module Escualo
   module Base
     DEPS = %w(autoconf bison build-essential libreadline6 libreadline6-dev
-              curl git libssl-dev zlib1g zlib1g-dev libreadline-dev software-properties-common wget ca-certificates sudo upstart)
+              curl git libssl-dev zlib1g zlib1g-dev libreadline-dev software-properties-common wget ca-certificates sudo upstart locales)
 
     def self.install_base(session)
       session.tell! "apt-get update && apt-get install -y #{DEPS.join(' ')}"
