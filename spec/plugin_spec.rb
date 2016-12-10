@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'escualo plugin' do
 
   describe 'install postgres' do
-    let(:result) { dockerized_escualo 'plugin install postgres' }
+    let(:result) { dockerized_escualo 'plugin install postgres --pg-username foo --pg-password abcdefg' }
 
     it { expect(result).to include 'RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main"' }
     it { expect(result).to include 'apt-get install -y postgresql-9.3 libpq-dev' }

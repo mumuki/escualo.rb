@@ -1,10 +1,10 @@
 module Escualo::Plugin
   class Postgres
     def run(session, options)
-      pg_hba_conf = "/etc/postgresql/#{options.pg_version}/main/pg_hba.conf"
+      raise 'missing pg-username' unless options.pg_username
+      raise 'missing pg-password' unless options.pg_password
 
-      # TODO move to base
-      session.tell! 'apt-get install -y wget ca-certificates sudo'
+      pg_hba_conf = "/etc/postgresql/#{options.pg_version}/main/pg_hba.conf"
 
       session.tell_all! 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list',
                         'wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -'
@@ -17,8 +17,9 @@ module Escualo::Plugin
                         "echo 'local   all             all                                     password' >> #{pg_hba_conf}",
                         "echo 'host    all             all             127.0.0.1/32            md5' >> #{pg_hba_conf}"
 
-      session.tell_all! 'cd /',
-                        %q{sudo -u postgres PGDATABASE='' psql "create role $POSTGRESQL_DB_USERNAME with createdb login password '$POSTGRESQL_DB_PASSWORD';"}
+      session.tell_all! '/etc/init.d/postgresql restart',
+                        'cd /',
+                        "echo \"create role #{options.pg_username} with createdb login password '#{options.pg_password}';\" | sudo -u postgres PGDATABASE='' psql"
     end
 
 

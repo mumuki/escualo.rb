@@ -32,7 +32,7 @@ describe 'plugin', dockerized: true do
   end
 
   it 'installs postgre ' do
-    result = scripted_escualo 'plugin install postgre', 'bootstrapped.yml'
+    result = scripted_escualo 'plugin install postgre --pg-password pg123456 --pg-username username', 'bootstrapped.yml'
     expect(result).to eq ['', 0]
   end
 

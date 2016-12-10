@@ -6,6 +6,8 @@ command 'plugin install' do |c|
   c.option '--rabbit-admin-password PASSWORD', String, 'rabbitmq admin password, only for rabbit plugin'
 
   c.option '--pg-version VERSION', String, 'PostgreSQL major and minor version. Default is 9.3, only for postgre plugin'
+  c.option '--pg-username USERNAME', String, 'PostgreSQL username'
+  c.option '--pg-password PASSWORD', String, 'PostgreSQL password'
 
   c.option '--monit-version VERSION', String, 'Monit version. Default is 5.16'
   c.option '--monit-password PASSWORD', String, 'Monit password. Required with monit plugin'
