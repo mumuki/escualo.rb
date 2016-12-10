@@ -5,8 +5,10 @@ describe 'escualo plugin' do
   describe 'install postgres' do
     let(:result) { dockerized_escualo 'plugin install postgres' }
 
-    it { expect(result).to include 'RUN apt-get install postgresql libpq-dev' }
+    it { expect(result).to include 'RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main"' }
+    it { expect(result).to include 'apt-get install -y postgresql-9.3 libpq-dev' }
     it { expect(result).to include 'create role $POSTGRESQL_DB_USERNAME' }
+    it { expect(result).to include '> /etc/postgresql/9.3/main/pg_hba.conf' }
   end
 
   describe 'install monit' do
