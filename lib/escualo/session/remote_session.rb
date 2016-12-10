@@ -5,7 +5,7 @@ class Escualo::Session::Remote < Escualo::Session
   end
 
   def upload!(file, destination)
-    scp.upload! file, destination
+    @ssh.scp.upload! file, destination
   end
 
   def exec!(command)
