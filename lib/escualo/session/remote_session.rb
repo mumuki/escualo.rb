@@ -27,7 +27,7 @@ class Escualo::Session::Remote < Escualo::Session
       if stream == :stdout
         $stdout.print data
       else
-        stderr.print data
+        $stderr.print data
       end
     end
   end
