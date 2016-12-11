@@ -30,6 +30,7 @@ describe Escualo::Script do
         it { expect(session.dockerfile).to include "RUN chmod +x /var/repo/baz.git/hooks/post-receive" }
       end
     end
+
     context 'no dockerfile' do
       before do
         session.start! struct base_image: 'ubuntu', write_dockerfile: false
