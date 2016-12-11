@@ -1,12 +1,7 @@
 require 'spec_helper'
 
-class DummySession
-  def perform!(command, options)
-    command
-  end
-end
-
 describe Escualo::Env do
+
   it { expect(Escualo::Env.set_command 'FOO', 'bar').to eq 'echo export FOO=bar > ~/.escualo/vars/FOO' }
   it { expect(Escualo::Env.set_command 'FOO', '"bar"').to eq "echo export FOO=\"bar\" > ~/.escualo/vars/FOO" }
   it { expect(Escualo::Env.set_command 'FOO', "'bar'").to eq "echo export FOO='bar' > ~/.escualo/vars/FOO" }
@@ -26,6 +21,4 @@ describe Escualo::Env do
   it { expect(Escualo::Env.environment_variables('production')).to eq 'NODE_ENV' => 'production',
                                                                       'RACK_ENV' => 'production',
                                                                       'RAILS_ENV' => 'production' }
-
-  it { expect(Escualo::Env.set_locale(DummySession.new, struct)).to eq 'locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8' }
 end

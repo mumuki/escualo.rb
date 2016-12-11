@@ -1,35 +1,55 @@
 require 'spec_helper'
 
 describe Escualo::Script do
-  describe Escualo::Script::Mode do
-    let(:mode) { Escualo::Script::Dockerized.new }
-    context 'debian' do
-      before do
-        mode.start! struct base_image: 'debian'
-        mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+  describe 'run!' do
+    let(:session) { Escualo::Session::Docker.new({}) }
+    context 'with dockerfile' do
+      context 'debian' do
+        before do
+          session.start! struct base_image: 'debian', write_dockerfile: true
+          Escualo::Script.run! session, 'bin/escualo', ['bootstrap', 'env set FOO=BAR']
+        end
+        it { expect(session.dockerfile).to include "FROM debian:jessie\n" }
+        it { expect(session.dockerfile).to_not include 'escualo env set' }
       end
-      it { expect(mode.dockerfile).to include "\nFROM debian:jessie\n" }
-      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo -v" }
-      it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
+
+      context 'ubuntu' do
+        before do
+          session.start! struct base_image: 'ubuntu', write_dockerfile: true
+          Escualo::Script.run! session, 'bin/escualo', ['bootstrap', 'env set FOO=BAR', 'artifact create site baz']
+        end
+
+        it { expect(session.dockerfile).to include "FROM ubuntu:xenial\n" }
+        it { expect(session.dockerfile).to include "MAINTAINER #{ENV['USER']}\n" }
+
+        it { expect(session.dockerfile).to_not include 'escualo env set' }
+
+        it { expect(session.dockerfile).to include "RUN apt-get update && apt-get install" }
+        it { expect(session.dockerfile).to include "RUN mkdir -p /var/repo/" }
+        it { expect(session.dockerfile).to include "RUN chmod +x /var/scripts/baz/init" }
+        it { expect(session.dockerfile).to include "RUN chmod +x /var/repo/baz.git/hooks/post-receive" }
+      end
     end
 
-    context 'ubuntu' do
+    context 'no dockerfile' do
       before do
-        mode.start! struct base_image: 'ubuntu'
-        mode.run_commands_for! ['bootstrap', 'env set FOO=BAR'], nil, {}
+        session.start! struct base_image: 'ubuntu', write_dockerfile: false
+        Escualo::Script.run! session, 'bin/escualo', ['bootstrap', 'env set FOO=BAR']
       end
-      it { expect(mode.dockerfile).to include "\nFROM ubuntu:xenial\n" }
-      it { expect(mode.dockerfile).to include "RUN apt-get update && apt-get install ruby ruby-dev build-essential -y\nRUN gem install escualo -v" }
-      it { expect(mode.dockerfile).to include "RUN escualo bootstrap \nRUN escualo env set FOO=BAR \n" }
+
+      it { expect(session.dockerfile).to_not include "FROM ubuntu:xenial\n" }
+      it { expect(session.dockerfile).to_not include 'escualo env set' }
+      it { expect(session.dockerfile).to include "RUN gem install bundler && gem install escualo" }
+      it { expect(session.dockerfile).to include "RUN echo export FOO=BAR > ~/.escualo/vars/FOO\n" }
     end
   end
 
   describe 'with_commands_for' do
     let(:extra) { '--verbose=true' }
 
-    it { expect(Escualo::Script.each_command(%w(foo bar), extra).to_a).to eq ['escualo foo --verbose=true',
-                                                                              'escualo bar --verbose=true'] }
-    it { expect(Escualo::Script.each_command(nil, extra).to_a).to eq [] }
+    it { expect(Escualo::Script.commands('escualo', %w(foo bar), extra).to_a).to eq ['escualo foo --verbose=true',
+                                                                                     'escualo bar --verbose=true'] }
+    it { expect(Escualo::Script.commands('escualo', nil, extra).to_a).to eq [] }
   end
 
   describe 'delegated_options' do

@@ -14,11 +14,17 @@ do
 
        echo "[Escualo] [<%= @name %>] master branch detected, deploying..."
        mkdir -p /var/www/<%= @name %>
-       git --work-tree=/var/www/<%= @name %> --git-dir=/var/repo/<%= @name %>.git checkout master -f
 
+       if [ "$(ls -A /var/www/<%= @name %>)" ]; then
+         START_TYPE=restart
+       else
+         START_TYPE=first
+       fi
+
+       git --work-tree=/var/www/<%= @name %> --git-dir=/var/repo/<%= @name %>.git checkout master -f
        <% if @service %>
        /var/scripts/<%= @name %>/codechange $newrev
        <% end %>
-       /var/scripts/<%= @name %>/init $newrev
+       /var/scripts/<%= @name %>/init $newrev $START_TYPE
     fi
 done

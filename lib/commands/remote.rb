@@ -3,10 +3,11 @@ command 'remote attach' do |c|
   c.description = "Adds the given artifact to current's repository"
   c.option '--repo-path PATH', String, 'Sets the git dir'
 
-  c.action do |args, options|
+  c.local_session_action do |args, options, session|
     options.default repo_path: Dir.pwd
+    session_options = Escualo::Session.parse_session_options options
 
-    Escualo::Remote.attach options.repo_path, args.first
+    Escualo::Remote.attach session, options.repo_path, args.first, session_options
   end
 end
 
@@ -15,10 +16,10 @@ command 'remote show' do |c|
   c.description = "Show attached artifacts to current's repository"
   c.option '--repo-path PATH', String, 'Sets the git dir'
 
-  c.action do |_args, options|
+  c.local_session_action do |_args, options, session|
     options.default repo_path: Dir.pwd
 
-    Escualo::Remote.remotes(options.repo_path).each { |it| say it }
+    Escualo::Remote.remotes(session, options.repo_path).each { |it| say it }
   end
 end
 
@@ -26,7 +27,7 @@ command 'remote push' do |c|
   c.syntax = 'escualo remote push'
   c.description = 'Pushes artifact at current repository'
   c.action do |_args, _options|
-    Escualo::Remote.push Dir.pwd
+    Escualo::Remote.push session, Dir.pwd
   end
 end
 

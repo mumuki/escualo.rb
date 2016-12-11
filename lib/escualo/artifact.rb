@@ -1,72 +1,69 @@
 module Escualo
   module Artifact
-    def self.setup(ssh)
-      ssh.exec! %q{
-        mkdir -p /var/repo/ && \
-        mkdir -p /var/scripts/
-    }
+    def self.setup(session)
+      session.tell_all! 'mkdir -p /var/repo/',
+                        'mkdir -p /var/scripts/'
     end
 
-    def self.destroy(ssh, name)
+    def self.destroy(session, name)
       raise 'name must not be blank' if name.blank?
       raise 'name must not contains wildcards' if name.include?('*')
 
-      ssh.exec! "rm -rf /var/scripts/#{name}"
-      ssh.exec! "rm -rf /var/repo/#{name}.git"
-      ssh.exec! "rm -f /etc/monit/conf.d/escualo-#{name}"
-      ssh.exec! "rm -f /etc/init/#{name}.conf"
+      session.tell_all! "rm -rf /var/scripts/#{name}",
+                        "rm -rf /var/repo/#{name}.git",
+                        "rm -f /etc/monit/conf.d/escualo-#{name}",
+                        "rm -f /etc/init/#{name}.conf",
+                        "test ! -e /var/repo/#{name}.git"
     end
 
-    def self.present?(ssh, name)
-      list(ssh).include? name
+    def self.present?(session, name)
+      list(session).include? name rescue false
     end
 
-    def self.create_scripts_dir(ssh, name)
-      ssh.exec! "mkdir -p /var/scripts/#{name}"
+    def self.create_scripts_dir(session, name)
+      session.tell! "mkdir -p /var/scripts/#{name}"
     end
 
-    def self.create_init_script(ssh, options)
-      ssh.upload_template! "/var/scripts/#{options[:name]}/init",
-                           'init.sh',
-                           options
-      ssh.exec! "chmod +x /var/scripts/#{options[:name]}/init"
+    def self.create_init_script(session, options)
+      session.upload_template! "/var/scripts/#{options[:name]}/init",
+                               'init.sh',
+                               options
+      session.tell! "chmod +x /var/scripts/#{options[:name]}/init"
     end
 
-    def self.list(ssh)
-      ssh.exec!('ls /var/repo/').captures(/(.*)\.git/).map { $1 }
+    def self.list(session)
+      session.ask('ls /var/repo/').captures(/(.*)\.git/).map { $1 }
     end
 
-    def self.create_push_infra(ssh, options)
+    def self.create_push_infra(session, options)
       name = options[:name]
-      ssh.exec! %Q{\
-        cd /var && \
-        mkdir -p www && \
-        mkdir -p repo && \
-        cd repo && \
-        rm -rf #{name}.git && \
-        mkdir #{name}.git && \
-        cd #{name}.git && \
-        git init --bare
-      }
+      session.tell_all! 'cd /var',
+                        'mkdir -p www',
+                        'mkdir -p repo',
+                        'cd repo',
+                        "rm -rf #{name}.git",
+                        "mkdir #{name}.git",
+                        "cd #{name}.git",
+                        'git init --bare'
       hook_file = "/var/repo/#{name}.git/hooks/post-receive"
-      ssh.upload_template! hook_file, 'post-receive.sh', options
-      ssh.exec! "chmod +x #{hook_file}"
+      session.upload_template! hook_file, 'post-receive.sh', options
+      session.tell! "chmod +x #{hook_file}"
     end
 
-    def self.configure_monit(ssh, options)
+    def self.configure_monit(session, options)
       name = options[:name]
-      ssh.exec! 'mkdir -p /etc/monit/conf.d/'
-      ssh.upload_template! "/etc/monit/conf.d/escualo-#{name}", 'monit.conf', options
-      ssh.exec! 'monit reload'
+      session.tell! 'mkdir -p /etc/monit/conf.d/'
+      session.upload_template! "/etc/monit/conf.d/escualo-#{name}", 'monit.conf', options
+      session.tell! 'monit reload'
     end
 
-    def self.create_codechange_script(ssh, name)
-      ssh.upload_template! "/var/scripts/#{name}/codechange", 'codechange.sh', name: name
-      ssh.exec! "chmod +x /var/scripts/#{name}/codechange"
+    def self.create_codechange_script(session, name)
+      session.upload_template! "/var/scripts/#{name}/codechange", 'codechange.sh', name: name
+      session.tell! "chmod +x /var/scripts/#{name}/codechange"
     end
 
-    def self.configure_upstart(ssh, options)
-      ssh.upload_template! "/etc/init/#{options[:name]}.conf", 'upstart.conf', options
+    def self.configure_upstart(session, options)
+      session.upload_template! "/etc/init/#{options[:name]}.conf", 'upstart.conf', options
     end
   end
 end

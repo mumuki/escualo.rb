@@ -4,40 +4,45 @@ command 'bootstrap' do |c|
   c.option '--swap', TrueClass, 'Setup swap?'
   c.option '--env ENVIRONMENT', String, 'Environment. Valid options are development and production. default is production'
   c.option '--with-rbenv', TrueClass, 'Use rbenv instead of native ruby installation'
-  c.option '-f', '--force', TrueClass, 'Force bootstrap even if already done?'
 
-  c.ssh_action do |_args, options, ssh|
+  c.session_action do |_args, options, session|
     options.default env: 'production'
 
-    do_unless Escualo::Bootstrap.check(ssh), 'This host has already been bootstrapped', options do
+    exit_if('This host has already been bootstrapped', options) do
+      Escualo::Env.present?(session, :ESCUALO_BASE_VERSION) && Escualo::Gems.installed?(session)
+    end
 
-      step 'Enabling swap...' do
-        Escualo::Bootstrap.enable_swap ssh
-      end if options.swap
+    step 'Configuring variables...', options do
+      Escualo::Env.setup session
+      Escualo::Env.set_builtins session, options
+    end
 
-      step 'Configuring variables...' do
-        Escualo::Env.setup ssh
-        Escualo::Env.set_locale ssh, options
-        Escualo::Env.set_builtins ssh, options
-      end
+    step 'Configuring locales...', options do
+      Escualo::Base.configure_locales session
+    end
 
-      step 'Installing Ruby...' do
-        Escualo::Bootstrap.install_ruby ssh, options
-      end
+    step 'Installing base software', options do
+      Escualo::Base.install session
+    end
 
-      step 'Installing gems...' do
-        Escualo::Gems.install ssh, options
-      end
+    step 'Adding package repositories', options do
+      Escualo::Base.add_repositories session
+    end
 
-      step 'Setup artifact directories...' do
-        Escualo::Artifact.setup ssh
-      end
+    step 'Enabling swap...', options do
+      Escualo::Base.enable_swap session
+    end if options.swap
 
-      if Escualo::Bootstrap.check ssh
-        say 'Host bootstrapped successfully '
-      else
-        abort 'bootstrapping failed'
-      end
+    step 'Installing Ruby...', options do
+      Escualo::Ruby.install session, options
+    end
+
+    step 'Installing gems...', options do
+      Escualo::Gems.install session
+    end
+
+    step 'Setup artifact directories...', options do
+      Escualo::Artifact.setup session
     end
   end
 end

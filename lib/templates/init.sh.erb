@@ -1,5 +1,6 @@
 #!/bin/bash
 REVISION=$1
+START_TYPE=$2
 
 cd /var/www/<%= @name %>
 
@@ -12,6 +13,12 @@ fi
 <% if @service %>
 echo "[Escualo] [<%= @name %>] installing dependencies..."
 <%= @install_command %>
+
+if [ $START_TYPE = first ] && [ -e .escualo/install/first ]; then
+  echo "[Escualo] [<%= @name %>] .escualo/install/start and it is first run. Running it..."
+  chmod u+x .escualo/install/first
+  .escualo/install/first
+fi
 
 monit unmonitor escualo-<%= @name %>
 service <%= @name %> stop

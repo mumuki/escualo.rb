@@ -1,19 +1,16 @@
 module Escualo::Plugin
   class Nginx
-    def run(ssh, options)
+    def run(session, options)
       config = options.nginx_conf.try { |it| File.read it }
 
-      ssh.perform! %Q{
-        sudo add-apt-repository #{Escualo::PPA.for 'nginx/stable'} &&
-        sudo apt-get update &&
-        sudo apt-get install nginx -y &&
-        #{config ? "/etc/nginx/nginx.conf < cat #{config} && " : ''}
-        service nginx restart
-      }, options
+      Escualo::AptGet.install session, 'nginx'
+
+      session.tell_all! "#{config ? "/etc/nginx/nginx.conf < cat #{config} && " : ''}",
+                        'service nginx restart'
     end
 
-    def check(ssh, _options)
-      ssh.exec!('nginx -v').include? 'nginx version: nginx/1' rescue false
+    def installed?(session, _options)
+      session.check? 'nginx -v', 'nginx version: nginx/1'
     end
   end
 end
