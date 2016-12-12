@@ -4,9 +4,11 @@
 
 > Simple provisioning and deployment tool with - some -batteries included, for the typical ruby webapp. 
 
-Escualo! is a ver simple but yet powerful provisioing and deployment system, which lets you installing, deploying and monitoring ruby software components on a debian remote host. It is fully written in ruby, too. 
+Escualo! is a ver simple but yet powerful provisioing and deployment system, which lets you install, deploy and monitor ruby software components on a debian remote host. It is fully written in ruby, too. 
 
 It is similar to what chef, ansible or puppet does, but simpler - no agents, no recieps, no plugins. It is by no means so generic, though, but it comes with batteries included: it lets you easily add a load balancer, a message queue, a database, etc. For simple and not-so-simple deployments it works like a charm. 
+
+Escualo was originally written to deploy the Mumuki Platform, but it is a quite generic component. 
 
 ## Installing
 
@@ -18,17 +20,66 @@ $ gem install escualo
 
 And that's all!
 
-## Using the gem
+## Overview
 
-### Overview
+### Supported hosts
 
-Escualo is a provisioning system written, that was originally written to deploy the Mumuki Platform. With it you can: 
+Escualo supports the following operative systems: 
 
-* manage artifacts: create, list, destroy services, executables and static sites. Escualo artifacts out of the box automatic monitoring, restart on machine reboot and deploy though git.  
-* bootstrap hosts: installing base esential libraries and utilities that escualo needs on the hosts. 
-* deploy escualo projects hosted on github to escualo hosts. 
+* Ubuntu 14.04
+* Ubuntu 16.04
+* Debian Jessie
+
+### Comands
+
+An easy way of discovering escualo commands it to run it with `--help`:
+
+```
+$ escualo --help
+
+    artifact create executable Setup an executable command deployment           
+    artifact create service    Setup a micro-service deployment         
+    artifact create site       Setup an static site deployment          
+    artifact destroy           Destroys an artifact on host             
+    artifact list              Lists artifacts on host          
+    bootstrap                  Prepare environment to be an escualo host                
+    deploy                     Deploys repository to the given executable, service or site              
+    env clean                  Unset all escualo variables on host              
+    env list                   List escualo variables on host           
+    env set                    Sets one or more escualo variables on host               
+    env unset                  Unset escualo variables on host          
+    help                       Display global or [command] help documentation           
+    plugin install             Install plugin on host. Valid plugins are node, haskell, docker, postgre, nginx, rabbit, mongo, monit            
+    plugin list                List installed plugins on host           
+    rake                       Run rake task on host            
+    remote attach              Adds the given artifact to current's repository          
+    remote push                Pushes artifact at current repository            
+    remote show                Show attached artifacts to current's repository          
+    script                     Runs a escualo configuration             
+    upload                     Upload file to host      
+```
+
+Oops, that is a lot. Lets have a more general view. With `escualo` you can:
+
+* manage artifacts: create, list and destroy deployable components, called _artifacts_. Escualo artifacts out of the box support automatic monitoring, restart on machine reboot and deploy though git.  There are three different kind of artifacts:
+   * _services_: HTTP servers that listen in some port
+   * _executables_: command line utilities
+   * _sites_: statis sites that can be served through nginx
+* bootstrap hosts: installing base esential libraries and utilities that escualo needs on the hosts.
+   * It also configures host locale to `en_US.UTF-8` 
+* deploy escualo projects hosted on github to escualo hosts
 * manage persistent environment variables
-* easily installing additional software  
+  * It stores them in the filesystem
+* easily install additional software. The following are supported: 
+    * nginx
+    * mongo
+    * rabbit
+    * postgresql
+    * docker
+    * node
+    * monit
+
+### Operation Modes
 
 It suports three different modes: 
 
@@ -37,6 +88,8 @@ It suports three different modes:
 * **Dockerized Mode**: instead of running commands, escualo will create [Docker](https://www.docker.com/) compatible scripts, that you can easily embedd in  Dockerfile. This mode will be enabled if you set the `--dockerized` options. 
 
 Instead of a deep explanation of the gem, I will show you some usage examples. Let's begin with something easy.
+
+## Using the gem
 
 ### Remote usage
 
@@ -67,7 +120,6 @@ escualo artifact create service atheneum 80
 escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 escualo deploy atheneum mumuki/mumuki-atheneum
 ```
-
 
 ### Installing plugins
 
