@@ -26,7 +26,7 @@ end
 command 'remote push' do |c|
   c.syntax = 'escualo remote push'
   c.description = 'Pushes artifact at current repository'
-  c.action do |_args, _options|
+  c.local_session_action do |_args, _options, session|
     Escualo::Remote.push session, Dir.pwd
   end
 end
