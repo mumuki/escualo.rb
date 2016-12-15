@@ -14,7 +14,7 @@ class Escualo::Session::Remote < Escualo::Session
   end
 
   def ask(command)
-    out = []
+    out = ''
     @ssh.stream! wrap(command) do |_stream, data|
       out << data
     end
