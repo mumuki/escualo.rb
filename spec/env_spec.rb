@@ -7,6 +7,8 @@ describe Escualo::Env do
   it { expect(Escualo::Env.set_command 'FOO', "'bar'").to eq "echo export FOO='bar' > ~/.escualo/vars/FOO" }
   it { expect(Escualo::Env.set_command 'FOO', "'ba*r'").to eq "echo export FOO='ba*r' > ~/.escualo/vars/FOO" }
 
+  it { expect(Escualo::Env.clean_command).to include 'rm' }
+
   it { expect(Escualo::Env.locale_variables).to eq 'LANG' => 'en_US.UTF-8',
                                                    'LC_ADDRESS' => 'en_US.UTF-8',
                                                    'LC_ALL' => 'en_US.UTF-8',

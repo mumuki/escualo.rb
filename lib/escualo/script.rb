@@ -12,6 +12,7 @@ module Escualo
        options.ssh_port.try { |it| "--ssh-port #{it}" },
        options.trace && '--trace',
        options.verbose && '--verbose',
+       options.unoptimized_dockerfile && '--unoptimized-dockerfile'
       ].compact.join(' ')
     end
 

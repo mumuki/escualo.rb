@@ -6,8 +6,8 @@ def raw_escualo(command)
   %x{bin/escualo #{command}}
 end
 
-def dockerized_escualo(command)
-  Open3.exec! "bin/escualo #{command} --dockerized --trace"
+def dockerized_escualo(command, options='')
+  Open3.exec! "bin/escualo #{command} #{options} --dockerized --trace"
 end
 
 def scripted_escualo(command, env)

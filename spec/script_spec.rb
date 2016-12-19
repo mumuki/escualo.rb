@@ -40,7 +40,7 @@ describe Escualo::Script do
       it { expect(session.dockerfile).to_not include "FROM ubuntu:xenial\n" }
       it { expect(session.dockerfile).to_not include 'escualo env set' }
       it { expect(session.dockerfile).to include "RUN gem install bundler && gem install escualo" }
-      it { expect(session.dockerfile).to include "RUN echo export FOO=BAR > ~/.escualo/vars/FOO\n" }
+      it { expect(session.dockerfile).to include "ENV FOO BAR\n" }
     end
   end
 

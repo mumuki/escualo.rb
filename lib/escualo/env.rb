@@ -1,11 +1,7 @@
 module Escualo
   module Env
     def self.setup(session)
-      source_escualorc = "'source ~/.escualorc'"
-      session.tell_all! 'mkdir -p ~/.escualo/vars',
-                        %q{echo 'for var in ~/.escualo/vars/*; do source $var; done' > ~/.escualorc},
-                        %q{chmod u+x ~/.escualorc},
-                        "grep -q #{source_escualorc} ~/.bashrc || echo #{source_escualorc} >> ~/.bashrc"
+      session.setup_environment_variables!
     end
 
     def self.set_builtins(session, options)
@@ -19,7 +15,8 @@ module Escualo
     end
 
     def self.clean(session, options)
-      session.tell! 'rm ~/.escualo/vars/*'
+      session.clean_environment_variables!
+
       set_builtins session, options
     end
 
@@ -34,17 +31,23 @@ module Escualo
     end
 
     def self.set(session, variables)
-      session.tell_all! *variables.map { |key, value| set_command key, value }
+      session.set_environment_variables! variables
+    end
+
+    def self.unset(session, variable_names)
+      session.unset_environment_variables! variable_names
+    end
+
+    def self.unset_command(name)
+      "rm ~/.escualo/vars/#{name}"
+    end
+
+    def self.clean_command
+      'rm ~/.escualo/vars/*'
     end
 
     def self.set_command(key, value)
       "echo export #{key}=#{value} > ~/.escualo/vars/#{key}"
-    end
-
-    def self.unset(session, variable_names)
-      variable_names.each do |name|
-        session.tell!("rm ~/.escualo/vars/#{name}")
-      end
     end
 
     def self.locale_variables

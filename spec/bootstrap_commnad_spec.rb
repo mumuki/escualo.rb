@@ -7,13 +7,13 @@ describe 'escualo bootstrap' do
   it { expect(result).to include 'RUN apt-get update && apt-get install -y' }
   it { expect(result).to include '--force-yes' }
   it { expect(result).to include 'autoconf' }
-  it { expect(result).to include 'RUN echo export ESCUALO_BASE_VERSION=' }
+  it { expect(result).to include 'ENV ESCUALO_BASE_VERSION ' }
   it { expect(result).to include 'RUN apt-get purge libruby* -y' }
   it { expect(result).to include 'apt-get install -y --force-yes ruby2.3 ruby2.3-dev' }
   it { expect(result).to include 'RUN gem install bundler && gem install escualo' }
   it { expect(result).to include 'RUN mkdir -p /var/repo/ && mkdir -p /var/scripts/'}
-  it { expect(result).to include 'RAILS_ENV=production' }
-  it { expect(result).to include 'RACK_ENV=production' }
+  it { expect(result).to include 'ENV RAILS_ENV production' }
+  it { expect(result).to include 'ENV RACK_ENV production' }
 
   describe '--with-rbenv' do
     let(:result) { dockerized_escualo 'bootstrap --with-rbenv' }
@@ -33,9 +33,9 @@ describe 'escualo bootstrap' do
   describe '--env development' do
     let(:result) { dockerized_escualo 'bootstrap --env development' }
 
-    it { expect(result).to include 'RAILS_ENV=development' }
-    it { expect(result).to include 'RACK_ENV=development' }
-    it { expect(result).to_not include 'RACK_ENV=production' }
+    it { expect(result).to include "ENV RAILS_ENV development\n" }
+    it { expect(result).to include "ENV RACK_ENV development\n" }
+    it { expect(result).to_not include "ENV RACK_ENV production\n" }
   end
 
 end
