@@ -5,7 +5,8 @@ command 'plugin install' do |c|
 
   c.option '--rabbit-admin-password PASSWORD', String, 'rabbitmq admin password, only for rabbit plugin'
 
-  c.option '--pg-version VERSION', String, 'PostgreSQL major and minor version. Default is 9.3, only for postgre plugin'
+  c.option '--pg-libs-only', TrueClass, 'Do not install server, only for postgres'
+  c.option '--pg-version VERSION', String, 'PostgreSQL major and minor version. Default is 9.3, only for postgres plugin'
   c.option '--pg-username USERNAME', String, 'PostgreSQL username'
   c.option '--pg-password PASSWORD', String, 'PostgreSQL password'
 

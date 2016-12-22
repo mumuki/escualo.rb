@@ -11,6 +11,11 @@ describe 'escualo plugin' do
     it { expect(result).to_not include 'echo "deb http://apt.postgresql.org/pub/repos/apt/' }
   end
 
+  describe 'install postgres --pg-libs-only' do
+    let(:result) { dockerized_escualo 'plugin install postgres --pg-username foo --pg-password abcdefg --pg-libs-only' }
+    it { expect(result).to start_with 'RUN apt-get install -y --force-yes postgresql-client-9.3 libpq-dev' }
+  end
+
   describe 'install monit' do
     let(:result) { dockerized_escualo 'plugin install monit' }
 
