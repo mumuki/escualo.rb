@@ -22,10 +22,6 @@ class Escualo::Session::Docker < Escualo::Session
     end
   end
 
-  def embed!(command)
-    dockerfile << Open3.exec!("#{command} --dockerized")
-  end
-
   def tell!(command)
     dockerfile << "RUN #{command}\n"
   end
