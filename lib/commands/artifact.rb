@@ -24,6 +24,9 @@ command 'artifact create service' do |c|
     name = args.first
     port = args.second
 
+    raise 'missing service name!' unless name
+    raise 'missing port!' unless port
+
     exit_if("Service #{name} already created", options) { Escualo::Artifact.present?(session, name) }
 
     launch_command = "exec bundle exec rackup -o 0.0.0.0 -p #{port} > rack.log"
@@ -58,6 +61,8 @@ command 'artifact create site' do |c|
 
   c.session_action do |args, options, session|
     name = args.first
+    raise 'missing site name!' unless name
+
     exit_if("Site #{name} already created", options) { Escualo::Artifact.present?(session, name) }
 
     step 'Creating init scripts...', options do
@@ -77,6 +82,7 @@ command 'artifact create executable' do |c|
 
   c.session_action do |args, options, session|
     name = args.first
+    raise 'missing executable name!' unless name
 
     exit_if("Executable #{name} already created", options) { Escualo::Artifact.present?(session, name) }
     step 'Creating init scripts...', options do
