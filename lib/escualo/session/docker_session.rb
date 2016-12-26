@@ -22,10 +22,6 @@ class Escualo::Session::Docker < Escualo::Session
     end
   end
 
-  def embed!(command)
-    dockerfile << Open3.exec!("#{command} --dockerized")
-  end
-
   def tell!(command)
     dockerfile << "RUN #{command}\n"
   end
@@ -43,30 +39,12 @@ class Escualo::Session::Docker < Escualo::Session
     raise 'can not ask on a docker session'
   end
 
-  def start!(options)
-    if options.write_dockerfile
-      @dockerfile = "FROM #{base_image options}\nMAINTAINER #{ENV['USER']}\n"
-    else
-      @dockerfile = ''
-    end
+  def start!(_options)
+    @dockerfile = ''
   end
 
-  def base_image(options)
-    if options.base_image == 'ubuntu'
-      'ubuntu:xenial'
-    elsif options.base_image == 'debian'
-      'debian:jessie'
-    else
-      raise "Unsupported base image #{options.base_image}. Only debian and ubuntu are supported"
-    end
-  end
-
-  def finish!(options)
-    if options.write_dockerfile
-      File.write('Dockerfile', dockerfile)
-    else
-      puts dockerfile
-    end
+  def finish!(_options)
+    puts dockerfile
   end
 
   def self.started(options = struct)

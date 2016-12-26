@@ -14,7 +14,7 @@ describe 'escualo env' do
 
   describe 'unset' do
     context '' do
-      it { expect { dockerized_escualo 'env unset FOO' }.to raise_error }
+      it { expect { dockerized_escualo 'env unset FOO' }.to raise_error RuntimeError }
     end
 
     context '--unoptimized-dockerfile' do
@@ -25,7 +25,7 @@ describe 'escualo env' do
 
   describe 'clean' do
     context '' do
-      it { expect { dockerized_escualo 'env clean FOO' }.to raise_error }
+      it { expect { dockerized_escualo 'env clean FOO' }.to raise_error RuntimeError }
     end
 
     context '--unoptimized-dockerfile' do
@@ -33,3 +33,5 @@ describe 'escualo env' do
     end
   end
 end
+
+

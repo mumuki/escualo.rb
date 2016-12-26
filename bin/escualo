@@ -27,7 +27,6 @@ require_relative '../lib/commands/globals'
 
 require_relative '../lib/commands/bootstrap'
 require_relative '../lib/commands/deploy'
-require_relative '../lib/commands/script'
 require_relative '../lib/commands/upload'
 require_relative '../lib/commands/rake'
 

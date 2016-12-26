@@ -11,10 +11,6 @@ class Escualo::Session
     ask(command).include? include rescue false
   end
 
-  def embed!(command)
-    tell! command
-  end
-
   def tell_all!(*commands)
     tell! commands.compact.join(' && ')
   end
