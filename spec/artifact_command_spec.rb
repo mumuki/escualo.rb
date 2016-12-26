@@ -15,6 +15,13 @@ describe 'escualo artifact' do
     end
   end
 
+  describe 'destroy' do
+    let(:result) { dockerized_escualo 'artifact destroy foo' }
+
+    it { expect(result).to include  'rm -rf /var/www/foo' }
+    it { expect(result).to include  'rm -rf /var/repo/foo.git' }
+  end
+
   describe 'create site' do
     let(:result) { dockerized_escualo 'artifact create site foo' }
 

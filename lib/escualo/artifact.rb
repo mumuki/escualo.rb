@@ -11,6 +11,7 @@ module Escualo
 
       session.tell_all! "rm -rf /var/scripts/#{name}",
                         "rm -rf /var/repo/#{name}.git",
+                        "rm -rf /var/www/#{name}",
                         "rm -f /etc/monit/conf.d/escualo-#{name}",
                         "rm -f /etc/init/#{name}.conf",
                         "test ! -e /var/repo/#{name}.git"
