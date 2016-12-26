@@ -12,6 +12,8 @@ command 'artifact destroy' do |c|
   c.syntax = 'escualo artifact destroy <NAME>'
   c.description = 'Destroys an artifact on host'
   c.session_action do |args, options, session|
+    raise 'artifact destroy takes exactly one argument' if args.length > 1
+
     Escualo::Artifact.destroy(session, args.first)
   end
 end
