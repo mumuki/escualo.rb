@@ -3,12 +3,25 @@ require 'spec_helper'
 describe 'escualo plugin' do
 
   describe 'install postgres' do
-    let(:result) { dockerized_escualo 'plugin install postgres --pg-username foo --pg-password abcdefg' }
+    context 'missing arguments' do
+      it { expect { dockerized_escualo 'plugin install postgres' }.to raise_error(RuntimeError) }
+    end
 
-    it { expect(result).to start_with 'RUN apt-get install -y --force-yes postgresql-9.3 libpq-dev' }
-    it { expect(result).to include "create role foo with createdb login password 'abcdefg';" }
-    it { expect(result).to include '> /etc/postgresql/9.3/main/pg_hba.conf' }
-    it { expect(result).to_not include 'echo "deb http://apt.postgresql.org/pub/repos/apt/' }
+    context 'server mode' do
+      let(:result) { dockerized_escualo 'plugin install postgres --pg-username foo --pg-password abcdefg' }
+
+      it { expect(result).to include 'apt-get install -y --force-yes postgresql-9.3 libpq-dev' }
+      it { expect(result).to include "create role foo with createdb login password 'abcdefg';" }
+      it { expect(result).to include '> /etc/postgresql/9.3/main/pg_hba.conf' }
+      it { expect(result).to_not include 'echo "deb http://apt.postgresql.org/pub/repos/apt/' }
+    end
+
+    context 'client mode' do
+      let(:result) { dockerized_escualo 'plugin install postgres --pg-libs-only' }
+
+      it { expect(result).to include 'apt-get install -y --force-yes postgresql-client-9.3 libpq-dev' }
+      it { expect(result).to_not include "create role" }
+    end
   end
 
   describe 'install postgres --pg-libs-only' do

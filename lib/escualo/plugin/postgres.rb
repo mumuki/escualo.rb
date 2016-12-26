@@ -1,18 +1,19 @@
 module Escualo::Plugin
   class Postgres
     def run(session, options)
-      raise 'missing pg-username' unless options.pg_username
-      raise 'missing pg-password' unless options.pg_password
+      if_server options do
+        raise 'missing pg-username' unless options.pg_username
+        raise 'missing pg-password' unless options.pg_password
+      end
 
       pg_hba_conf = "/etc/postgresql/#{options.pg_version}/main/pg_hba.conf"
-
       dependencies = options.pg_libs_only ?
           "postgresql-client-#{options.pg_version} libpq-dev" :
           "postgresql-#{options.pg_version} libpq-dev"
 
       Escualo::AptGet.install session, dependencies
 
-      unless options.pg_libs_only
+      if_server options do
         session.tell_all! "echo 'local   all             postgres                                peer' > #{pg_hba_conf}",
                           "echo 'local   all             postgres                                peer' >> #{pg_hba_conf}",
                           "echo 'local   all             all                                     password' >> #{pg_hba_conf}",
@@ -24,6 +25,11 @@ module Escualo::Plugin
       end
     end
 
+    def if_server(options)
+      unless options.pg_libs_only
+        yield
+      end
+    end
 
     def installed?(session, options)
       session.check? 'psql --version', "psql (PostgreSQL) #{options.pg_version}"
