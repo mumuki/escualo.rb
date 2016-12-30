@@ -23,9 +23,9 @@ respawn
 chdir /var/www/<%= @name %>
 
 script
-  for var in /root/.escualo/vars/*; do . \\$var; done
+  for var in /root/.escualo/vars/*; do . \$var; done
   chmod u+x .escualo/jobs/$job
-  echo \\$\\$ > $job.pid
+  echo \$\$ > $job.pid
   $job_path
 end script
 EOJOB
