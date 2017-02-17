@@ -67,7 +67,7 @@ module Escualo
     end
 
     def self.install_gems(ssh, options)
-      ssh.shell.perform! 'gem install bundler && gem install escualo', options
+      ssh.shell.perform! "gem install bundler && gem install escualo -v #{Escualo::VERSION}", options
     end
   end
 end
