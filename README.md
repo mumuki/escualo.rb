@@ -49,7 +49,7 @@ $ escualo --help
     env set                    Sets one or more escualo variables on host
     env unset                  Unset escualo variables on host
     help                       Display global or [command] help documentation
-    plugin install             Install plugin on host. Valid plugins are node, haskell, docker, postgre, nginx, rabbit, mongo, monit
+    plugin install             Install plugin on host. Valid plugins are node, haskell, docker, postgres, nginx, rabbit, mongo, monit
     plugin list                List installed plugins on host
     rake                       Run rake task on host
     remote attach              Adds the given artifact to current's repository
@@ -73,7 +73,7 @@ Oops, that is a lot. Lets have a more general view. With `escualo` you can:
     * nginx
     * mongo
     * rabbit
-    * postgresql
+    * postgres
     * docker
     * node
     * monit
@@ -99,7 +99,7 @@ Instead of a deep explanation of the gem, I will show you some usage examples. L
 export OPTIONS='--hostname my.mumuki.host.com --username mumukiuser --ssh-port 2202'
 
 escualo bootstrap $OPTIONS
-escualo plugin install postgre $OPTIONS
+escualo plugin install postgres $OPTIONS
 escualo artifact create service atheneum 80 $OPTIONS
 escualo env set <NAME1=VALUE1> <NAME2=VALUE2> $OPTIONS
 escualo deploy atheneum mumuki/mumuki-atheneum
@@ -114,7 +114,7 @@ escualo deploy atheneum mumuki/mumuki-atheneum
 > :warning: Unless you know what you are doing, **don't run `bootstrap` command locally**, since it will override the ruby. This is probably not what you want on a development machine.
 
 ```bash
-escualo plugin install postgre
+escualo plugin install postgres
 escualo artifact create service atheneum 80
 escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 escualo deploy atheneum mumuki/mumuki-atheneum
@@ -140,7 +140,7 @@ escualo deploy bibliotheca mumuki/mumuki-bibliotheca
 ```bash
 escualo bootstrap
 
-escualo plugin install postgre
+escualo plugin install postgres
 escualo plugin install haskell
 escualo plugin install nginx --nginx-conf /home/user/Desktop/nginx.conf
 
@@ -163,7 +163,7 @@ escualo rake db:seed
 
 ```bash
 escualo bootstrap
-escualo plugin install postgre
+escualo plugin install postgres
 escualo artifact create service atheneum 80
 escualo env set <NAME1=VALUE1> <NAME2=VALUE2>
 
