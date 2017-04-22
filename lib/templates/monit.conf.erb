@@ -1,6 +1,17 @@
 check host escualo-<%= name %> with address localhost
   start "/sbin/start <%= name %>"
   stop "/sbin/stop <%= name %>"
+  alert soporte@mumuki.org with mail-format {
+      from: soporte@mumuki.org
+      subject: monit alert --  $EVENT $SERVICE
+      message: $EVENT Service $SERVICE
+                 Date:        $DATE
+                 Action:      $ACTION
+                 Host:        $HOST
+                 Description: $DESCRIPTION
+
+            Saludos Escualo
+  }
   if failed
     port <%= port %>
     protocol HTTP
