@@ -4,6 +4,8 @@ command 'bootstrap' do |c|
   c.option '--swap', TrueClass, 'Setup swap?'
   c.option '--env ENVIRONMENT', String, 'Environment. Valid options are development and production. default is production'
   c.option '--with-rbenv', TrueClass, 'Use rbenv instead of native ruby installation'
+  c.option '--with-native-ruby', TrueClass, "Don't install ruby. Use native installation instead"
+
 
   c.session_action do |_args, options, session|
     options.default env: 'production'

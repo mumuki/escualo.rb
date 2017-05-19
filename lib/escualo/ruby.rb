@@ -9,6 +9,8 @@ module Escualo
         session.tell_all! 'rbenv install 2.3.1',
                           'rbenv global 2.3.1',
                           'rbenv rehash'
+      elsif options.with_native_ruby
+        puts "[Escualo] Using native ruby. Not installing it."
       else
         Escualo::AptGet.install session, 'ruby2.3 ruby2.3-dev'
       end
