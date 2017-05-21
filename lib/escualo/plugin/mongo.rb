@@ -2,7 +2,8 @@ module Escualo::Plugin
   class Mongo
     def run(session, _options)
       Escualo::AptGet.install session, 'mongodb-org'
-      session.tell_all! "echo '' >> /etc/init/mongodb.conf",
+      session.tell_all! "mkdir -p /data/db",
+                        "echo '' >> /etc/init/mongodb.conf",
                         "echo 'respawn' >> /etc/init/mongodb.conf"
     end
 
