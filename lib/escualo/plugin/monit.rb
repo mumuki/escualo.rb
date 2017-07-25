@@ -1,6 +1,8 @@
 module Escualo::Plugin
   class Monit
     def run(session, options)
+      raise 'missing monit password!' unless options.monit_password
+
       Escualo::AptGet.install session, 'monit'
 
       session.tell_all! 'service monit stop',

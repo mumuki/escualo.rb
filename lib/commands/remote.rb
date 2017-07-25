@@ -3,7 +3,10 @@ command 'remote attach' do |c|
   c.description = "Adds the given artifact to current's repository"
   c.option '--repo-path PATH', String, 'Sets the git dir'
 
+
   c.local_session_action do |args, options, session|
+    raise 'missing service name!' unless args.first
+
     options.default repo_path: Dir.pwd
     session_options = Escualo::Session.parse_session_options options
 

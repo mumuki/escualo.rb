@@ -30,7 +30,7 @@ describe 'escualo plugin' do
   end
 
   describe 'install monit' do
-    let(:result) { dockerized_escualo 'plugin install monit' }
+    let(:result) { dockerized_escualo 'plugin install monit --monit-password foo' }
 
     it { expect(result).to start_with 'RUN apt-get install -y --force-yes monit' }
     it { expect(result).to include 'service monit stop' }
