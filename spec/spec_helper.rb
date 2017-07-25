@@ -6,12 +6,12 @@ def raw_escualo(command)
   %x{bin/escualo #{command}}
 end
 
-def dockerized_escualo(command, options='')
-  Open3.exec! "bin/escualo #{command} #{options} --dockerized --trace"
+def logonly_escualo(command, options='')
+  Open3.exec! "bin/escualo #{command} #{options} --logonly --trace"
 end
 
-def dockerized
-  session = Escualo::Session::Docker.started
+def logonly
+  session = Escualo::Session::Logonly.started
   yield session
-  session.dockerfile
+  session.log
 end

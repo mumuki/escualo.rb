@@ -8,16 +8,15 @@ class Escualo::Session
            },
            verbose: options.verbose,
            local: options.hostname.blank? && options.username.blank? && options.ssh_key.blank? && options.ssh_port.blank?,
-           dockerized: options.dockerized,
-           unoptimized_dockerfile: options.unoptimized_dockerfile
+           logonly: options.logonly
 
   end
 
   def self.within(options, force_local=false, &block)
     session_options = parse_session_options options
 
-    if session_options.dockerized
-      within_dockerized_session session_options, options, &block
+    if session_options.logonly
+      within_logonly_session session_options, options, &block
     elsif session_options.local || force_local
       block.call(Escualo::Session::Local.new session_options)
     else
@@ -25,8 +24,8 @@ class Escualo::Session
     end
   end
 
-  def self.within_dockerized_session(session_options, options, &block)
-    session = Escualo::Session::Docker.new session_options
+  def self.within_logonly_session(session_options, options, &block)
+    session = Escualo::Session::Logonly.new session_options
     session.start! options
     block.call(session)
     session.finish! options

@@ -20,8 +20,8 @@ describe Escualo::Remote do
       let(:options) { struct }
       it { expect(Escualo::Remote.remote_git_url 'foo', session_options).to eq '/var/repo/foo.git' }
     end
-    context 'dockerized' do
-      let(:options) { struct dockerized: true }
+    context 'logonly' do
+      let(:options) { struct logonly: true }
       it { expect(Escualo::Remote.remote_git_url 'foo', session_options).to eq '/var/repo/foo.git' }
     end
   end

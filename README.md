@@ -84,7 +84,7 @@ It suports three different modes:
 
 * **Local Mode**: all the commands will run against the local machine. It is the default mode.
 * **Remote Mode**: all the commands will run agains a remote machine, using ssh. This mode will be enabled when you specify any ssh option.
-* **Dockerized Mode**: instead of running commands, escualo will create [Docker](https://www.docker.com/) statements, that you can easily embedd in  Dockerfile. This mode will be enabled if you set the `--dockerized` option.
+* **Log-only Mode**: instead of running commands, escualo will dump bash command statements, that you can easily embedd in your script. This mode will be enabled if you set the `--logonly` option.
 
 Instead of a deep explanation of the gem, I will show you some usage examples. Let's begin with something easy.
 

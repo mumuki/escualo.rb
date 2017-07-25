@@ -11,12 +11,12 @@ program :description, 'escualo provisioning tool implementation for ruby'
 require_relative '../lib/command'
 
 def step(name, options=struct, &block)
-  say name unless options.dockerized
+  say name unless options.logonly
   block.call
 end
 
 def exit_if(done_message, options)
-  if !options.force && !options.dockerized && yield
+  if !options.force && !options.logonly && yield
     say "Nothing to do. #{done_message}"
     say 'Use --force to proceed it anyway'
     exit

@@ -38,7 +38,7 @@ class Escualo::Session
   end
 end
 
-require_relative './session/docker_session'
+require_relative './session/logonly_session'
 require_relative './session/remote_session'
 require_relative './session/local_session'
 require_relative './session/within'

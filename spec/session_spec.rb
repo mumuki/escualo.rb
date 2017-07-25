@@ -9,8 +9,8 @@ describe Escualo::Session do
 
   it do
     session = nil
-    Escualo::Session.within(struct dockerized: true) { |it| session = it }
-    expect(session).to be_a Escualo::Session::Docker
+    Escualo::Session.within(struct logonly: true) { |it| session = it }
+    expect(session).to be_a Escualo::Session::Logonly
   end
 
   it do
@@ -47,8 +47,8 @@ describe Escualo::Session do
     it { expect { session.exec! 'ls ./spec/this-repo-does-not-exist' }.to raise_error RuntimeError }
   end
 
-  describe Escualo::Session::Docker do
-    let(:session) { Escualo::Session::Docker.started }
+  describe Escualo::Session::Logonly do
+    let(:session) { Escualo::Session::Logonly.started }
 
     describe 'ask' do
       it { expect { session.ask 'ls ./spec/data' }.to raise_error RuntimeError }
@@ -56,18 +56,18 @@ describe Escualo::Session do
 
     describe 'tell!' do
       before { session.tell! 'foo' }
-      it { expect(session.dockerfile).to eq "RUN foo\n" }
+      it { expect(session.log).to eq "foo\n" }
     end
 
     describe 'tell_all!' do
       context 'no nil command' do
         before { session.tell_all! 'foo', 'bar', 'baz' }
-        it { expect(session.dockerfile).to eq "RUN foo && bar && baz\n" }
+        it { expect(session.log).to eq "foo && bar && baz\n" }
       end
 
       context 'nil command' do
         before { session.tell_all! 'foo', nil, 'baz' }
-        it { expect(session.dockerfile).to eq "RUN foo && baz\n" }
+        it { expect(session.log).to eq "foo && baz\n" }
       end
     end
   end

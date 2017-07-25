@@ -7,7 +7,7 @@ module Escualo
     end
 
     def self.remote_git_url(name, session_options)
-      if session_options.local || session_options.dockerized
+      if session_options.local || session_options.logonly
         "/var/repo/#{name}.git"
       else
         "ssh://#{session_options.username}@#{session_options.hostname}:#{session_options.ssh_options[:port]}/var/repo/#{name}.git"
